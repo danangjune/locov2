@@ -12,6 +12,7 @@ use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::view('/pecut', 'pecut.index')->name('pecut.index');
 // Auth Route
 Auth::routes(['register' => false]);
 
@@ -61,7 +62,7 @@ Route::prefix('users')->group(function () {
     Route::get('/profile', [LoginController::class, 'profile'])->name('users.profile');
 });
 
-Route::prefix('admin')->middleware(['auth','role:1'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
     Route::get('/', function () {
         return to_route('admin.dashboard');
     });
