@@ -1,0 +1,39 @@
+// Body
+$body-bg: #f8fafc;
+
+// Typography
+$font-family-sans-serif: 'Poppins', sans-serif;
+$font-size-base: 0.8rem;
+$line-height-base: 1.6;
+
+// Tooltip
+$tooltip-font-size: 0.6rem;
+$tooltip-max-width: 150px;
+$tooltip-opacity: .9;
+$tooltip-color: #efefef;
+$tooltip-bg: #3c3c3c;
+
+// Margin & Padding
+$enable-negative-margins: true;
+
+// Custom Color
+$primary:#1e6fa5;
+$info: #32CD32;
+$primary-darken: darken($primary, 30%);
+$transparent-tize: transparentize($primary-darken, 0.5);
+
+// Custom Carousel
+$carousel-control-opacity: .2;
+$carousel-indicator-height: 10px;
+$carousel-indicator-width: 50px;
+$carousel-indicator-active-bg: $primary;
+$carousel-control-transition: opacity .15s ease;
+$carousel-indicator-transition: opacity .6s ease;
+$carousel-transition-duration: .6s;
+$carousel-transition: transform $carousel-transition-duration ease-in-out; // Define transform transition first if using multiple transitions (e.g., `transform 2s ease, opacity .5s ease-out`)
+
+$header-height: 65px;
+$sidebar-width: 275px;
+$content-height: calc(100vh - #{$header-height});
+
+$input-focus-box-shadow: 0;

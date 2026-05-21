@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+   RewriteEngine On
+   RewriteRule ^(.*)$ public/$1 [L]
+	Order allow,deny
+Allow from all
+</IfModule>

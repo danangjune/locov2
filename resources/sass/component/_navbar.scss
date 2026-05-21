@@ -1,0 +1,44 @@
+// ====================================== //
+// Set Variable Global Navbar
+.nav-parent {
+    @extend .navbar;
+    @extend .navbar-expand-sm;
+    @extend .navbar-dark;
+    // @extend .bg-primary-subtle;
+    @extend .py-2;
+    @extend .sticky-top;
+    // background-color: $primary-darken;
+    background-image: radial-gradient(circle, $primary, $primary-darken);
+}
+.nav-items{
+    @extend .nav-item;
+    @extend .px-2;
+    &:hover{
+        a{
+            @extend .text-primary;
+        }
+    }
+}
+.dropdown-menu{
+    .dropdown-item{
+        &:hover{
+            background-color: $primary;
+            @extend .text-light;
+        }
+    }
+}
+.nav-pattern {
+    @extend .position-relative;
+    &::before {
+        content: "";
+        @extend .position-absolute;
+        @extend .container-fluid;
+        background-image: url("../../public/assets/img/pattern-tenun-kediri.png");
+        background-size: cover;
+        background-position: center center;
+        opacity: 3%;
+        width: 100%; // Harus Ada
+        height: 100%; // Harus Ada
+    }
+}
+// ====================================== //

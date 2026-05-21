@@ -1,0 +1,170 @@
+// ====================================== //
+// Set Class Global Footer
+.footer-a {
+    @extend .text-light;
+    @extend .my-1;
+    text-decoration: none;
+}
+.footer-div {
+    // @extend .mt-2;
+    @extend .text-light;
+}
+.footer-gradient {
+    @extend .footer-div;
+    background-image: radial-gradient(circle, $primary, $primary-darken);
+}
+.footer-pattern {
+    @extend .position-relative;
+    &::before {
+        content: "";
+        // position: absolute;
+        @extend .position-absolute;
+        @extend .container-fluid;
+        background-image: url("../../public/assets/img/pattern-tenun-kediri.png");
+        background-size: cover;
+        background-position: center center;
+        opacity: 3%;
+        width: 100%; // Harus Ada
+        height: 100%; // Harus Ada
+    }
+}
+.footer-flex {
+    @extend .d-flex;
+    @extend .flex-column;
+}
+.footer-content-1 {
+    @extend .footer-flex;
+    @extend .col-sm-2;
+    @extend .text-center;
+    @extend .text-sm-start;
+}
+.footer-content-2 {
+    @extend .footer-flex;
+    @extend .col-sm-7;
+    @extend .text-center;
+    @extend .text-sm-start;
+    @extend .mt-3;
+    @extend .mt-sm-0;
+}
+.footer-content-3 {
+    @extend .footer-flex;
+    @extend .col-sm-3;
+    @extend .text-center;
+    @extend .text-sm-start;
+    @extend .mt-3;
+    @extend .mt-sm-0;
+}
+.footer-content-4 {
+    @extend .footer-flex;
+    @extend .col-sm-3;
+    @extend .text-end;
+    @extend .align-items-center;
+    @extend .mt-3;
+    @extend .mt-sm-0;
+}
+.footer-div-parent {
+    @extend .rounded-3;
+    @extend .text-center;
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-center;
+    @extend .flex-column;
+    @extend .mb-3;
+    @extend .py-3;
+    background-color: $transparent-tize;
+    width: 220px;
+    // height: 150px;
+}
+.footer-div-icon {
+    @extend .mx-3;
+    @extend .rounded-2;
+    @extend .text-start;
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-center;
+    background-color: $primary-darken;
+    width: 40px;
+    height: 30px;
+}
+.footer-div-title {
+    @extend .mx-3;
+    font-size: x-small;
+}
+.footer-div-value {
+    @extend .mx-3;
+    @extend .fs-2;
+}
+.footer-div-on {
+    @extend .mx-3;
+    @extend .rounded-2;
+    @extend .text-center;
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-center;
+    background-color: $primary-darken;
+    height: 20px;
+    width: 140px !important;
+    font-size: x-small;
+}
+.footer-content-surkep {
+    @extend .d-flex;
+    // @extend .justify-content-around;
+    // @extend .justify-content-sm-between;
+    @extend .align-items-center;
+    @extend .gap-1;
+    height: 50px;
+    div{
+        img{
+            filter: grayscale(100%);
+            height: 30px;
+            width: 30px;
+            transition: all 0.2s;
+        }
+    }
+}
+.footer-surkep-items {
+    @extend .d-flex;
+    @extend .flex-column;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+    width: 50px;
+    &:hover{
+        img{
+            filter: grayscale(0%);
+            height: 35px !important;
+            width: 35px !important;
+        }
+    }
+}
+.footer-surkep-items-active {
+    img{
+        filter: grayscale(0%);
+        height: 35px !important;
+        width: 35px !important;
+    }
+}
+.footer-surkep-sangatpuas {
+    @extend .footer-surkep-items;
+}
+.footer-surkep-puas {
+    @extend .footer-surkep-items;
+}
+.footer-surkep-cukuppuas {
+    @extend .footer-surkep-items;
+}
+.footer-surkep-kurangpuas {
+    @extend .footer-surkep-items;
+}
+.footer-surkep-sangatpuas.active {
+    @extend .footer-surkep-items-active;
+}
+.footer-surkep-puas.active {
+    @extend .footer-surkep-items-active;
+}
+.footer-surkep-cukuppuas.active {
+    @extend .footer-surkep-items-active;
+}
+.footer-surkep-kurangpuas.active {
+    @extend .footer-surkep-items-active;
+}
+// ====================================== //

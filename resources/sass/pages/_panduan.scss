@@ -1,0 +1,70 @@
+// ====================================== //
+// Set Variable Global Panduan
+.nav-tabs {
+    .nav-item {
+        .nav-link-new {
+            @extend .nav-link;
+            @extend .text-secondary;
+            @extend .text-opacity-50;
+        }
+        .nav-link-new.active {
+            @extend .active;
+            @extend .text-primary;
+            @extend .fw-semibold;
+        }
+    }
+}
+
+.file-list-parent {
+    @extend .col-6;
+    @extend .col-sm-3;
+    @extend .p-2;
+}
+
+.file-list-div {
+    @extend .p-3;
+    @extend .d-flex;
+    @extend .flex-column;
+    @extend .border;
+    @extend .rounded;
+    @extend .h-100;
+    border-style: dashed !important;
+}
+
+.file-list-a {
+    @extend .text-black;
+    @extend .text-center;
+    @extend .h-100;
+    text-decoration: none;
+    &:hover {
+        .file-list-title {
+            @extend .text-primary;
+        }
+        .file-list-desk {
+            @extend .text-primary;           
+        }
+        .file-list-logo {
+            @extend .text-primary;
+        }
+    }
+}
+
+.file-list-logo {
+    font-size: 3.5rem;
+}
+
+.file-list-title {
+    font-size: medium;
+    font-weight: bold;
+    @extend .lh-sm;
+    @extend .mb-2;
+    // @extend .text-primary;
+}
+
+.file-list-desk {
+    @extend .text-secondary;
+    @extend .text-opacity-50;
+    @extend .lh-sm;
+    font-size:0.7rem;
+}
+// ====================================== //

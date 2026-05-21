@@ -1,0 +1,156 @@
+// ====================================== //
+@include media-breakpoint-down(sm) {
+    .apk-sidemenu-parent.offcanvas-start{
+        width: 75vw !important;
+    }
+    .apk-sidemenu-filetree{
+        width: 75vw !important;
+    }
+}
+// ====================================== //
+// Set Variable Global Banner
+.banner-apk-tree-height {
+    height: 200px !important;
+}
+
+.banner-apk-tree {
+    @extend .banner;
+    @extend .banner-apk-tree-height;
+}
+
+.banner-apk-tree-gradient {
+    @extend .position-relative;
+    &::before {
+        @extend .banner-apk-tree;
+        background-image: linear-gradient(to bottom, $primary, white);
+    }
+}
+
+.banner-apk-tree-pattern {
+    @extend .position-relative;
+    &::before {
+        @extend .banner-apk-tree;
+        background-image: url("../../public/assets/img/pattern-tenun-kediri.png");
+    }
+}
+
+.banner-apk-tree-content {
+    @extend .container;
+    @extend .position-relative;
+    @extend .banner-apk-tree-height;
+    @extend .text-center;
+    @extend .pt-5;
+}
+
+.banner-apk-tree-content-title {
+    @extend .fs-3;
+    @extend .fw-bold;
+    @extend .text-dark;
+    @extend .pb-3;
+}
+
+.banner-apk-tree-content-form {
+    @extend .row;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+}
+
+// Set Variable Global APK List
+.apk-list-div {
+    @extend .p-2;
+    @extend .d-flex;
+    @extend .flex-column;
+    @extend .position-relative;
+    img {
+        @extend .mx-auto;
+    }
+}
+
+.apk-list-a {
+    @extend .text-black;
+    @extend .text-center;
+    text-decoration: none;
+    &:hover {
+        .apk-list-title {
+            @extend .text-primary;
+        }
+        .apk-list-desk {
+            @extend .text-primary;           
+        }
+    }
+}
+
+.apk-list-kategori {
+    font-size: 0.6rem;
+    font-weight: normal;
+    // line-height: 15px;
+    @extend .mt-1;
+    @extend .mb-0;
+    @extend .text-primary;
+}
+
+.apk-list-title {
+    font-size: 0.8rem;
+    font-weight: bold;
+    line-height: 15px;
+    // @extend .text-dark;
+    @extend .my-1;
+    img{
+        @extend .ms-1;
+        margin-right: unset !important;
+    }
+}
+
+.apk-list-desk {
+    font-size: 0.6rem;
+    font-weight: normal;
+    line-height: 15px;
+    @extend .mb-0;
+    @extend .text-secondary;
+}
+
+.apk-sidemenu-parent {
+    @extend .offcanvas;
+    @extend .bg-transparent;
+    @extend .border-end-0;
+    @extend .visible;
+    height: fit-content;
+}
+.apk-sidemenu-parent.offcanvas-start{
+    @extend .offcanvas-start;
+    // width: auto !important;
+    width: 25vw;
+}
+.apk-sidemenu-button {
+    writing-mode: vertical-rl; 
+    transform: rotate(180deg);
+    @extend .py-5;
+    @extend .btn;
+    @extend .btn-primary;
+    @extend .rounded-start-4;
+    box-shadow: 0 0 1rem rgba(30, 111, 165, 1);
+}
+.apk-sidemenu-filetree {
+    @extend .align-content-center;
+    @extend .bg-light;
+    @extend .border;
+    @extend .border-primary;
+    @extend .px-4;
+    @extend .py-4;
+    @extend .rounded-end;
+    // @extend .w-100;
+    width: 25vw;
+    z-index:2;
+    margin-top:5rem;
+}
+.apk-sidemenu-filebutton {
+    @extend .justify-content-end;
+    @extend .align-content-center;
+    @extend .position-absolute;
+    @extend .top-50;
+    @extend .start-100;
+    @extend .translate-middle;
+    @extend .ms-3;
+    z-index:1;
+}
+// ====================================== //

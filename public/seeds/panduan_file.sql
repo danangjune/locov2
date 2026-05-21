@@ -1,0 +1,7 @@
+insert into `panduan_file` (`id`, `name_file`, `description`, `typefile`, `statusenabled`) values('1','Ebook Panduan Pecut','Ebook Panduan Pecut','pdf','1');
+insert into `panduan_file` (`id`, `name_file`, `description`, `typefile`, `statusenabled`) values('2','Panduan Instalasi & Pendaftaran','Panduan Instalasi Aplikasi Pecut dan Pendaftaran Aplikasi Pecut','docx','1');
+insert into `panduan_file` (`id`, `name_file`, `description`, `typefile`, `statusenabled`) values('3','Panduan Dokumentasi SSO','Panduan Penggunaan API Integrasi Aplikasi ke SSO Server','pdf','1');
+insert into `panduan_file` (`id`, `name_file`, `description`, `typefile`, `statusenabled`) values('4','Panduan Penggunaan ASN Digital','Panduan Pengguanan Aplikasi ASN Digital','pdf','1');
+insert into `panduan_file` (`id`, `name_file`, `description`, `typefile`, `statusenabled`) values('5','Panduan Permohonan Pembuatan Akun Pusdasip','Panduan Permohonan Pembuatan Akun dan Fitur pada Aplikasi Pusdasip','pdf','1');
+insert into `panduan_file` (`id`, `name_file`, `description`, `typefile`, `statusenabled`) values('8','Pengajuan Aplikasi ke SSO','Buku panduan tutorial tentang cara mendaftarkan aplikasi ke aplikasi SSO dan ditampilkan ke portal PECUT Pemkot Kediri','docx','0');
+insert into `panduan_file` (`id`, `name_file`, `description`, `typefile`, `statusenabled`) values('9','Pria Sejati','Tutorial Menjadi Pria Sedjadthi ala Wak Fani\r\nEXCLUSIVE','pdf','1');

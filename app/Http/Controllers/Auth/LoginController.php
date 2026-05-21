@@ -1,0 +1,167 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+
+class LoginController extends Controller
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
+    |
+    */
+
+    use AuthenticatesUsers;
+
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/home';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+        // $this->middleware('auth')->only('logout');
+    }
+
+    public function loginView(Request $request)
+    {
+        $this->_logoutFromSSOServer();
+        $request->session()->put('state', $state = Str::random(40));
+        $query = http_build_query([
+            'client_id' => env('OAUTH_CLIENT_ID'),
+            'redirect_uri' => env('APP_URL') . '/auth/callback',
+            'response_type' => 'code',
+            'scope' => 'view-user',
+            'state' => $state,
+        ]);
+        return redirect(env('APP_URL_SSO') . '/oauth/authorize?' . $query);
+    }
+
+    public function callback(Request $request)
+    {
+        $state = $request->session()->pull('state');
+
+        $response = Http::withoutVerifying()->asForm()->post(env('APP_URL_SPLP') . '/oauth/token', [
+            'grant_type' => 'authorization_code',
+            'client_id' => env('OAUTH_CLIENT_ID'),
+            'client_secret' => env('OAUTH_CLIENT_SECRET'),
+            'redirect_uri' => env('APP_URL') . '/auth/callback',
+            'code' => $request->code,
+        ]);
+
+        $request->session()->put($response->json());
+
+        return redirect()->route('users.profile');
+    }
+
+    public function profile(Request $request)
+    {
+        $access_token = $request->session()->get('access_token');
+        $response = Http::withoutVerifying()->withHeaders([
+            'auth' => 'Bearer ' . $access_token
+        ])->get(env('APP_URL_SPLP') . '/api/user');
+
+        $userArray = $response->json();
+
+        // return response()->json($userArray);
+
+        try {
+            $name = $userArray['name'];
+            $email = $userArray['email'];
+            $nik = $userArray['nik'];
+            $nip = $userArray['nip'];
+            $role_id = $userArray['role_id'];
+            $is_verified = $userArray['is_verified'];
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Failed to get login information! Try again.'], 403);
+        }
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            $newUser = User::create([
+                'name' => $name,
+                'email' => $email,
+                'nik' => $nik,
+                'nip' => $nip,
+                'role_id' => $role_id,
+                'is_verified' => $is_verified,
+                'password' => Hash::make('kedirikota'),
+            ]);
+
+            Auth::login($newUser);
+            return redirect()->route('home');
+        }
+
+        Auth::login($user);
+        return redirect()->route('home');
+    }
+
+    private function _logoutFromSSOServer()
+    {
+        $access_token = session()->get('access_token');
+        $response = Http::withoutVerifying()->withHeaders([
+            'auth' => 'Bearer ' . $access_token
+        ])->get(env('APP_URL_SPLP') . '/api/logmeout');
+
+        return $response;
+
+        // die($response);
+    }
+
+    public function logout(Request $request)
+    {
+        $this->_logoutFromSSOServer();
+
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
+    }
+
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+        if ($response = $this->authenticated($request, $this->guard()->user())) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+                    ? new JsonResponse([], 204)
+                    : to_route('home');
+    }
+}

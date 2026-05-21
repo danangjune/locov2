@@ -1,0 +1,507 @@
+// ====================================== //
+@include media-breakpoint-down(md) {
+    .apk-sidemenu-filetree {
+        width: 75% !important;
+    }
+    .content-layanan-content-jnslyn{
+        width: 75vw !important;
+    }
+    .content-layanan-content-frminpt{
+        width: 75vw !important;
+    }
+    .clc-jnslyn-title{
+        font-size: 0.8rem !important;
+    }
+    .banner-title-description{
+        display: none;
+    }
+    .banner-title-subtitle{
+        font-size: 1.2rem !important;
+        line-height: 30px !important;
+    }
+    .banner-title{
+        height: 250px !important;
+    }
+    .banner-size{
+        height: 30vh !important;
+    }
+    .banner-layer-2-content-2{
+        font-size: 1.2rem !important;
+        line-height: 30px !important;
+    }
+    .banner-layer-2-content-1{
+        font-size: 4rem !important;
+    }
+    .layanan-div{
+        height: 80px !important;
+    }
+    .smart-slik{
+        .slick-prev:before,
+        .slick-next:before {
+            color: darken($primary, 30%) !important;
+            font-family: "bootstrap-icons" !important;
+            display: none;
+            // background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z' clip-rule='evenodd'/></svg>");
+        }
+        .slick-prev:before {
+            content: "\f284";
+        }
+        .slick-next:before {
+            content: "\f285";
+        }
+    }
+
+    .carousel {
+        height: auto !important;
+        .carousel-inner {
+            height: auto !important;
+            .carousel-item {
+                margin-bottom: $spacer * 1.5;
+            }
+        }
+    }
+}
+// ====================================== //
+// Set Globaly Variable
+.text-gradient{
+    background: -webkit-linear-gradient($primary, $primary-darken);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+// Banner Title
+.banner-title {
+    @extend .position-relative;
+    height: 479px;
+    width: 100%;
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    &::before {
+        @extend .position-absolute;
+        content: "";
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: transparentize($color: $light, $amount: 0.5);
+    }
+}
+.banner-title-parent{
+    @extend .container;
+    @extend .position-relative;
+    @extend .d-flex;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+    @extend .text-center;
+    @extend .h-100;
+    @extend .flex-column;
+    @extend .px-5;
+}
+.banner-title-title{
+    @extend .fw-bold;
+    @extend .text-primary-emphasis;
+    font-size: 4rem;
+    text-shadow: 2px 2px white;
+}
+.banner-title-subtitle{
+    @extend .fw-bold;
+    @extend .text-primary-emphasis;
+    font-size: 2rem;
+    text-shadow: 2px 2px white;
+}
+.banner-title-description{
+    @extend .fw-bold;
+    @extend .text-primary-emphasis;
+    @extend .mt-3;
+    font-size: 1rem;
+    text-shadow: 1px 1px white;
+}
+// ====================================== //
+// Set Variable Global Banner
+$m_position_banner: -50px;
+
+.banner-image{
+    background-image: url('/public/assets/img/background.JPG');
+    background-size: cover;
+    background-position: center top;
+}
+.banner-size{
+    @extend .w-100;
+    height: 75vh;
+}
+.banner-align{
+    @extend .d-flex;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+}
+.banner-parent{
+    @extend .position-relative;
+}
+.banner-layer-1{
+    @extend .banner-size;
+    @extend .banner-align;
+    @extend .banner-image;
+}
+.banner-layer-1-content{
+    @extend .container;
+    @extend .font-arcivo;
+    @extend .text-light;
+    @extend .text-center;
+    @extend .lh-1;
+    font-size: 8rem;
+    margin-top: $m_position_banner;
+}
+.banner-layer-2-bggradient{
+    background: radial-gradient(100% 820.78% at 0% 0%, rgba(19, 0, 40, 0.9) 0%, rgba(18, 0, 39, 0.7) 61.62%);
+}
+.banner-layer-2{
+    @extend .banner-size;
+    @extend .banner-align;
+    @extend .flex-column;
+    @extend .position-absolute;
+    @extend .top-0;
+    @extend .banner-layer-2-bggradient;
+}
+.banner-layer-2-content-1{
+    @extend .container;
+    @extend .font-poppins;
+    @extend .fw-bold;
+    @extend .text-light;
+    @extend .text-center;
+    font-size: 5rem;
+    margin-top: $m_position_banner;
+    text-shadow: 3px 3px 0px rgba(104, 63, 169, 0.2);
+}
+.banner-layer-2-content-2{
+    @extend .container;
+    @extend .font-poppins;
+    @extend .fw-bold;
+    @extend .text-light;
+    @extend .text-center;
+    @extend .lh-lg;
+    font-size: 2rem;
+    text-shadow: 3px 3px 0px rgba(104, 63, 169, 0.2);
+}
+// ====================================== //
+// Variable
+$lay-img-width: 70px;
+// Set Variable Global Layanan
+.layanan-transition {
+    transition: 0.6s ease;
+}
+.layanan-img {
+    width: $lay-img-width;
+    @extend .my-3;
+    @extend .layanan-transition;
+}
+.layanan-h {
+    @extend .fs-5;
+}
+.layanan-p {
+    @extend .fs-6;
+    // margin-top: -10px;
+}
+.layanan-row {
+    @extend .px-2;
+    @extend .px-sm-5;
+    @extend .row;
+    @extend .align-items-stretch;
+}
+.layanan-a {
+    @extend .text-black;
+    text-decoration: none;
+    // &:hover{
+    //     .layanan-img{
+    //         width: $lay-img-width+5px;
+    //         @extend .layanan-transition;
+    //     }
+    // }
+}
+.layanan-div {
+    @extend .bg-light;
+    @extend .py-sm-3;
+    @extend .py-3;
+    @extend .px-sm-5;
+    @extend .px-3;
+    @extend .w-50;
+    height: 100px;
+    @extend .d-flex;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+    &:hover {
+        // .layanan-h {
+        //     @extend .text-primary;
+        //     @extend .fw-bold;
+        // }
+        // @extend .border;
+        // @extend .border-primary;
+        @extend .bg-primary-subtle;
+        @extend .layanan-transition;
+    }
+}
+.content-layanan-parent {
+    @extend .bg-primary;
+    @extend .py-5;
+    background-image: radial-gradient(circle, $white, $white);
+}
+.content-layanan-title {
+    @extend .fw-bold;
+    @extend .text-primary;
+    @extend .text-center;
+    font-size: 2rem;
+}
+.content-layanan-description {
+    @extend .text-muted;
+    @extend .text-center;
+    @extend .mt-2;
+    @extend .mb-5;
+    font-size: 1rem;
+}
+.content-layanan-content-parent {
+    @extend .d-flex;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+    @extend .px-2;
+    @extend .px-sm-5;
+    @extend .py-4;
+    @extend .py-sm-5;
+    height: 500px;
+}
+.content-layanan-content-div {
+    @extend .container;
+    @extend .rounded-3;
+    @extend .shadow-lg;
+    @extend .px-2;
+    @extend .px-sm-5;
+    @extend .py-4;
+    @extend .py-sm-5;
+    @extend .bg-light;
+    @extend .d-flex;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+    @extend .flex-column;
+    @extend .position-relative;
+    height: 450px;
+}
+.content-layanan-content-jnslyn{
+    @extend .position-absolute;
+    @extend .top-0;
+    @extend .start-50;
+    @extend .translate-middle;
+    @extend .d-flex;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+    @extend .rounded-3;
+    @extend .shadow;
+    width: 40vw;
+}
+.content-layanan-content-frminpt{
+    @extend .input-group;
+    @extend .mt-5;
+    width: 40vw
+}
+.clc-jnslyn-title{
+    @extend .text-center;
+    @extend .fw-bold;
+    // @extend .text-primary-emphasis;
+    @extend .text-gradient;
+    @extend .text-uppercase;
+    // text-shadow: 2px 2px white;
+    font-size: 1.1rem;
+}
+// ====================================== //
+// Set Variable Global Carousel
+.car-height {
+    height: 450px;
+}
+
+@include media-breakpoint-down(md) {
+    .car-height{
+        height: calc(100vh - 200px);
+    }
+
+    .banner {
+        height: auto !important;
+    }
+}
+
+.banner {
+    content: "";
+    // position: absolute;
+    @extend .position-absolute;
+    @extend .car-height;
+    // @extend .bg-primary;
+    background-size: cover;
+    background-position: center center;
+    opacity: 30%;
+    width: 100%;
+}
+
+.banner-gradient {
+    @extend .position-relative;
+    &::before {
+        @extend .banner;
+        background-image: linear-gradient(to bottom, $primary, white);
+    }
+}
+
+.banner-pattern {
+    @extend .position-relative;
+    &::before {
+        @extend .banner;
+        background-image: url("../../public/assets/img/pattern-tenun-kediri.png");
+    }
+}
+
+.car-rounded {
+    border-radius: 10px;
+    border-top: 0;
+    border-bottom: 0;
+    width: 15px;
+    height: 8px;
+}
+
+.carousel {
+    @extend .car-height;
+    .carousel-indicators {
+        button,
+        .circle {
+            @extend .car-rounded;
+        }
+        .active {
+            @extend .car-rounded;
+            width: 40px;
+            height: 8px;
+        }
+        // button{
+        //   @extend .car-rounded;
+        // }
+        // .circle{
+        //   @extend .car-rounded;
+        // }
+    }
+    .carousel-inner {
+        @extend .car-height;
+        .carousel-item {
+            img {
+                @extend .w-100;
+                @extend .justify-content-center;
+                @extend .justify-content-sm-end;
+            }
+            .row {
+                @extend .car-height;
+                @extend .align-items-center;
+                @extend .text-center;
+                @extend .text-sm-start;
+            }
+        }
+    }
+}
+// ====================================== //
+// Set Variable Global Smart Service
+.smart-a {
+    @extend .text-black;
+    @extend .text-center;
+    text-decoration: none;
+    &:hover {
+        @extend .text-primary;
+    }
+}
+.smart-div {
+    height: 140px !important;
+    width: 180px !important;
+    // @extend .border;
+    // @extend .border-success;
+    // @extend .rounded;
+    // @extend .border-1;
+    @extend .pt-3;
+    @extend .px-2;
+    @extend .pb-2;
+    @extend .d-flex;
+    @extend .flex-column;
+    @extend .justify-content-start;
+    @extend .align-items-center;
+    @extend .position-relative;
+    // @extend .shadow;
+    &:hover {
+        .smart-h {
+            @extend .text-primary;
+        }
+        .smart-p {
+            @extend .text-primary;
+        }
+        @extend .border-2;
+        @extend .border-primary;
+    }
+}
+.smart-p {
+    font-size: 0.6rem;
+    font-weight: normal;
+    line-height: 15px;
+    @extend .text-secondary;
+    @extend .mb-0;
+}
+.smart-h {
+    font-size: 0.8rem;
+    font-weight: bold;
+    line-height: 15px;
+    @extend .mt-2;
+    @extend .d-flex;
+}
+.smart-items {
+    height: 180px !important;
+    width: 200px !important;
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-center;
+}
+.slick-prev:before,
+.slick-next:before {
+    color: $primary !important;
+    font-family: "bootstrap-icons" !important;
+    // background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z' clip-rule='evenodd'/></svg>");
+}
+.slick-prev:before {
+    content: "\f284";
+}
+.slick-next:before {
+    content: "\f285";
+}
+// ====================================== //
+
+.card-simalik-wrapper {
+    @extend .overflow-y-auto;
+    max-height: 75vh;
+    .card-simalik {
+        @extend .position-relative;
+        @extend .mb-4;
+        &::before {
+            content: "";
+            @extend .position-absolute;
+            @extend .top-0;
+            left: 4px;
+            width: 2px;
+            height: 100%;
+            background-color: lighten($primary, 25%);
+        }
+        .card-agenda {
+            @extend .position-relative;
+            @extend .p-3;
+            @extend .mb-3;
+            @extend .rounded;
+            @extend .bg-primary-subtle;
+            @extend .border;
+            @extend .border-primary-subtle;
+            margin-left: 25px;
+            &::after {
+                font-family: 'bootstrap-icons';
+                content: "\F287";
+                font-size: $spacer * 0.5;
+                @extend .position-absolute;
+                @extend .top-50;
+                left: -25px;
+                @extend .text-primary;
+            }
+        }
+    }
+}
