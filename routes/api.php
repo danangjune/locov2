@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ReferController;
 use App\Http\Controllers\Auth\EncryptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
 // Route CAAS BSSN
 Route::prefix('caas')->group(function () {
@@ -23,3 +24,5 @@ Route::get('/apps/random', [AppLinkController::class, 'randomSelection']);
 Route::prefix('agenda')->group(function () {
     Route::get('/', [AgendaController::class, 'index']);
 });
+
+Route::get('/berita/top', [HomeController::class, 'beritaTop']);
