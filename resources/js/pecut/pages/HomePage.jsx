@@ -35,8 +35,12 @@ export default function HomePage({
     setActiveCategory,
     apps = appData,
     appsLoading = false,
+    news = newsData,
+    newsLoading = false,
+    newsError = "",
 }) {
     const activeApps = apps.length ? apps : appData;
+    const activeNews = news.length ? news : newsData;
     const popularApps = activeApps.filter((app) => app.popular).slice(0, 12);
 
     const asnCount = activeApps.filter(
@@ -360,8 +364,26 @@ export default function HomePage({
                     onAction={() => navigate("news")}
                 />
 
+                {newsLoading && (
+                    <div className="mb-5 rounded-3xl bg-sky-50 px-5 py-4">
+                        <p className="text-sm font-bold text-sky-800">
+                            Memuat berita terbaru dari website resmi Kota
+                            Kediri...
+                        </p>
+                    </div>
+                )}
+
+                {newsError && (
+                    <div className="mb-5 rounded-3xl bg-amber-50 px-5 py-4">
+                        <p className="text-sm font-bold text-amber-800">
+                            Berita asli belum berhasil dimuat. Sementara memakai
+                            data dummy.
+                        </p>
+                    </div>
+                )}
+
                 <div className="grid gap-6 lg:grid-cols-3">
-                    {newsData.slice(0, 3).map((news) => (
+                    {activeNews.slice(0, 3).map((news) => (
                         <NewsCard
                             key={news.slug}
                             news={news}

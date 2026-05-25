@@ -98,6 +98,8 @@ import AppsPage from "./pages/AppsPage";
 import AppDetailPage from "./pages/AppDetailPage";
 import HomePage from "./pages/HomePage";
 
+import { fetchTopNewsFromApi } from "./api/newsApi";
+
 export default function App() {
     const [route, navigate] = useHashRoute();
     const [activeType, setActiveType] = useState("Semua");
@@ -106,6 +108,10 @@ export default function App() {
     const [backendApps, setBackendApps] = useState([]);
     const [appsLoading, setAppsLoading] = useState(true);
     const [appsError, setAppsError] = useState("");
+
+    const [backendNews, setBackendNews] = useState([]);
+    const [newsLoading, setNewsLoading] = useState(true);
+    const [newsError, setNewsError] = useState("");
 
     useEffect(() => {
         let isMounted = true;
@@ -152,7 +158,46 @@ export default function App() {
         };
     }, []);
 
+    useEffect(() => {
+        let isMounted = true;
+
+        async function loadNews() {
+            try {
+                setNewsLoading(true);
+                setNewsError("");
+
+                const result = await fetchTopNewsFromApi(10);
+
+                if (!isMounted) return;
+
+                setBackendNews(result);
+
+                console.log("PECUT berita backend loaded:", {
+                    total_loaded: result.length,
+                    sample: result.slice(0, 3),
+                });
+            } catch (error) {
+                if (!isMounted) return;
+
+                console.error("PECUT berita backend error:", error);
+                setNewsError(error.message || "Gagal memuat berita.");
+                setBackendNews([]);
+            } finally {
+                if (isMounted) {
+                    setNewsLoading(false);
+                }
+            }
+        }
+
+        loadNews();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
     const appsForView = backendApps.length ? backendApps : appData;
+    const newsForView = backendNews.length ? backendNews : newsData;
 
     const [page, slug] = route.split("/");
 
@@ -179,8 +224,23 @@ export default function App() {
                 />
             );
         if (page === "news" && slug)
-            return <NewsDetailPage slug={slug} navigate={navigate} />;
-        if (page === "news") return <NewsPage navigate={navigate} />;
+            return (
+                <NewsDetailPage
+                    slug={slug}
+                    navigate={navigate}
+                    news={newsForView}
+                />
+            );
+
+        if (page === "news")
+            return (
+                <NewsPage
+                    navigate={navigate}
+                    news={newsForView}
+                    newsLoading={newsLoading}
+                    newsError={newsError}
+                />
+            );
         if (page === "agenda" && slug)
             return <AgendaDetailPage slug={slug} navigate={navigate} />;
         if (page === "agenda") return <AgendaPage navigate={navigate} />;
@@ -195,6 +255,9 @@ export default function App() {
                 setActiveCategory={setActiveCategory}
                 apps={appsForView}
                 appsLoading={appsLoading}
+                news={newsForView}
+                newsLoading={newsLoading}
+                newsError={newsError}
             />
         );
     };

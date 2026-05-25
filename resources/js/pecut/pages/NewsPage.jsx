@@ -6,16 +6,22 @@ import PageHero from "../components/layout/PageHero";
 import NewsCard from "../components/news/NewsCard";
 import { newsData } from "../data/staticData";
 
-export default function NewsPage({ navigate }) {
+export default function NewsPage({
+    navigate,
+    news = newsData,
+    newsLoading = false,
+    newsError = "",
+}) {
     const [query, setQuery] = useState("");
     const [tag, setTag] = useState("Semua");
+    const activeNews = news.length ? news : newsData;
 
     const tags = [
         "Semua",
-        ...Array.from(new Set(newsData.map((item) => item.tag))),
+        ...Array.from(new Set(activeNews.map((item) => item.tag))),
     ];
 
-    const filtered = newsData.filter((news) => {
+    const filtered = activeNews.filter((news) => {
         const matchTag = tag === "Semua" || news.tag === tag;
 
         const matchQuery =
@@ -62,6 +68,24 @@ export default function NewsPage({ navigate }) {
                         </select>
                     </div>
                 </div>
+
+                {newsLoading && (
+                    <div className="mb-5 rounded-3xl bg-sky-50 px-5 py-4">
+                        <p className="text-sm font-bold text-sky-800">
+                            Memuat 10 berita terbaru dari website resmi Kota
+                            Kediri...
+                        </p>
+                    </div>
+                )}
+
+                {newsError && (
+                    <div className="mb-5 rounded-3xl bg-amber-50 px-5 py-4">
+                        <p className="text-sm font-bold text-amber-800">
+                            Berita asli belum berhasil dimuat. Sementara memakai
+                            data dummy.
+                        </p>
+                    </div>
+                )}
 
                 <div className="grid gap-6 lg:grid-cols-3">
                     {filtered.map((news, index) => (

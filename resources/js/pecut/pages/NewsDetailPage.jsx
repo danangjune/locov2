@@ -3,10 +3,23 @@ import { ArrowLeft } from "lucide-react";
 import PageShell from "../components/layout/PageShell";
 import { newsData } from "../data/staticData";
 
-export default function NewsDetailPage({ slug, navigate }) {
-    const news = newsData.find((item) => item.slug === slug) || newsData[0];
+export default function NewsDetailPage({
+    slug,
+    navigate,
+    news: newsList = newsData,
+}) {
+    const activeNews = newsList.length ? newsList : newsData;
 
-    const related = newsData
+    const news =
+        activeNews.find((item) => item.slug === slug) ||
+        activeNews[0] ||
+        newsData[0];
+
+    const contentItems = Array.isArray(news.content)
+        ? news.content
+        : [news.excerpt || "Informasi berita resmi Pemerintah Kota Kediri."];
+
+    const related = activeNews
         .filter((item) => item.slug !== news.slug)
         .slice(0, 3);
 
@@ -51,10 +64,25 @@ export default function NewsDetailPage({ slug, navigate }) {
                     </p>
 
                     <div className="mt-8 space-y-6 text-base leading-8 text-slate-600">
-                        {news.content.map((paragraph) => (
+                        {contentItems.map((paragraph) => (
                             <p key={paragraph}>{paragraph}</p>
                         ))}
                     </div>
+
+                    {news.url && (
+                        <button
+                            onClick={() =>
+                                window.open(
+                                    news.url,
+                                    "_blank",
+                                    "noopener,noreferrer",
+                                )
+                            }
+                            className="mt-8 inline-flex items-center gap-2 rounded-full bg-sky-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-sky-100 hover:bg-sky-700"
+                        >
+                            Baca di Website Resmi Kota Kediri
+                        </button>
+                    )}
                 </article>
 
                 <aside className="h-fit rounded-[2rem] border border-slate-100 bg-white p-5 shadow-sm shadow-slate-100 lg:sticky lg:top-24">
