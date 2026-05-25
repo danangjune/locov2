@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
     ArrowRight,
@@ -20,14 +21,12 @@ import MiniCalendar from "../components/agenda/MiniCalendar";
 import {
     appData,
     appPalettes,
-    newsData,
     agendaGovernmentData,
     agendaPublicData,
     allAgendaData,
 } from "../data/staticData";
 
 import { classNames } from "../utils/helpers";
-import { useState } from "react";
 
 export default function HomePage({
     navigate,
@@ -35,12 +34,13 @@ export default function HomePage({
     setActiveCategory,
     apps = appData,
     appsLoading = false,
-    news = newsData,
+    news = [],
     newsLoading = false,
     newsError = "",
 }) {
     const activeApps = apps.length ? apps : appData;
-    const activeNews = news.length ? news : newsData;
+    const activeNews = Array.isArray(news) ? news : [];
+
     const popularApps = activeApps.filter((app) => app.popular).slice(0, 12);
 
     const asnCount = activeApps.filter(
@@ -80,7 +80,6 @@ export default function HomePage({
                         className="relative z-10"
                     >
                         <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white px-4 py-2 text-sm font-bold text-sky-700 shadow-sm">
-                            <Star className="h-4 w-4 fill-amber-300 text-amber-400" />
                             Portal satu pintu layanan digital Kota Kediri
                         </div>
 
@@ -359,38 +358,45 @@ export default function HomePage({
                 <SectionHeader
                     eyebrow="Informasi Kota"
                     title="Berita Terkini Kota Kediri"
-                    subtitle="Berita ditampilkan sebagai kanal informasi pendukung portal PECUT."
+                    subtitle="Berita ditampilkan dari website resmi Pemerintah Kota Kediri."
                     action="Lihat seluruh berita"
                     onAction={() => navigate("news")}
                 />
 
-                {newsLoading && (
-                    <div className="mb-5 rounded-3xl bg-sky-50 px-5 py-4">
-                        <p className="text-sm font-bold text-sky-800">
-                            Memuat berita terbaru dari website resmi Kota
-                            Kediri...
-                        </p>
-                    </div>
-                )}
-
                 {newsError && (
                     <div className="mb-5 rounded-3xl bg-amber-50 px-5 py-4">
                         <p className="text-sm font-bold text-amber-800">
-                            Berita asli belum berhasil dimuat. Sementara memakai
-                            data dummy.
+                            Berita asli belum berhasil dimuat.
                         </p>
                     </div>
                 )}
 
-                <div className="grid gap-6 lg:grid-cols-3">
-                    {activeNews.slice(0, 3).map((news) => (
-                        <NewsCard
-                            key={news.slug}
-                            news={news}
-                            onOpen={() => navigate(`news/${news.slug}`)}
-                        />
-                    ))}
-                </div>
+                {newsLoading ? (
+                    <div className="grid gap-6 lg:grid-cols-3">
+                        {[1, 2, 3].map((item) => (
+                            <div
+                                key={item}
+                                className="h-96 animate-pulse rounded-[2rem] bg-slate-100"
+                            />
+                        ))}
+                    </div>
+                ) : activeNews.length > 0 ? (
+                    <div className="grid gap-6 lg:grid-cols-3">
+                        {activeNews.slice(0, 3).map((newsItem) => (
+                            <NewsCard
+                                key={newsItem.slug}
+                                news={newsItem}
+                                onOpen={() => navigate(`news/${newsItem.slug}`)}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="rounded-[2rem] border border-dashed border-sky-200 bg-sky-50/50 p-8 text-center">
+                        <p className="text-sm font-bold text-slate-600">
+                            Berita belum tersedia atau gagal dimuat.
+                        </p>
+                    </div>
+                )}
             </section>
 
             <section className="bg-slate-50/70 py-16">

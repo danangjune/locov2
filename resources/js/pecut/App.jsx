@@ -197,7 +197,7 @@ export default function App() {
     }, []);
 
     const appsForView = backendApps.length ? backendApps : appData;
-    const newsForView = backendNews.length ? backendNews : newsData;
+    const newsForView = backendNews;
 
     const [page, slug] = route.split("/");
 
