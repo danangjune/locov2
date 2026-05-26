@@ -8,12 +8,37 @@ export default function Header({ navigate, route }) {
     const navItems = [
         ["home", "Beranda"],
         ["apps", "Aplikasi"],
+        ["aduan", "Aduan Warga"],
         ["news", "Berita"],
         ["agenda", "Agenda"],
         ["help", "Bantuan"],
     ];
 
     const isActive = (path) => route.split("/")[0] === path;
+
+    const goToAduan = () => {
+        navigate("home");
+
+        window.setTimeout(() => {
+            const target = document.getElementById("aduan-warga");
+
+            if (target) {
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        }, 150);
+    };
+
+    const handleNavClick = (path) => {
+        if (path === "aduan") {
+            goToAduan();
+            return;
+        }
+
+        navigate(path);
+    };
 
     return (
         <header className="sticky top-0 z-50 border-b border-sky-100/80 bg-white/85 backdrop-blur-xl">
@@ -40,7 +65,7 @@ export default function Header({ navigate, route }) {
                     {navItems.map(([path, label]) => (
                         <button
                             key={path}
-                            onClick={() => navigate(path)}
+                            onClick={() => handleNavClick(path)}
                             className={classNames(
                                 "hover:text-sky-600",
                                 isActive(path) ? "text-sky-700" : "",
@@ -85,9 +110,8 @@ export default function Header({ navigate, route }) {
                     <div className="grid gap-3 text-sm font-bold text-slate-600">
                         {navItems.map(([path, label]) => (
                             <button
-                                key={path}
                                 onClick={() => {
-                                    navigate(path);
+                                    handleNavClick(path);
                                     setMobileMenuOpen(false);
                                 }}
                                 className="text-left"
