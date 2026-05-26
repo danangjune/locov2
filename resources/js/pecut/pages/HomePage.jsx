@@ -17,6 +17,7 @@ import SectionHeader from "../components/layout/SectionHeader";
 import AppCard from "../components/apps/AppCard";
 import NewsCard from "../components/news/NewsCard";
 import MiniCalendar from "../components/agenda/MiniCalendar";
+import ComplaintCard from "../components/complaints/ComplaintCard";
 
 import {
     appData,
@@ -34,12 +35,16 @@ export default function HomePage({
     setActiveCategory,
     apps = appData,
     appsLoading = false,
+    complaints = [],
+    complaintsLoading = false,
+    complaintsError = "",
     news = [],
     newsLoading = false,
     newsError = "",
 }) {
     const activeApps = apps.length ? apps : appData;
     const activeNews = Array.isArray(news) ? news : [];
+    const activeComplaints = Array.isArray(complaints) ? complaints : [];
 
     const popularApps = activeApps.filter((app) => app.popular).slice(0, 12);
 
@@ -352,6 +357,56 @@ export default function HomePage({
                         ))}
                     </div>
                 </div>
+            </section>
+
+            <section
+                id="aduan-warga"
+                className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8"
+            >
+                <SectionHeader
+                    eyebrow="Aduan Warga"
+                    title="Aduan Terbaru Masyarakat"
+                    subtitle="Menampilkan 6 aduan terbaru dari kanal pengaduan sebagai gambaran laporan warga, lokasi, status proses, dan bukti pendukung."
+                    action="Lihat kanal aduan"
+                    onAction={() => navigate("apps")}
+                />
+
+                {complaintsError && (
+                    <div className="mb-5 rounded-3xl bg-amber-50 px-5 py-4">
+                        <p className="text-sm font-bold text-amber-800">
+                            Aduan terbaru belum berhasil dimuat.
+                        </p>
+                    </div>
+                )}
+
+                {complaintsLoading ? (
+                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                        {[1, 2, 3, 4, 5, 6].map((item) => (
+                            <div
+                                key={item}
+                                className="h-[420px] animate-pulse rounded-[2rem] bg-slate-100"
+                            />
+                        ))}
+                    </div>
+                ) : activeComplaints.length > 0 ? (
+                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                        {activeComplaints.slice(0, 6).map((complaint) => (
+                            <ComplaintCard
+                                key={complaint.slug}
+                                complaint={complaint}
+                                onOpen={() =>
+                                    navigate(`aduan/${complaint.slug}`)
+                                }
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="rounded-[2rem] border border-dashed border-sky-200 bg-sky-50/50 p-8 text-center">
+                        <p className="text-sm font-bold text-slate-600">
+                            Aduan terbaru belum tersedia.
+                        </p>
+                    </div>
+                )}
             </section>
 
             <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'aduan' => [
+        'url' => env('ADUAN_API_URL'),
+        'appkey' => env('ADUAN_API_KEY'),
+    ],
+
 ];

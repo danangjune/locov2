@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\EncryptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Api\AduanPortalController;
 
 // Route CAAS BSSN
 Route::prefix('caas')->group(function () {
@@ -26,3 +27,8 @@ Route::prefix('agenda')->group(function () {
 });
 
 Route::get('/berita/top', [HomeController::class, 'beritaTop']);
+
+Route::prefix('aduan')->group(function () {
+    Route::get('/top', [AduanPortalController::class, 'top']);
+    Route::get('/detail/{id}', [AduanPortalController::class, 'detail']);
+});

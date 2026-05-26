@@ -97,8 +97,10 @@ import AgendaDetailPage from "./pages/AgendaDetailPage";
 import AppsPage from "./pages/AppsPage";
 import AppDetailPage from "./pages/AppDetailPage";
 import HomePage from "./pages/HomePage";
+import ComplaintDetailPage from "./pages/ComplaintDetailPage";
 
 import { fetchTopNewsFromApi } from "./api/newsApi";
+import { fetchTopComplaintsFromApi } from "./api/complaintsApi";
 
 export default function App() {
     const [route, navigate] = useHashRoute();
@@ -112,6 +114,10 @@ export default function App() {
     const [backendNews, setBackendNews] = useState([]);
     const [newsLoading, setNewsLoading] = useState(true);
     const [newsError, setNewsError] = useState("");
+
+    const [backendComplaints, setBackendComplaints] = useState([]);
+    const [complaintsLoading, setComplaintsLoading] = useState(true);
+    const [complaintsError, setComplaintsError] = useState("");
 
     useEffect(() => {
         let isMounted = true;
@@ -161,6 +167,44 @@ export default function App() {
     useEffect(() => {
         let isMounted = true;
 
+        async function loadComplaints() {
+            try {
+                setComplaintsLoading(true);
+                setComplaintsError("");
+
+                const result = await fetchTopComplaintsFromApi(6);
+
+                if (!isMounted) return;
+
+                setBackendComplaints(result);
+
+                console.log("PECUT aduan backend loaded:", {
+                    total_loaded: result.length,
+                    sample: result.slice(0, 2),
+                });
+            } catch (error) {
+                if (!isMounted) return;
+
+                console.error("PECUT aduan backend error:", error);
+                setComplaintsError(error.message || "Gagal memuat aduan.");
+                setBackendComplaints([]);
+            } finally {
+                if (isMounted) {
+                    setComplaintsLoading(false);
+                }
+            }
+        }
+
+        loadComplaints();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        let isMounted = true;
+
         async function loadNews() {
             try {
                 setNewsLoading(true);
@@ -197,6 +241,7 @@ export default function App() {
     }, []);
 
     const appsForView = backendApps.length ? backendApps : appData;
+    const complaintsForView = backendComplaints;
     const newsForView = backendNews;
 
     const [page, slug] = route.split("/");
@@ -232,6 +277,15 @@ export default function App() {
                 />
             );
 
+        if (page === "aduan" && slug)
+            return (
+                <ComplaintDetailPage
+                    slug={slug}
+                    navigate={navigate}
+                    complaints={complaintsForView}
+                />
+            );
+
         if (page === "news")
             return (
                 <NewsPage
@@ -255,6 +309,9 @@ export default function App() {
                 setActiveCategory={setActiveCategory}
                 apps={appsForView}
                 appsLoading={appsLoading}
+                complaints={complaintsForView}
+                complaintsLoading={complaintsLoading}
+                complaintsError={complaintsError}
                 news={newsForView}
                 newsLoading={newsLoading}
                 newsError={newsError}
