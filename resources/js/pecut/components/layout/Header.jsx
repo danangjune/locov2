@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, Menu, Sparkles, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import { classNames } from "../../utils/helpers";
 
 export default function Header({ navigate, route }) {
@@ -14,7 +14,15 @@ export default function Header({ navigate, route }) {
         ["help", "Bantuan"],
     ];
 
-    const isActive = (path) => route.split("/")[0] === path;
+    const isActive = (path) => {
+        const current = route.split("/")[0];
+
+        if (path === "aduan") {
+            return current === "aduan";
+        }
+
+        return current === path;
+    };
 
     const goToAduan = () => {
         navigate("home");
@@ -41,33 +49,29 @@ export default function Header({ navigate, route }) {
     };
 
     return (
-        <header className="sticky top-0 z-50 border-b border-sky-100/80 bg-white/85 backdrop-blur-xl">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-50 border-b border-sky-100/80 bg-white/90 backdrop-blur-xl">
+            <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
                 <button
+                    type="button"
                     onClick={() => navigate("home")}
-                    className="flex items-center gap-3 text-left"
+                    className="flex min-w-0 shrink-0 items-center"
+                    aria-label="Kembali ke Beranda PECUT"
                 >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 via-cyan-400 to-blue-600 text-white shadow-lg shadow-sky-200">
-                        <Sparkles className="h-7 w-7" />
-                    </div>
-
-                    <div>
-                        <p className="text-xl font-black leading-none tracking-tight text-slate-900">
-                            PECUT
-                        </p>
-                        <p className="text-xs font-semibold text-sky-700">
-                            Portal Efisien Cepat Mudah Terpadu
-                        </p>
-                    </div>
+                    <img
+                        src="/images/logo-pecut-full (2).png"
+                        alt="PECUT Kota Kediri"
+                        className="h-9 max-w-[180px] object-contain sm:h-10 sm:max-w-[230px] md:h-11 md:max-w-[270px] xl:h-12 xl:max-w-[320px]"
+                    />
                 </button>
 
-                <nav className="hidden items-center gap-7 text-sm font-bold text-slate-600 lg:flex">
+                <nav className="hidden min-w-0 items-center gap-6 text-sm font-bold text-slate-600 xl:flex">
                     {navItems.map(([path, label]) => (
                         <button
                             key={path}
+                            type="button"
                             onClick={() => handleNavClick(path)}
                             className={classNames(
-                                "hover:text-sky-600",
+                                "whitespace-nowrap transition hover:text-sky-600",
                                 isActive(path) ? "text-sky-700" : "",
                             )}
                         >
@@ -76,8 +80,9 @@ export default function Header({ navigate, route }) {
                     ))}
                 </nav>
 
-                <div className="hidden items-center gap-3 lg:flex">
+                <div className="hidden shrink-0 items-center gap-3 xl:flex">
                     <button
+                        type="button"
                         onClick={() => navigate("info")}
                         className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-bold text-sky-700 hover:bg-sky-100"
                     >
@@ -86,6 +91,7 @@ export default function Header({ navigate, route }) {
                     </button>
 
                     <button
+                        type="button"
                         onClick={() => navigate("login")}
                         className="rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 px-5 py-2.5 text-sm font-black text-slate-900 shadow-lg shadow-amber-100 transition hover:scale-[1.02]"
                     >
@@ -94,8 +100,10 @@ export default function Header({ navigate, route }) {
                 </div>
 
                 <button
-                    className="rounded-2xl border border-sky-100 p-2 lg:hidden"
+                    type="button"
+                    className="shrink-0 rounded-2xl border border-sky-100 p-2 xl:hidden"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    aria-label="Buka menu"
                 >
                     {mobileMenuOpen ? (
                         <X className="h-6 w-6" />
@@ -106,31 +114,40 @@ export default function Header({ navigate, route }) {
             </div>
 
             {mobileMenuOpen && (
-                <div className="border-t border-sky-100 bg-white px-4 py-4 lg:hidden">
+                <div className="border-t border-sky-100 bg-white px-4 py-4 xl:hidden">
                     <div className="grid gap-3 text-sm font-bold text-slate-600">
                         {navItems.map(([path, label]) => (
                             <button
+                                key={path}
+                                type="button"
                                 onClick={() => {
                                     handleNavClick(path);
                                     setMobileMenuOpen(false);
                                 }}
-                                className="text-left"
+                                className={classNames(
+                                    "rounded-2xl px-3 py-2 text-left hover:bg-sky-50 hover:text-sky-700",
+                                    isActive(path)
+                                        ? "bg-sky-50 text-sky-700"
+                                        : "",
+                                )}
                             >
                                 {label}
                             </button>
                         ))}
 
                         <button
+                            type="button"
                             onClick={() => {
                                 navigate("info");
                                 setMobileMenuOpen(false);
                             }}
-                            className="text-left"
+                            className="rounded-2xl px-3 py-2 text-left hover:bg-sky-50 hover:text-sky-700"
                         >
                             Info Layanan
                         </button>
 
                         <button
+                            type="button"
                             onClick={() => {
                                 navigate("login");
                                 setMobileMenuOpen(false);

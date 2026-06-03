@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -8,6 +9,10 @@ import ModeBadge from "./ModeBadge";
 export default function AppCard({ app, compact = false, index = 0, onOpen }) {
     const Icon = app.icon;
     const palette = appPalettes[index % appPalettes.length];
+    const [logoError, setLogoError] = useState(false);
+
+    const logoUrl = app.logo || app.image || null;
+    const showLogo = Boolean(logoUrl) && !logoError;
 
     return (
         <motion.article
@@ -31,13 +36,23 @@ export default function AppCard({ app, compact = false, index = 0, onOpen }) {
                         type="button"
                         onClick={onOpen}
                         className={classNames(
-                            "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-lg transition group-hover:scale-105",
-                            palette.bg,
-                            palette.shadow,
+                            "flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl shadow-lg transition group-hover:scale-105",
+                            showLogo
+                                ? "border border-slate-100 bg-white p-2"
+                                : `bg-gradient-to-br text-white ${palette.bg} ${palette.shadow}`,
                         )}
                         aria-label={`Buka detail ${app.name}`}
                     >
-                        <Icon className="h-7 w-7" />
+                        {showLogo ? (
+                            <img
+                                src={logoUrl}
+                                alt={app.name}
+                                onError={() => setLogoError(true)}
+                                className="h-full w-full object-contain"
+                            />
+                        ) : (
+                            <Icon className="h-7 w-7" />
+                        )}
                     </button>
 
                     <ModeBadge mode={app.mode} />
