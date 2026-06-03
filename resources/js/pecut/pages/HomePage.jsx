@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
     ArrowRight,
     Building2,
+    ChevronLeft,
     ChevronRight,
     CloudSun,
     Link as LinkIcon,
@@ -47,6 +48,17 @@ export default function HomePage({
     const activeComplaints = Array.isArray(complaints) ? complaints : [];
 
     const popularApps = activeApps.filter((app) => app.popular).slice(0, 12);
+
+    const popularScrollRef = useRef(null);
+
+    const scrollPopularApps = (direction) => {
+        if (!popularScrollRef.current) return;
+
+        popularScrollRef.current.scrollBy({
+            left: direction === "left" ? -360 : 360,
+            behavior: "smooth",
+        });
+    };
 
     const asnCount = activeApps.filter(
         (app) => app.type === "ASN Digital",
@@ -341,20 +353,48 @@ export default function HomePage({
                         onAction={() => goApps("Semua")}
                     />
 
-                    <div className="no-scrollbar flex gap-5 overflow-x-auto pb-4">
-                        {popularApps.map((app, index) => (
-                            <div
-                                key={app.name}
-                                className="min-w-[280px] max-w-[280px]"
-                            >
-                                <AppCard
-                                    app={app}
-                                    compact
-                                    index={index}
-                                    onOpen={() => navigate(`app/${app.slug}`)}
-                                />
-                            </div>
-                        ))}
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => scrollPopularApps("left")}
+                            className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-sky-100 bg-white text-sky-700 shadow-xl shadow-slate-200 transition hover:bg-sky-50 md:flex"
+                            aria-label="Geser aplikasi populer ke kiri"
+                        >
+                            <ChevronLeft className="h-5 w-5" />
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => scrollPopularApps("right")}
+                            className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-sky-100 bg-white text-sky-700 shadow-xl shadow-slate-200 transition hover:bg-sky-50 md:flex"
+                            aria-label="Geser aplikasi populer ke kanan"
+                        >
+                            <ChevronRight className="h-5 w-5" />
+                        </button>
+
+                        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 hidden w-16 bg-gradient-to-r from-slate-50/90 to-transparent md:block" />
+                        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 hidden w-16 bg-gradient-to-l from-slate-50/90 to-transparent md:block" />
+
+                        <div
+                            ref={popularScrollRef}
+                            className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4 md:px-12"
+                        >
+                            {popularApps.map((app, index) => (
+                                <div
+                                    key={app.slug || app.name}
+                                    className="min-w-[280px] max-w-[280px] snap-start"
+                                >
+                                    <AppCard
+                                        app={app}
+                                        compact
+                                        index={index}
+                                        onOpen={() =>
+                                            navigate(`app/${app.slug}`)
+                                        }
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
