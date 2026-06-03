@@ -71,8 +71,11 @@ function getAppIcon(app) {
     if (text.includes("statistik") || text.includes("data")) return BarChart3;
     if (text.includes("kearsipan") || text.includes("arsip")) return Archive;
     if (text.includes("perpustakaan") || text.includes("buku")) return BookOpen;
-    if (text.includes("perhubungan") || text.includes("transportasi"))
+
+    if (text.includes("perhubungan") || text.includes("transportasi")) {
         return Bus;
+    }
+
     if (text.includes("lingkungan")) return Leaf;
     if (text.includes("pengaduan") || text.includes("lapor")) return Megaphone;
 
@@ -95,11 +98,22 @@ function getAppIcon(app) {
     return Grid3X3;
 }
 
+function normalizeAppLogo(item) {
+    const image = item?.image || null;
+
+    if (!image) {
+        return null;
+    }
+
+    return image;
+}
+
 export function mapApiApp(item, index = 0) {
     const urusanTitle = item?.urusan?.title || "Pelayanan";
     const categoryTitle = item?.category?.title || "Layanan Digital";
     const categoryId = Number(item?.category_id ?? item?.category?.id);
     const portalType = categoryId === 2 ? "ASN Digital" : "Public Digital";
+    const logo = normalizeAppLogo(item);
 
     return {
         id: item.id,
@@ -123,7 +137,10 @@ export function mapApiApp(item, index = 0) {
         mode: item.is_sso ? "SSO" : "Link",
         popular: index < 12,
         icon: getAppIcon(item),
-        image: item.image,
+
+        logo,
+        image: logo,
+
         url: item.url,
         redirectUrl: `/redirect/${item.id}`,
         raw: item,
