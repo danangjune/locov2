@@ -9,9 +9,11 @@ export default function Footer({ navigate }) {
                         onClick={() => navigate("home")}
                         className="flex items-center gap-3 text-left"
                     >
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-400 text-white">
-                            <Sparkles className="h-7 w-7" />
-                        </div>
+                        <img
+                            src="/images/logo-pecut-full.png"
+                            alt="PECUT Kota Kediri"
+                            className="h-9 max-w-[180px] object-contain sm:h-10 sm:max-w-[230px] md:h-11 md:max-w-[270px] xl:h-12 xl:max-w-[320px]"
+                        />
 
                         <div>
                             <p className="text-xl font-black leading-none">

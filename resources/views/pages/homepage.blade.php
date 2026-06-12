@@ -10,7 +10,7 @@
 @endpush
 {{-- Content Layanan --}}
 <div class="content-layanan-parent">
-    <div class="content-layanan-title">THE SERVICE CITY</div>
+    <div class="content-layanan-title">KEDIRI NGANGENI</div>
     <div class="content-layanan-description">Telusuri semua layanan digital di Kota Kediri</div>
     <div class="content-layanan-content-parent">
         <div class="content-layanan-content-div">

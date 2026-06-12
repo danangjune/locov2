@@ -43,7 +43,7 @@
         <img src="{{ asset('assets/img/kediri/taman-sekartaji.jpg') }}" style="width: 300px; height: 300px;" class="rounded object-fit-cover shadow" alt="">
       </div>
       <div style="flex: 1;">
-        <h4 class="fw-bold text-primary">Kediri, The Service City</h4>
+        <h4 class="fw-bold text-primary">Kediri, KEDIRI NGANGENI</h4>
         <p class="text-muted">Untuk Meningkatkan peluang investasi di Kota Kediri, pemerintah kota menerapkan berbagai layanan untuk memberikan kemudahan bagi calon investor. Salah satunya adalah pembentukan Badan Penanaman Modal (BPM) Kota Kediri yang mempunyai tugas melaksanakan sebagian urusan pemerintah daerah dibidang penanaman modal yang meliputi perencanaan, pelaksanaan dan pengendalian sesuai dengan kebijakan Walikota Kediri.</p>
         <p class="text-muted">Pemerintah Kota Kediri juga berbenah dalam penigkatan pelayanan prima kepada masyarakat. Agar pelayanan terhadap masyarakat lebih representatif, pemerintah melakukan perbaikan gedung pelayanan di seluruh kelurahan yang ada di Kota Kediri. Tidak hanya gedung pelayanannya saja namun sarana dan prasarana pendukung pelayanan juga diperbaiki. Diharapkan dengan gedung pelayanan yang baru, suasana baru bisa tumbuh, sehingga mendorong gairah dan semangat kerja yang produktif dalam melayani masyarakat.</p>
         <p class="text-muted">Keberadaan BPM ditujukan untuk membantu para investor menanamkan modalnya di Kota Kediri. BPM memberikan kemudahan layanan perijinan yang disyaratkan. Dari sekitar 153 item perjanjian, hanya 4 (empat) yang berbayar, sisanya gratis. Dengan berbagai kemudahan tersebut Pemkot Kediri mendapatkan penghargaan "Investmen Award" 2015 di bidang pelayanan penanaman modal oleh Gubernur Jawa Timur Soekarwo.</p>

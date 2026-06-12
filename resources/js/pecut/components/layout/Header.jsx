@@ -12,6 +12,8 @@ export default function Header({ navigate, route }) {
         ["news", "Berita"],
         ["agenda", "Agenda"],
         ["help", "Bantuan"],
+        ["guide", "Panduan"],
+        ["selayangpandang", "Selayang Pandang"],
     ];
 
     const isActive = (path) => {
@@ -48,6 +50,55 @@ export default function Header({ navigate, route }) {
         navigate(path);
     };
 
+    const redirectToSSO = () => {
+        const base = window.PECUT_SSO_URL || '/auth/login';
+        const redirect = encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+        const url = base.includes('?') ? `${base}&redirect=${redirect}` : `${base}?redirect=${redirect}`;
+        window.location.href = url;
+    };
+
+    // Prefer auth prop from parent; fall back to global injected user
+    const user = window.PECUT_USER ?? null;
+    console.log("Authenticated user:", window);
+
+    const goToDashboard = () => {
+        if (window.PECUT_SSO_DASHBOARD_URL) {
+            window.location.href = window.PECUT_SSO_DASHBOARD_URL;
+            return;
+        }
+
+        navigate('dashboard');
+    };
+
+    const logout = async () => {
+        // If SSO provides a logout URL, redirect there (with return to origin)
+        if (window.PECUT_SSO_LOGOUT) {
+            const redirect = encodeURIComponent(window.location.origin);
+            const url = window.PECUT_SSO_LOGOUT.includes('?')
+                ? `${window.PECUT_SSO_LOGOUT}&redirect=${redirect}`
+                : `${window.PECUT_SSO_LOGOUT}?redirect=${redirect}`;
+            window.location.href = url;
+            return;
+        }
+
+        // Fallback: call local logout route (Laravel) then redirect home
+        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        try {
+            await fetch('/logout', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token || '',
+                },
+            });
+        } catch (e) {
+            // ignore network errors and still redirect
+        }
+
+        window.location.href = '/';
+    };
+
     return (
         <header className="sticky top-0 z-50 border-b border-sky-100/80 bg-white/90 backdrop-blur-xl">
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
@@ -58,7 +109,7 @@ export default function Header({ navigate, route }) {
                     aria-label="Kembali ke Beranda PECUT"
                 >
                     <img
-                        src="/images/logo-pecut-full (2).png"
+                        src="/images/logo-pecut-full.png"
                         alt="PECUT Kota Kediri"
                         className="h-9 max-w-[180px] object-contain sm:h-10 sm:max-w-[230px] md:h-11 md:max-w-[270px] xl:h-12 xl:max-w-[320px]"
                     />
@@ -90,13 +141,33 @@ export default function Header({ navigate, route }) {
                         Info Layanan
                     </button>
 
-                    <button
-                        type="button"
-                        onClick={() => navigate("login")}
-                        className="rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 px-5 py-2.5 text-sm font-black text-slate-900 shadow-lg shadow-amber-100 transition hover:scale-[1.02]"
-                    >
-                        Masuk SSO
-                    </button>
+                    {user ? (
+                        <>
+                            <button
+                                type="button"
+                                onClick={goToDashboard}
+                                className="rounded-full border border-sky-100 bg-white px-4 py-2 text-sm font-bold text-sky-700 hover:bg-sky-50"
+                            >
+                                Dashboard
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={logout}
+                                className="rounded-full bg-red-500 px-4 py-2 text-sm font-bold text-white hover:opacity-95"
+                            >
+                                Keluar
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={() => redirectToSSO()}
+                            className="rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 px-5 py-2.5 text-sm font-black text-slate-900 shadow-lg shadow-amber-100 transition hover:scale-[1.02]"
+                        >
+                            Masuk SSO
+                        </button>
+                    )}
                 </div>
 
                 <button
@@ -146,16 +217,42 @@ export default function Header({ navigate, route }) {
                             Info Layanan
                         </button>
 
-                        <button
-                            type="button"
-                            onClick={() => {
-                                navigate("login");
-                                setMobileMenuOpen(false);
-                            }}
-                            className="mt-2 rounded-full bg-amber-300 px-4 py-2 font-black text-slate-900"
-                        >
-                            Masuk SSO
-                        </button>
+                        {user ? (
+                            <>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        goToDashboard();
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="mt-2 rounded-full border border-sky-100 bg-white px-4 py-2 font-black text-slate-900"
+                                >
+                                    Dashboard
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        logout();
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="mt-2 rounded-full bg-red-500 px-4 py-2 font-black text-white"
+                                >
+                                    Keluar
+                                </button>
+                            </>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    redirectToSSO();
+                                    setMobileMenuOpen(false);
+                                }}
+                                className="mt-2 rounded-full bg-amber-300 px-4 py-2 font-black text-slate-900"
+                            >
+                                Masuk SSO
+                            </button>
+                        )}
                     </div>
                 </div>
             )}

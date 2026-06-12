@@ -85,7 +85,7 @@ export default function HomePage({
 
     return (
         <PageShell>
-            <section className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-cyan-50">
+            <section className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-sky-50">
                 <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-sky-200/40 blur-3xl" />
                 <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-200/40 blur-3xl" />
 
@@ -162,7 +162,7 @@ export default function HomePage({
                         className="relative z-10"
                     >
                         <div className="relative mx-auto max-w-xl rounded-[2rem] border border-sky-100 bg-white p-4 shadow-2xl shadow-sky-100">
-                            <div className="rounded-[1.5rem] bg-gradient-to-br from-sky-600 via-cyan-500 to-blue-700 p-5 text-white">
+                            <div className="rounded-[1.5rem] bg-gradient-to-br from-sky-600 via-sky-500 to-sky-700 p-5 text-white">
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-sm font-bold text-sky-100">
@@ -282,7 +282,7 @@ export default function HomePage({
                             desc: "Kumpulan aplikasi internal untuk ASN, OPD, kelurahan, kecamatan, administrasi, laporan, dan layanan pemerintahan.",
                             icon: Building2,
                             count: appsLoading ? "..." : `${asnCount} aplikasi`,
-                            gradient: "from-sky-600 to-blue-700",
+                            gradient: "from-sky-600 to-sky-700",
                         },
                         {
                             title: "Public Digital",
@@ -291,7 +291,7 @@ export default function HomePage({
                             count: appsLoading
                                 ? "..."
                                 : `${publicCount} aplikasi`,
-                            gradient: "from-cyan-500 to-sky-600",
+                            gradient: "from-sky-500 to-sky-600",
                         },
                     ].map((item) => (
                         <motion.div

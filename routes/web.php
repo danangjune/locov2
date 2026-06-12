@@ -4,53 +4,57 @@ use App\Http\Controllers\Admin\AppLinkController as AdminAppLinkController;
 use App\Http\Controllers\Admin\ContentFooterController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PanduanController;
+use App\Http\Controllers\Api\AgendaController;
 use App\Http\Controllers\AppLinkController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Portal\AppController;
+use App\Http\Controllers\Portal\ComplaintController;
+use App\Http\Controllers\Portal\NewsController;
+use App\Http\Controllers\Portal\SupportController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::view('/pecut', 'pecut.index')->name('pecut.index');
 // Auth Route
-Auth::routes(['register' => false]);
+Auth::routes();
 
-// Pages
-Route::get('/about', function () {
-    return view('pages.about');
-});
-Route::get('/privasi-data', function () {
-    return view('pages.privasi-data');
-});
-Route::get('/syarat-ketentuan', function () {
-    return view('pages.syarat-ketentuan');
-});
-
-
+/*
+|--------------------------------------------------------------------------
+| PECUT Public Inertia Routes - Final Order
+|--------------------------------------------------------------------------
+| Tempelkan ke routes/web.php dan sesuaikan dengan route auth/admin lama.
+| Hapus route /test-inertia jika sudah tidak dipakai.
+| Jangan taruh /apps/{slug} sebelum /apps.
+| Jangan taruh route parameter terlalu umum sebelum route statis.
+*/
 
 // Route Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/kediri', [HomeController::class, 'kediri'])->name('kediri');
-Route::get('/panduan', [HomeController::class, 'panduan'])->name('panduan');
-// Route::get('/aplikasi-tree', [HomeController::class, 'aplikasitree'])->name('aplikasitree');
 
-// Route Footer
-Route::get('/get-live-views', [FooterController::class, 'live_views'])->name('live-views');
-Route::get('/survey-kepuasan/{id}', [FooterController::class, 'survey_kepuasan'])->name('survey-kepuasan');
-Route::get('/load-survey-kepuasan', [FooterController::class, 'load_survey_kepuasan'])->name('load-survey-kepuasan');
+// Route Apps
+Route::get('/apps', [AppController::class, 'index'])->name('apps.index');
+Route::get('/apps/{slug}', [AppController::class, 'show'])->name('apps.show');
 
-// Route Layanan
-Route::get('/cek-link/{category_id}', [AppLinkController::class, 'index'])->name('cek-link');
-Route::get('/cek-link-detail/{id}', [AppLinkController::class, 'detail'])->name('cek-link-detail');
-Route::get('/cek-link-show/{id}', [AppLinkController::class, 'show'])->name('cek-link-show');
-Route::post('/cek-link-search', [AppLinkController::class, 'search'])->name('cek-link-search');
+// Route Berita
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
-Route::get('/redirect/{id}', [AppLinkController::class, 'redirect'])->name('apps.redirect');
+// Route Agenda
+Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
+Route::get('/agenda/{slug}', [AgendaController::class, 'show'])->name('agenda.show');
 
-Route::prefix('testing')->group(function () {
-    Route::get('pagination', [TestingController::class, 'pagination'])->name('testing.pagination');
-});
+// Route Aduan
+Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
+Route::get('/complaints/{slug}', [ComplaintController::class, 'show'])->name('complaints.show');
+
+// Route Bantuan
+Route::get('/guide', [SupportController::class, 'guide'])->name('guide.index');
+Route::get('/help', [SupportController::class, 'help'])->name('help.index');
+Route::get('/info', [SupportController::class, 'info'])->name('info.index');
+Route::get('/kediri', [SupportController::class, 'kediri'])->name('kediri');
 
 // Route Login
 Route::prefix('auth')->group(function () {
@@ -62,6 +66,7 @@ Route::prefix('users')->group(function () {
     Route::get('/profile', [LoginController::class, 'profile'])->name('users.profile');
 });
 
+// Route Admin
 Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
     Route::get('/', function () {
         return to_route('admin.dashboard');
@@ -86,4 +91,21 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
         Route::post('/destroy', [PanduanController::class, 'destroy'])->name('admin.panduan.destroy');
         Route::get('/data-dropdown', [PanduanController::class, 'data_dropdown'])->name('admin.panduan.data-dropdown');
     });
+});
+
+// Route Footer
+Route::get('/get-live-views', [FooterController::class, 'live_views'])->name('live-views');
+Route::get('/survey-kepuasan/{id}', [FooterController::class, 'survey_kepuasan'])->name('survey-kepuasan');
+Route::get('/load-survey-kepuasan', [FooterController::class, 'load_survey_kepuasan'])->name('load-survey-kepuasan');
+
+// Route Layanan
+Route::get('/cek-link/{category_id}', [AppLinkController::class, 'index'])->name('cek-link');
+Route::get('/cek-link-detail/{id}', [AppLinkController::class, 'detail'])->name('cek-link-detail');
+Route::get('/cek-link-show/{id}', [AppLinkController::class, 'show'])->name('cek-link-show');
+Route::post('/cek-link-search', [AppLinkController::class, 'search'])->name('cek-link-search');
+
+Route::get('/redirect/{id}', [AppLinkController::class, 'redirect'])->name('apps.redirect');
+
+Route::prefix('testing')->group(function () {
+    Route::get('pagination', [TestingController::class, 'pagination'])->name('testing.pagination');
 });

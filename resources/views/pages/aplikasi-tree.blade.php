@@ -89,7 +89,7 @@
         <div class="row align-items-center justify-content-between">
             <div id="title-content" class="col-8 col-sm-6 text-start">
                 <div class="fs-4 fw-bold text-gradient text-start">
-                    {{ 'Kediri The Service City' }}
+                    {{ 'KEDIRI NGANGENI' }}
                 </div>
                 <div class="fs-6 text-secondary text-opacity-50">
                     {{ 'Semua Layanan ' . ($category_id == '1' ? 'Publik' : ($category_id == '2' ? 'Pemerintah' : 'Lainnya')) }}
@@ -181,7 +181,7 @@
             }
             // Set Title Content
             title_content.append(`
-                        <div class="fs-4 fw-bold text-gradient text-start">Kediri The Service City</div>
+                        <div class="fs-4 fw-bold text-gradient text-start">KEDIRI NGANGENI</div>
                         <div class="fs-6 text-secondary text-opacity-50">Semua Layanan ${pathArray[2]=='1'?'Publik':(pathArray[2]=='2'?'Pemerintah':'Lainnya')}</div>
                     `);
             // Set Content
@@ -310,7 +310,7 @@
                 // Set Title Content
                 if (paramsArray[1] == '0') {
                     title_content.append(`
-                                <div class="fs-4 fw-bold text-gradient text-start">Kediri The Service City</div>
+                                <div class="fs-4 fw-bold text-gradient text-start">KEDIRI NGANGENI</div>
                                 <div class="fs-6 text-secondary text-opacity-50">Semua Layanan ${pathArray[2]=='1'?'Public Digital':(pathArray[2]=='2'?'ASN Digital':'Lainnya')}</div>
                             `);
                     // Set Content
@@ -362,7 +362,7 @@
                 }
                 // Set Title Content
                 title_content.append(`
-                            <div class="fs-4 fw-bold text-gradient text-start">Kediri The Service City</div>
+                            <div class="fs-4 fw-bold text-gradient text-start">KEDIRI NGANGENI</div>
                             <div class="fs-6 text-secondary text-opacity-50">Semua Layanan ${pathArray[2]=='1'?'Public Digital':(pathArray[2]=='2'?'ASN Digital':'Lainnya')}</div>
                         `);
                 // Set Content
