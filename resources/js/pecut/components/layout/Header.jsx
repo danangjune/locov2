@@ -109,7 +109,7 @@ export default function Header({ navigate, route }) {
                     aria-label="Kembali ke Beranda PECUT"
                 >
                     <img
-                        src="/images/logo-pecut-full.png"
+                        src="/images/logo-pecut-full-transparan.png"
                         alt="PECUT Kota Kediri"
                         className="h-9 max-w-[180px] object-contain sm:h-10 sm:max-w-[230px] md:h-11 md:max-w-[270px] xl:h-12 xl:max-w-[320px]"
                     />

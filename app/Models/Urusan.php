@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Urusan extends Model
@@ -15,12 +14,12 @@ class Urusan extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'icon_name',
     ];
 
-    public function children() : HasMany 
+    public function children(): HasMany
     {
         return $this->hasMany(AppLink::class, 'urusan_id')->where('is_active', true);
     }
-
 }

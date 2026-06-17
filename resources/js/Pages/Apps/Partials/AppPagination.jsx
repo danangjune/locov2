@@ -18,6 +18,7 @@ export default function AppPagination({ meta = {}, filter = {} }) {
                 category_id: filter?.category_id || undefined,
                 urusan_id: filter?.urusan_id || undefined,
                 mode: filter?.mode || undefined,
+                app_from_id: filter?.app_from_id || undefined,
                 page,
             },
             {

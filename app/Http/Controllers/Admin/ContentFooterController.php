@@ -4,151 +4,140 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Footer;
+use App\Services\Pecut\Admin\ContentFooterManagementService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class ContentFooterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index(Request $request, ContentFooterManagementService $service)
     {
-        $filter = [
-            'search' => $request->query('search'),
+        $search = $request->query('search');
+        $page = (int) $request->query('page', 1);
+        $perPage = (int) $request->query('per_page', 10);
+
+        return Inertia::render('Admin/ContentFooter/Index', [
+            'meta' => [
+                'title' => 'Content Footer',
+                'subtitle' => 'Kelola group dan item konten footer yang tampil pada portal PECUT.',
+            ],
+            'filter' => (object) [
+                'search' => $search,
+                'page' => $page,
+                'per_page' => $perPage,
+            ],
+            'data' => $service->getIndexData($request),
+        ]);
+    }
+
+    public function store(Request $request, ContentFooterManagementService $service)
+    {
+        $validated = $request->validate([
+            'content' => ['required', 'string', 'max:1000'],
+            'url' => ['nullable', 'string', 'max:1000'],
+            'icon' => ['nullable', 'string', 'max:100'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
+            'parent' => ['nullable', 'integer'],
+            'idx_content' => ['nullable', 'integer', 'min:0'],
+        ]);
+
+        $parent = (int) ($validated['parent'] ?? 0);
+        $image = $this->storeImage($request);
+
+        Footer::create([
+            'content' => $validated['content'],
+            'url' => $validated['url'] ?? null,
+            'icon' => $validated['icon'] ?? null,
+            'image' => $image,
+            'parent' => $parent,
+            'idx_content' => $validated['idx_content'] ?? $service->getNextSortOrder($parent),
+            'tab_content' => null,
+            'statusenabled' => true,
+        ]);
+
+        return back()->with('success', 'Content footer berhasil ditambahkan.');
+    }
+
+    public function update(Request $request, Footer $footer)
+    {
+        $validated = $request->validate([
+            'content' => ['required', 'string', 'max:1000'],
+            'url' => ['nullable', 'string', 'max:1000'],
+            'icon' => ['nullable', 'string', 'max:100'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
+            'parent' => ['nullable', 'integer'],
+            'idx_content' => ['nullable', 'integer', 'min:0'],
+        ]);
+
+        $payload = [
+            'content' => $validated['content'],
+            'url' => $validated['url'] ?? null,
+            'icon' => $validated['icon'] ?? null,
+            'parent' => (int) ($validated['parent'] ?? 0),
+            'idx_content' => $validated['idx_content'] ?? $footer->idx_content,
+            'statusenabled' => true,
         ];
 
-        $query = Footer::query()->where('statusenabled', true);
-        $query->with('children', 'parent');
-        $query->where('parent', 0);
-        if ($request->filled('search')) {
-            $query->where(function ($sub) use ($filter) {
-                $seach = $filter['search'];
-                $sub->where('content', 'like', '%' . $seach . '%');
-            });
-        }
-
-        $data = $query->paginate();
-
-        // return response()->json($data);
-        return view('admin.content-footer.index', compact('filter', 'data'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.content-footer.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        // dd($request->all());
-        $request->validate([
-            'content' => 'required|string|',
-            'url' => 'string|nullable',
-            'icon' => 'string|nullable',
-            'image' => 'nullable|image|mimes:png,jpeg,jpg'
-        ]);
-
-        // File Manage
-        $image = null;
         if ($request->hasFile('image')) {
-            $file_name = $request->file('image')->hashName();
-            $request->file('image')->storeAs('public/footer', $file_name);
-            $image = 'storage/footer/' . $file_name;
+            $this->deleteImage($footer->image);
+            $payload['image'] = $this->storeImage($request);
         }
 
-        // Store Content Footer
-        $idx = Footer::where('parent', $request->parent)->max('idx_content') + 1;
-        $data = Footer::create([
-            'content' => $request->content,
-            'url' => $request->url,
-            'icon' => $request->icon,
-            'image' => $image,
-            'parent' => $request->parent,
-            'idx_content' => $idx,
-            'tab_content'=> null,
-        ]);
+        $footer->update($payload);
 
-        return response()->json([
-            'message' => 'Success',
-        ]);
+        return back()->with('success', 'Content footer berhasil diperbarui.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(Footer $footer)
     {
-        //
-    }
+        $activeChildren = Footer::query()
+            ->where('statusenabled', true)
+            ->where('parent', $footer->id)
+            ->count();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function find(Request $request)
-    {
-        return response()->json(Footer::find($request->id));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request)
-    {
-        // return response()->json($request->all());
-        $request->validate([
-            'content' => 'required|string|',
-            'url' => 'string|nullable',
-            'icon' => 'string|nullable',
-            'image' => 'nullable|image|mimes:png,jpeg,jpg'
-        ]);
-
-        // File Manage
-        $image = null;
-        if ($request->hasFile('image')) {
-            $file_name = $request->file('image')->hashName();
-            $request->file('image')->storeAs('public/footer', $file_name);
-            $image = public_path('storage/footer/' . $file_name);
+        if ($activeChildren > 0) {
+            return back()->withErrors([
+                'delete' => 'Content footer ini masih memiliki child. Hapus child terlebih dahulu sebelum menghapus parent.',
+            ]);
         }
 
-        // Store Content Footer
-        $data = Footer::find($request->parent);
-        $data->content = $request->content;
-        $data->url = $request->url;
-        $data->icon = $request->icon;
-        $data->idx_content = $request->idx;
-        if(isset($image) || $image != null){
-            $data->image = $image;
-        }
-        $data->save();
+        $footer->update([
+            'statusenabled' => false,
+        ]);
 
-        return response()->json(['message' => 'Update Success!']);
+        return back()->with('success', 'Content footer berhasil dihapus.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Request $request)
+    public function find(string $id)
     {
-        $data = Footer::find($request->id);
-        $data->statusenabled = false;
-        $data->save();
-        return response()->json([
-            'message' => 'Delete Success!',
-            'data' => $data,
-        ]);
+        return response()->json(Footer::findOrFail($id));
+    }
+
+    private function storeImage(Request $request): ?string
+    {
+        if (! $request->hasFile('image')) {
+            return null;
+        }
+
+        $fileName = $request->file('image')->hashName();
+        $request->file('image')->storeAs('public/footer', $fileName);
+
+        return 'storage/footer/' . $fileName;
+    }
+
+    private function deleteImage(?string $image): void
+    {
+        $image = trim((string) $image);
+
+        if ($image === '' || str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+            return;
+        }
+
+        $path = str_replace('storage/', 'public/', ltrim($image, '/'));
+
+        if (Storage::exists($path)) {
+            Storage::delete($path);
+        }
     }
 }

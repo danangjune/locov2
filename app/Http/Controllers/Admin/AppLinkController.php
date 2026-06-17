@@ -4,112 +4,66 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppLink;
+use App\Services\Pecut\Admin\AppManagementService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Inertia\Inertia;
 
 class AppLinkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index(Request $request, AppManagementService $service)
     {
-        $filter = [
-            'search' => $request->query('search'),
-            'is_sso' => $request->boolean('is_sso', false),
-            'is_active' => $request->boolean('is_active', false),
-            'app_from_id' => intval($request->query('app_from_id', 1)),
-            'show_all' => $request->boolean('show_all', true),
-            'isJson' => $request->boolean('is_json', false),
-        ];
+        $search = trim((string) $request->query('search', ''));
+        $showAll = $request->boolean('show_all', true);
+        $isSso = $request->boolean('is_sso', false);
+        $isActive = $request->boolean('is_active', false);
+        $appFromId = (int) $request->query('app_from_id', 1);
+        $categoryId = $request->query('category_id');
+        $page = (int) $request->query('page', 1);
+        $perPage = (int) $request->query('per_page', 15);
 
-        $query = AppLink::query()
-            ->with([
-                'childrenRecursive',
-                'childrenRecursive.urusan',
-                'childrenRecursive.app_from',
-            ])
-            ->where('parent', 0);
-
-        // ambil semua root dulu
-        $collection = $query->get();
-
-        // bersihkan tree
-        $cleaned = $this->cleanChildren($collection, $filter);
-
-        // sisakan root yang memang masih relevan
-        $cleaned = $cleaned->filter(function ($row) use ($filter) {
-            return $this->matchesFilter($row, $filter)
-                || $row->childrenRecursive->count() > 0;
-        })->values();
-
-        // paginate manual setelah dibersihkan
-        $perPage = 15;
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentItems = $cleaned->slice(($currentPage - 1) * $perPage, $perPage)->values();
-
-        $data = new LengthAwarePaginator(
-            $currentItems,
-            $cleaned->count(),
-            $perPage,
-            $currentPage,
-            [
-                'path' => request()->url(),
-                'query' => request()->query(),
-            ]
-        );
-
-        if ($filter['isJson']) {
-            return response()->json([
-                'filter' => $filter,
-                'data' => $data,
-            ]);
-        }
-
-        return view('admin.apps.index', compact('filter', 'data'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $data = new AppLink();
-
-        return view('admin.apps.forms', compact('data'));
-    }
-
-    private function _generateCode($parent): string
-    {
-        $count = AppLink::where('parent', $parent)->count();
-
-        return $parent . '.' . $count + 1;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'urusan_id' => ['required'],
-            'category_id' => ['required'],
-            'parent' => ['nullable'],
-            'name' => ['required'],
-            'alias' => ['nullable'],
-            'description' => ['nullable'],
-            'url' => ['nullable'],
-            'icon' => ['nullable', 'string'],
-            'image' => ['nullable', 'image'],
-            'is_active' => ['nullable', 'boolean'],
-            'is_sso' => ['nullable', 'boolean'],
-            'app_from_id' => ['nullable'],
+        return Inertia::render('Admin/Apps/Index', [
+            'meta' => [
+                'title' => 'Manajemen Aplikasi',
+                'subtitle' => 'Kelola struktur aplikasi parent-child, status, SSO, kategori, dan URL layanan PECUT.',
+            ],
+            'filter' => (object) [
+                'search' => $search,
+                'show_all' => $showAll,
+                'is_sso' => $isSso,
+                'is_active' => $isActive,
+                'app_from_id' => $appFromId,
+                'category_id' => $categoryId,
+                'page' => $page,
+                'per_page' => $perPage,
+            ],
+            'data' => $service->getIndexData($request),
         ]);
+    }
 
-        $validated['parent'] = $validated['parent'] ?? '0';
+    public function create(Request $request, AppManagementService $service)
+    {
+        return Inertia::render('Admin/Apps/Create', [
+            'meta' => [
+                'title' => 'Tambah Aplikasi',
+                'subtitle' => 'Tambahkan root aplikasi baru atau child aplikasi sesuai struktur portal.',
+            ],
+            'filter' => (object) [
+                'parent' => (int) $request->query('parent', 0),
+            ],
+            'data' => $service->getCreateData($request),
+        ]);
+    }
 
-        $validated['code'] = $this->_generateCode($validated['parent']);
+    public function store(Request $request, AppManagementService $service)
+    {
+        $validated = $this->validatePayload($request);
+        $validated['parent'] = (int) ($validated['parent'] ?? 0);
+        $validated['app_from_id'] = $validated['app_from_id'] ?? 1;
+        $validated['is_active'] = $request->boolean('is_active', true);
+        $validated['is_sso'] = $request->boolean('is_sso', false);
+        $validated['code'] = $service->generateCode($validated['parent']);
 
         if ($request->hasFile('image')) {
             $filename = $request->file('image')->hashName();
@@ -119,145 +73,128 @@ class AppLinkController extends Controller
 
         AppLink::create($validated);
 
-        return response()->json(['message' => 'Data created successfully.']);
+        return Redirect::route('admin.apps.index')
+            ->with('success', 'Aplikasi berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(string $id, AppManagementService $service)
     {
-        $data = AppLink::with(['urusan', 'category', 'parentRoot.category'])->findOrFail($id);
-
-        return response()->json($data);
+        return response()->json($service->getJsonApp((int) $id));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(string $id, AppManagementService $service)
     {
-        $data = AppLink::findOrFail($id);
-
-        return view('admin.apps.forms', compact('data'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $old = AppLink::findOrFail($id);
-
-        $validated = $request->validate([
-            'urusan_id' => ['required'],
-            'category_id' => ['required'],
-            'name' => ['required'],
-            'alias' => ['nullable'],
-            'description' => ['nullable'],
-            'url' => ['nullable'],
-            'icon' => ['nullable', 'string'],
-            'image' => ['nullable', 'image'],
-            'is_active' => ['nullable', 'boolean'],
-            'is_sso' => ['nullable', 'boolean'],
-            'app_from_id' => ['nullable'],
+        return Inertia::render('Admin/Apps/Edit', [
+            'meta' => [
+                'title' => 'Edit Aplikasi',
+                'subtitle' => 'Perbarui informasi aplikasi, URL, gambar, kategori, status, dan SSO.',
+            ],
+            'filter' => (object) [],
+            'data' => $service->getEditData((int) $id),
         ]);
+    }
+
+    public function update(Request $request, string $id, AppManagementService $service)
+    {
+        $app = AppLink::query()->findOrFail($id);
+        $validated = $this->validatePayload($request, true);
+        $validated['parent'] = array_key_exists('parent', $validated)
+            ? (int) ($validated['parent'] ?? 0)
+            : (int) $app->parent;
+        $validated['app_from_id'] = $validated['app_from_id'] ?? 1;
+        $validated['is_active'] = $request->boolean('is_active', false);
+        $validated['is_sso'] = $request->boolean('is_sso', false);
+
+        if ($service->isInvalidParent($app->id, (int) $validated['parent'])) {
+            return back()->withErrors([
+                'parent' => 'Parent tidak valid. Aplikasi tidak boleh menjadi parent dari dirinya sendiri atau turunannya.',
+            ]);
+        }
 
         if ($request->hasFile('image')) {
-            if (!is_null($old->image) && Storage::exists('public/apps/' . $old->image)) {
-                if(!preg_match('/general/i', $old->image)) {
-                    Storage::delete('public/apps/' . $old->image);
-                }
-            }
+            $this->deleteImageIfNeeded($app);
+
             $filename = $request->file('image')->hashName();
             $request->file('image')->storeAs('public/apps', $filename);
             $validated['image'] = $filename;
         }
 
-        $old->update($validated);
+        $app->update($validated);
 
-        return response()->json(['message' => 'Data updated successfully.']);
+        return Redirect::route('admin.apps.index')
+            ->with('success', 'Aplikasi berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        $data = AppLink::withTrashed()->findOrFail($id);
-        if (!is_null($data->image) && Storage::exists('public/apps/' . $data->image)) {
-            Storage::delete('public/apps/' . $data->image);
-        }
-        $data->forceDelete();
+        $app = AppLink::query()->withCount('children')->findOrFail($id);
 
-        return response()->json(['message' => 'Data deleted successfully.']);
+        if ($app->children_count > 0) {
+            return back()->withErrors([
+                'delete' => 'Aplikasi ini masih memiliki child. Pindahkan atau hapus child terlebih dahulu.',
+            ]);
+        }
+
+        $this->deleteImageIfNeeded($app);
+        $app->forceDelete();
+
+        return Redirect::route('admin.apps.index')
+            ->with('success', 'Aplikasi berhasil dihapus.');
     }
 
-    public function changeParent(Request $request, $id)
+    public function changeParent(Request $request, $id, AppManagementService $service)
     {
-        $data = AppLink::findOrFail($id);
+        $app = AppLink::query()->findOrFail($id);
 
         $validated = $request->validate([
-            'parent' => ['required'],
+            'parent' => ['required', 'integer'],
         ]);
 
-        $data->update($validated);
+        $newParentId = (int) $validated['parent'];
 
-        return response()->json(['message' => 'Data parent berhasil diubah.']);
-    }
-
-    private function cleanChildren($items, $filter)
-    {
-        return $items->map(function ($item) use ($filter) {
-
-            if ($item->childrenRecursive) {
-                $item->childrenRecursive = $this->cleanChildren(
-                    collect($item->childrenRecursive),
-                    $filter
-                );
-            }
-
-            if ($this->matchesFilter($item, $filter)) {
-                return $item;
-            }
-
-            if ($item->childrenRecursive && $item->childrenRecursive->count() > 0) {
-                return $item;
-            }
-
-            return null;
-
-        })->filter()->values();
-    }
-
-    private function matchesFilter($item, $filter)
-    {
-        $matchApp = true;
-        $matchActive = true;
-        $matchSso = true;
-        $matchSearch = true;
-
-        if (!$filter['show_all']) {
-            $matchApp = $item->app_from_id == $filter['app_from_id'];
-
-            $matchActive = $filter['is_active']
-                ? (bool) $item->is_active === true
-                : true;
-
-            $matchSso = $filter['is_sso']
-                ? (bool) $item->is_sso === true
-                : true;
+        if ($service->isInvalidParent($app->id, $newParentId)) {
+            return back()->withErrors([
+                'parent' => 'Parent tidak valid. Aplikasi tidak boleh dipindah ke dirinya sendiri atau turunannya.',
+            ]);
         }
 
-        if (!empty($filter['search'])) {
-            $search = strtolower($filter['search']);
+        $app->update([
+            'parent' => $newParentId,
+        ]);
 
-            $matchSearch =
-                str_contains(strtolower($item->name ?? ''), $search) ||
-                str_contains(strtolower($item->alias ?? ''), $search) ||
-                str_contains(strtolower($item->description ?? ''), $search);
+        return back()->with('success', 'Parent aplikasi berhasil diubah.');
+    }
+
+    private function validatePayload(Request $request, bool $isUpdate = false): array
+    {
+        return $request->validate([
+            'urusan_id' => ['required', 'exists:urusan,id'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'parent' => ['nullable', 'integer'],
+            'name' => ['required', 'string', 'max:255'],
+            'alias' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'url' => ['nullable', 'string', 'max:2048'],
+            'icon' => ['nullable', 'string', 'max:255'],
+            'image' => [$isUpdate ? 'nullable' : 'nullable', 'image', 'max:4096'],
+            'is_active' => ['nullable', 'boolean'],
+            'is_sso' => ['nullable', 'boolean'],
+            'app_from_id' => ['nullable', 'exists:app_from,id'],
+        ]);
+    }
+
+    private function deleteImageIfNeeded(AppLink $app): void
+    {
+        if (! $app->image) {
+            return;
         }
 
-        return $matchApp && $matchActive && $matchSso && $matchSearch;
+        if (preg_match('/general/i', $app->image)) {
+            return;
+        }
+
+        if (Storage::exists('public/apps/' . $app->image)) {
+            Storage::delete('public/apps/' . $app->image);
+        }
     }
 }

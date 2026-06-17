@@ -15,6 +15,7 @@ class AppController extends Controller
         $categoryId = $request->query('category_id');
         $urusanId = $request->query('urusan_id');
         $mode = $request->query('mode');
+        $app_from_id = $request->query('app_from_id');
         $page = (int) $request->query('page', 1);
 
         return Inertia::render('Apps/Index', [
@@ -26,6 +27,7 @@ class AppController extends Controller
                 'category_id' => $categoryId,
                 'urusan_id' => $urusanId,
                 'mode' => $mode,
+                'app_from_id' => $app_from_id,
                 'page' => $page,
             ],
             'data' => $service->getIndexData($request),

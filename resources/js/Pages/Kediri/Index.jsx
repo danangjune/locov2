@@ -42,7 +42,7 @@ const fallbackSections = [
         ],
     },
     {
-        title: "Kediri, NGANGENI",
+        title: "Kediri, KEDIRI NGANGENI",
         subtitle: "Penguatan pelayanan publik, investasi, dan kemudahan akses layanan masyarakat.",
         image: "/assets/img/kediri/taman-sekartaji.jpg",
         description: [
@@ -258,13 +258,18 @@ export default function Index({ meta = {}, data = {} }) {
         [data?.stats]
     );
 
-    const heroImage = getSectionImage(sections[0], 0);
+    const page = data?.page || {};
+    const pageTitle = page?.title || meta?.title || "Selayang Pandang Kota Kediri";
+    const pageSubtitle = page?.subtitle || "Kota Kediri dalam satu pandang";
+    const pageDescription = page?.description || "Ringkasan profil Kota Kediri yang memuat wilayah, posisi geografis, luas kota, sejarah singkat, dan arah penguatan pelayanan publik sebagai KEDIRI NGANGENI.";
+
+    const heroImage = page?.hero_image || getSectionImage(sections[0], 0);
     const secondaryImage = getSectionImage(sections[1], 1);
     const thirdImage = getSectionImage(sections[2], 2);
 
     return (
         <>
-            <Head title={meta?.title || "Selayang Pandang Kota Kediri"} />
+            <Head title={pageTitle} />
 
             <PublicLayout currentRoute="kediri">
                 <PageShell>
@@ -277,15 +282,15 @@ export default function Index({ meta = {}, data = {} }) {
                             <div>
                                 <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white/85 px-4 py-2 text-sm font-black text-sky-700 shadow-sm backdrop-blur">
                                     <MapPinned className="h-4 w-4" />
-                                    Kota Kediri dalam satu pandang
+                                    {pageSubtitle}
                                 </div>
 
                                 <h1 className="mt-6 max-w-4xl text-4xl font-black tracking-tight text-slate-950 md:text-6xl md:leading-[1.05]">
-                                    Selayang Pandang <span className="text-sky-700">Kota Kediri</span>
+                                    {pageTitle}
                                 </h1>
 
                                 <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-                                    Ringkasan profil Kota Kediri yang memuat wilayah, posisi geografis, luas kota, sejarah singkat, dan arah penguatan pelayanan publik sebagai Kediri Ngangeni.
+                                    {pageDescription}
                                 </p>
 
                                 <div className="mt-7 flex flex-wrap gap-3">
@@ -322,12 +327,12 @@ export default function Index({ meta = {}, data = {} }) {
                                                 />
                                             ) : null}
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
-                                            <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-white/50 p-4 backdrop-blur">
+                                            <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-white/40 p-4 backdrop-blur">
                                                 <p className="text-xs font-black uppercase tracking-[0.2em] text-sky-700">
                                                     KEDIRI NGANGENI
                                                 </p>
                                                 <p className="mt-1 text-XS font-black text-slate-950">
-                                                    Profil, Sejarah, dan Layanan
+                                                    {pageSubtitle}
                                                 </p>
                                             </div>
                                         </div>

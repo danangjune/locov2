@@ -135,6 +135,7 @@ export function mapApiApp(item, index = 0) {
         categoryOriginal: categoryTitle,
         categoryId,
         mode: item.is_sso ? "SSO" : "Link",
+        app_from: item.app_from?.name,
         popular: index < 12,
         icon: getAppIcon(item),
 

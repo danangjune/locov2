@@ -65,11 +65,12 @@ class AppService
             $categoryId = $request->query('category_id');
             $urusanId = $request->query('urusan_id');
             $mode = $request->query('mode');
+            $app_from_id = $request->query('app_from_id');
             $perPage = (int) $request->query('per_page', 12);
             $perPage = max(6, min($perPage, 48));
 
             $query = AppLink::query()
-                ->with(['urusan', 'category'])
+                ->with(['urusan', 'category', 'app_from'])
                 ->where('is_active', true)
                 ->whereDoesntHave('children');
 
@@ -89,6 +90,10 @@ class AppService
 
             if ($mode === 'link') {
                 $query->where('is_sso', false);
+            }
+
+            if ($app_from_id) {
+                $query->where('app_from_id', $app_from_id);
             }
 
             if ($search !== '') {

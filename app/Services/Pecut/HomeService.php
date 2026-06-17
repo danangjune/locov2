@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use App\Services\Pecut\HomeSectionContentService;
 
 class HomeService
 {
@@ -35,6 +36,7 @@ class HomeService
                 'news' => $news['error'],
                 'complaints' => $complaints['error'],
             ],
+            'home_sections' => app(HomeSectionContentService::class)->getSections(),
         ];
     }
 
@@ -45,7 +47,7 @@ class HomeService
             $categoryId = $request->query('category_id');
 
             $query = AppLink::query()
-                ->with(['urusan', 'category'])
+                ->with(['urusan', 'category', 'app_from'])
                 ->where('is_active', true)
                 ->whereDoesntHave('children');
 

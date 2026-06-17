@@ -66,7 +66,9 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
 
                     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
                         <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-                            <ComplaintFilter filter={filter} />
+                            <aside className="sticky top-24 self-start lg:sticky lg:top-24 lg:self-start">
+                                <ComplaintFilter filter={filter} />
+                            </aside>
 
                             <div>
                                 <SectionHeader

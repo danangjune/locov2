@@ -3,6 +3,9 @@
 namespace App\Services\Pecut;
 
 use App\Models\PanduanFile;
+use App\Models\PortalPage;
+use App\Models\PortalPageSection;
+use App\Models\PortalPageStat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -149,76 +152,227 @@ class SupportPageService
 
     public function getKediriData(Request $request): array
     {
-        return [
-            'stats' => [
-                [
-                    'label' => 'Kecamatan',
-                    'value' => '3',
+        try {
+            $page = PortalPage::query()
+                ->with([
+                    'sections' => fn ($query) => $query->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
+                    'stats' => fn ($query) => $query->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
+                ])
+                ->where('slug', 'kediri')
+                ->where('statusenabled', true)
+                ->first();
+
+            if (! $page) {
+                return $this->fallbackKediriData();
+            }
+
+            $sections = $page->sections
+                ->map(fn (PortalPageSection $section) => [
+                    'id' => $section->id,
+                    'title' => $section->title,
+                    'subtitle' => $section->subtitle,
+                    'image' => $section->image ? $this->makeFileUrl($section->image) : null,
+                    'description' => $this->splitParagraphs($section->content),
+                ])
+                ->values()
+                ->all();
+
+            $stats = $page->stats
+                ->map(fn (PortalPageStat $stat) => [
+                    'id' => $stat->id,
+                    'label' => $stat->label,
+                    'value' => $stat->value,
+                ])
+                ->values()
+                ->all();
+
+            $fallback = $this->fallbackKediriData();
+
+            return [
+                'page' => [
+                    'id' => $page->id,
+                    'title' => $page->title ?: 'Selayang Pandang Kota Kediri',
+                    'subtitle' => $page->subtitle ?: 'Kota Kediri dalam satu pandang',
+                    'description' => $page->description ?: $fallback['page']['description'],
+                    'hero_image' => $page->hero_image ? $this->makeFileUrl($page->hero_image) : null,
                 ],
-                [
-                    'label' => 'Kelurahan',
-                    'value' => '46',
+                'sections' => count($sections) ? $sections : $fallback['sections'],
+                'stats' => count($stats) ? $stats : $fallback['stats'],
+            ];
+        } catch (\Throwable $th) {
+            return $this->fallbackKediriData();
+        }
+    }
+
+
+    public function getStaticPageData(string $slug): array
+    {
+        try {
+            $page = PortalPage::query()
+                ->with([
+                    'sections' => fn ($query) => $query->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
+                ])
+                ->where('slug', $slug)
+                ->where('statusenabled', true)
+                ->first();
+
+            if (! $page) {
+                return $this->fallbackStaticPageData($slug);
+            }
+
+            $sections = $page->sections
+                ->map(fn (PortalPageSection $section) => [
+                    'id' => $section->id,
+                    'title' => $section->title,
+                    'subtitle' => $section->subtitle,
+                    'image' => $section->image ? $this->makeFileUrl($section->image) : null,
+                    'description' => $this->splitParagraphs($section->content),
+                ])
+                ->values()
+                ->all();
+
+            $fallback = $this->fallbackStaticPageData($slug);
+
+            return [
+                'page' => [
+                    'id' => $page->id,
+                    'slug' => $page->slug,
+                    'title' => $page->title ?: $fallback['page']['title'],
+                    'subtitle' => $page->subtitle ?: $fallback['page']['subtitle'],
+                    'description' => $page->description ?: $fallback['page']['description'],
+                    'hero_image' => $page->hero_image ? $this->makeFileUrl($page->hero_image) : null,
                 ],
-                [
-                    'label' => 'Luas Wilayah',
-                    'value' => '67,2 km²',
+                'sections' => count($sections) ? $sections : $fallback['sections'],
+            ];
+        } catch (\Throwable $th) {
+            return $this->fallbackStaticPageData($slug);
+        }
+    }
+
+    private function fallbackStaticPageData(string $slug): array
+    {
+        $fallback = [
+            'about' => [
+                'page' => [
+                    'slug' => 'about',
+                    'title' => 'Tentang PECUT',
+                    'subtitle' => 'Portal layanan digital Kota Kediri',
+                    'description' => 'PECUT adalah portal layanan digital Pemerintah Kota Kediri yang dirancang untuk memudahkan masyarakat, ASN, dan perangkat daerah dalam mengakses layanan digital secara cepat, efisien, dan terpadu.',
+                    'hero_image' => null,
+                ],
+                'sections' => [
+                    [
+                        'title' => 'Portal Efisien Cepat Mudah Terpadu',
+                        'subtitle' => 'Satu pintu akses layanan digital',
+                        'image' => null,
+                        'description' => [
+                            'PECUT menjadi pintu masuk layanan digital Kota Kediri agar pengguna tidak perlu mencari aplikasi secara terpisah.',
+                            'Melalui portal ini, layanan public digital dan ASN digital dapat dikelompokkan, dicari, serta diakses dengan lebih mudah.',
+                        ],
+                    ],
                 ],
             ],
+            'privasi-data' => [
+                'page' => [
+                    'slug' => 'privasi-data',
+                    'title' => 'Privasi Data',
+                    'subtitle' => 'Kebijakan perlindungan dan penggunaan data',
+                    'description' => 'Halaman ini menjelaskan gambaran umum pengelolaan data pada portal PECUT sebagai bagian dari layanan digital Pemerintah Kota Kediri.',
+                    'hero_image' => null,
+                ],
+                'sections' => [
+                    [
+                        'title' => 'Penggunaan Data',
+                        'subtitle' => 'Data digunakan sesuai kebutuhan layanan',
+                        'image' => null,
+                        'description' => [
+                            'Data yang diproses melalui portal digunakan untuk kebutuhan akses layanan, peningkatan kualitas layanan, pencatatan aktivitas layanan, dan pengamanan sistem.',
+                            'Pengelolaan data dilakukan secara proporsional sesuai kebutuhan penyelenggaraan layanan digital.',
+                        ],
+                    ],
+                ],
+            ],
+            'syarat-ketentuan' => [
+                'page' => [
+                    'slug' => 'syarat-ketentuan',
+                    'title' => 'Syarat & Ketentuan',
+                    'subtitle' => 'Ketentuan penggunaan portal PECUT',
+                    'description' => 'Halaman ini memuat ketentuan umum penggunaan portal PECUT agar layanan digital dapat digunakan secara tertib, aman, dan bertanggung jawab.',
+                    'hero_image' => null,
+                ],
+                'sections' => [
+                    [
+                        'title' => 'Ketentuan Penggunaan',
+                        'subtitle' => 'Gunakan layanan secara benar dan bertanggung jawab',
+                        'image' => null,
+                        'description' => [
+                            'Pengguna wajib menggunakan portal PECUT untuk kebutuhan akses layanan digital Pemerintah Kota Kediri secara benar dan tidak menyalahgunakan tautan, data, maupun fitur yang tersedia.',
+                            'Setiap layanan yang terhubung dapat memiliki ketentuan masing-masing sesuai sistem penyelenggara layanan.',
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
+        return $fallback[$slug] ?? $fallback['about'];
+    }
+
+    private function splitParagraphs(?string $content): array
+    {
+        $content = trim((string) $content);
+
+        if ($content === '') {
+            return [];
+        }
+
+        return collect(preg_split('/\R{2,}|\R/', $content))
+            ->map(fn ($paragraph) => trim((string) $paragraph))
+            ->filter()
+            ->values()
+            ->all();
+    }
+
+    private function fallbackKediriData(): array
+    {
+        return [
+            'page' => [
+                'title' => 'Selayang Pandang Kota Kediri',
+                'subtitle' => 'Kota Kediri dalam satu pandang',
+                'description' => 'Ringkasan profil Kota Kediri yang memuat wilayah, posisi geografis, luas kota, sejarah singkat, dan arah penguatan pelayanan publik sebagai KEDIRI NGANGENI.',
+                'hero_image' => null,
+            ],
             'sections' => [
                 [
                     'title' => 'Profil Wilayah Kota Kediri',
                     'subtitle' => 'Letak, posisi geografis, dan pembagian wilayah administratif Kota Kediri.',
                     'image' => '/assets/img/kediri/harmoni.jpeg',
                     'description' => [
-                        'Profil Wilayah — Kota Kediri “berumah” di arah barat daya Ibu Kota Provinsi Jawa Timur, Surabaya. Jarak dari Kota Pahlawan sekitar 130 km. Untuk catatan jumlah penduduk, Kota Kediri merupakan kota terbesar nomor 3 di Jawa Timur setelah Surabaya dan Malang. Menurut Badan Pusat Statistik (BPS) Jawa Timur, sampai 2018 penduduk Kota Kediri berjumlah 292.768 jiwa. Seluruh wilayah kota ibarat berada dalam kepungan Kabupaten Kediri karena seluruh batas wilayahnya, baik utara, barat, selatan, maupun timur, berbatasan langsung dengan Kabupaten Kediri. Kota Kediri juga terbelah oleh sungai tua dengan histori dan heroisme besar, yaitu Kali Brantas.',
-
-                        'Posisi Geografis — Kota Kediri berada pada posisi antara 111º05´ – 112º03´ Bujur Timur dan 7º45´ – 7º55´ Lintang Selatan. Dari aspek topografi, Kota Kediri terletak pada ketinggian rata-rata 67 meter di atas permukaan laut dengan tingkat kemiringan wilayah sekitar 0–40 persen.',
-
-                        'Luas Kota — Luas wilayah Kota Kediri adalah 67,2 km². Secara administratif, wilayah ini terbagi menjadi tiga kecamatan, yaitu Kecamatan Mojoroto, Kecamatan Kota, dan Kecamatan Pesantren, serta 46 kelurahan. Kecamatan Mojoroto memiliki luas wilayah 26,93 km² dan terdiri dari 14 kelurahan. Kecamatan Kota memiliki luas wilayah 15,95 km² dan terdiri dari 17 kelurahan. Sementara itu, Kecamatan Pesantren memiliki luas wilayah 24,32 km² dan terdiri dari 15 kelurahan.',
+                        'Profil Wilayah — Kota Kediri merupakan salah satu pusat pelayanan, perdagangan, pendidikan, dan aktivitas masyarakat di wilayah Kediri Raya.',
+                        'Posisi Geografis — Kota Kediri memiliki posisi strategis dan menjadi bagian penting dari kawasan Kediri Raya.',
+                        'Luas Kota — Wilayah Kota Kediri terbagi dalam tiga kecamatan, yaitu Mojoroto, Kota, dan Pesantren.',
                     ],
                 ],
-
                 [
                     'title' => 'Sejarah Singkat Kota Kediri',
                     'subtitle' => 'Jejak panjang Kediri dari masa kerajaan, kolonial, hingga perkembangan kota otonom.',
                     'image' => '/assets/img/kediri/gunung-klotok.jpg',
                     'description' => [
-                        'Artefak arkeologi yang ditemukan pada tahun 2007 menunjukkan bahwa daerah sekitar Kediri menjadi lokasi Kerajaan Kediri, sebuah kerajaan Hindu pada abad ke-11. Awal mula Kediri sebagai pemukiman perkotaan dimulai ketika Airlangga memindahkan pusat pemerintahan kerajaannya dari Kahuripan ke Dahanapura, menurut Serat Calon Arang. Dahanapura atau Kota Api selanjutnya lebih dikenal sebagai Daha. Sepeninggal Raja Airlangga, wilayah Medang dibagi menjadi dua, yaitu Panjalu di barat dan Janggala di timur. Daha menjadi pusat pemerintahan Kerajaan Panjalu, sedangkan Kahuripan menjadi pusat pemerintahan Kerajaan Jenggala. Panjalu oleh penulis-penulis periode belakangan juga disebut sebagai Kerajaan Kadiri atau Kediri.',
-
-                        'Semenjak Kerajaan Tumapel atau Singasari menguat, ibu kota Daha diserang dan kota ini menjadi kedudukan raja vazal. Kondisi tersebut terus berlanjut hingga masa Majapahit, Demak, dan Mataram. Kediri kemudian jatuh ke tangan VOC sebagai konsekuensi Geger Pecinan. Jawa Timur pada saat itu dikuasai Cakraningrat IV, adipati Madura yang memihak VOC dan menginginkan bebasnya Madura dari Kasunanan Kartasura. Karena keinginannya ditolak oleh VOC, Cakraningrat IV memberontak. Pemberontakan ini dikalahkan VOC dengan bantuan Pakubuwana II, Sunan Kartasura. Sebagai pembayaran, Kediri menjadi bagian wilayah yang dikuasai VOC. Kekuasaan Belanda atas Kediri terus berlangsung sampai masa Perang Kemerdekaan Indonesia.',
-
-                        'Perkembangan Kota Kediri menjadi swapraja dimulai ketika Gemeente Kediri diresmikan pada tanggal 1 April 1906 berdasarkan Staatsblad atau Lembaran Negara No. 148 tertanggal 1 Maret 1906. Gemeente ini menjadi tempat kedudukan Residen Kediri dengan sifat pemerintahan otonom terbatas dan memiliki Gemeente Raad atau Dewan Kota/DPRD sebanyak 13 orang, yang terdiri dari delapan orang golongan Eropa dan yang disamakan, empat orang Pribumi, dan satu orang Bangsa Timur Asing. Berdasarkan Staatsblad No. 173 tertanggal 13 Maret 1906, ditetapkan pula anggaran keuangan sebesar f. 15.240 dalam satu tahun. Baru sejak tanggal 1 November 1928 berdasarkan Staatsblad No. 498 tanggal 1 Januari 1928, Kota Kediri menjadi Zelfstanding Gemeenteschap atau kota swapraja dengan otonomi penuh.',
+                        'Kediri memiliki sejarah panjang yang menjadi bagian penting dari identitas dan perkembangan wilayahnya.',
                     ],
                 ],
-
                 [
-                    'title' => 'Kediri, NGANGENI',
+                    'title' => 'Kediri, KEDIRI NGANGENI',
                     'subtitle' => 'Penguatan pelayanan publik, investasi, dan kemudahan akses layanan masyarakat.',
                     'image' => '/assets/img/kediri/taman-sekartaji.jpg',
                     'description' => [
-                        'Untuk meningkatkan peluang investasi di Kota Kediri, pemerintah kota menerapkan berbagai layanan untuk memberikan kemudahan bagi calon investor. Salah satunya adalah pembentukan Badan Penanaman Modal (BPM) Kota Kediri yang mempunyai tugas melaksanakan sebagian urusan pemerintah daerah di bidang penanaman modal, meliputi perencanaan, pelaksanaan, dan pengendalian sesuai dengan kebijakan Wali Kota Kediri.',
-
-                        'Pemerintah Kota Kediri juga terus berbenah dalam peningkatan pelayanan prima kepada masyarakat. Agar pelayanan terhadap masyarakat lebih representatif, pemerintah melakukan perbaikan gedung pelayanan di seluruh kelurahan yang ada di Kota Kediri. Tidak hanya gedung pelayanannya, sarana dan prasarana pendukung pelayanan juga diperbaiki. Dengan gedung pelayanan yang lebih baik, diharapkan suasana baru dapat tumbuh dan mendorong gairah serta semangat kerja yang produktif dalam melayani masyarakat.',
-
-                        'Keberadaan BPM ditujukan untuk membantu para investor menanamkan modalnya di Kota Kediri. BPM memberikan kemudahan layanan perizinan yang disyaratkan. Dari sekitar 153 item perizinan, hanya empat yang berbayar, sedangkan sisanya gratis. Dengan berbagai kemudahan tersebut, Pemerintah Kota Kediri mendapatkan penghargaan “Investment Award” 2015 di bidang pelayanan penanaman modal oleh Gubernur Jawa Timur Soekarwo.',
+                        'Kota Kediri terus memperkuat layanan publik yang mudah, cepat, responsif, dan terintegrasi.',
                     ],
                 ],
             ],
-
-            'highlights' => [
-                [
-                    'title' => 'Kota Pelayanan',
-                    'description' => 'Kediri terus memperkuat pelayanan publik yang mudah dijangkau, representatif, dan dekat dengan kebutuhan masyarakat.',
-                ],
-                [
-                    'title' => 'Wilayah Strategis',
-                    'description' => 'Berada di kawasan Kediri Raya dan dilalui Kali Brantas, Kota Kediri memiliki peran penting dalam aktivitas pemerintahan, ekonomi, dan sosial.',
-                ],
-                [
-                    'title' => 'Identitas Sejarah',
-                    'description' => 'Kediri memiliki jejak sejarah panjang sejak masa kerajaan hingga berkembang menjadi kota dengan otonomi pemerintahan.',
-                ],
+            'stats' => [
+                ['label' => 'Kecamatan', 'value' => '3'],
+                ['label' => 'Kelurahan', 'value' => '46'],
+                ['label' => 'Luas Wilayah', 'value' => '67,2 km²'],
             ],
         ];
     }

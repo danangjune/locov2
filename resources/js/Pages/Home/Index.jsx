@@ -21,6 +21,7 @@ import AppCard from "../../Components/Apps/AppCard";
 import NewsCard from "../../Components/News/NewsCard";
 import MiniCalendar from "../../Components/Agenda/MiniCalendar";
 import ComplaintCard from "../../Components/Complaints/ComplaintCard";
+import HomeAppSections from "./Partials/HomeAppSections";
 
 import {
     appData,
@@ -39,6 +40,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
     const appsPayload = Array.isArray(data?.apps?.items) ? data.apps.items : [];
     const newsPayload = Array.isArray(data?.news?.items) ? data.news.items : [];
     const complaintsPayload = Array.isArray(data?.complaints?.items) ? data.complaints.items : [];
+    const homeSections = Array.isArray(data?.home_sections) ? data.home_sections : [];
     const errors = data?.errors || {};
 
     const apps = appsPayload.length
@@ -462,6 +464,8 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                     </div>
                 </div>
             </section>
+
+            <HomeAppSections sections={homeSections} />
 
             <section
                 id="aduan-warga"

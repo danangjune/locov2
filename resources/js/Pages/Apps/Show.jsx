@@ -8,12 +8,14 @@ import {
     LockKeyhole,
     Settings,
     Users,
+    Landmark,
 } from "lucide-react";
 
 import PublicLayout from "../../Layouts/PublicLayout";
 import PageShell from "../../Components/UI/PageShell";
 import AppCard from "../../Components/Apps/AppCard";
 import ModeBadge from "../../Components/Apps/ModeBadge";
+import AppFromBadge from "../../Components/Apps/AppFromBadge";
 import { appPalettes } from "../../Data/staticData";
 import { classNames, mapApiApp } from "../../Utils/helpers";
 
@@ -71,7 +73,8 @@ export default function Show({ meta = {}, data = {} }) {
                             <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
                                 <div>
                                     <div className="mb-5 flex flex-wrap gap-2">
-                                        <ModeBadge mode={app.mode} />
+                                        {app.mode === "SSO" && <ModeBadge mode={app.mode} />}
+                                        <AppFromBadge app_from={app.app_from} />
                                         <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-black text-white">
                                             {app.type}
                                         </span>
@@ -120,11 +123,12 @@ export default function Show({ meta = {}, data = {} }) {
                                 <h2 className="text-2xl font-black text-slate-900">Detail Layanan</h2>
                                 <p className="mt-4 leading-8 text-slate-600">{app.detail}</p>
 
-                                <div className="mt-8 grid gap-4 md:grid-cols-3">
+                                <div className="mt-8 grid gap-4 md:grid-cols-4">
                                     {[
                                         { label: "Urusan / OPD", value: app.category, icon: Grid3X3 },
                                         { label: "Tipe Portal", value: app.type, icon: Users },
                                         { label: "Akses", value: app.mode, icon: LockKeyhole },
+                                        { label: "Asal Aplikasi", value: app.app_from, icon: Landmark },
                                     ].map((item) => (
                                         <div key={item.label} className="rounded-3xl bg-slate-50 p-5">
                                             <item.icon className="h-6 w-6 text-sky-700" />

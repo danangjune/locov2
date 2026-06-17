@@ -1,10 +1,11 @@
 import React from "react";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import { ChevronDown, HelpCircle, Mail, MapPinned, Phone } from "lucide-react";
 
 import PublicLayout from "../../Layouts/PublicLayout";
 import PageShell from "../../Components/UI/PageShell";
 import PageHero from "../../Components/UI/PageHero";
+import { DynamicIcon } from "../../Utils/iconRegistry";
 
 const iconMap = {
     Mail,
@@ -12,9 +13,73 @@ const iconMap = {
     MapPinned,
 };
 
+const fallbackFooter = {
+    groups: [],
+};
+
+function isExternalUrl(url = "") {
+    return (
+        url.startsWith("http://") ||
+        url.startsWith("https://") ||
+        url.startsWith("mailto:") ||
+        url.startsWith("tel:") ||
+        url.startsWith("https://wa.me") ||
+        url.startsWith("whatsapp://")
+    );
+}
+
+function isHttpUrl(url = "") {
+    return url.startsWith("http://") || url.startsWith("https://");
+}
+
+function SmartLink({ href = "", children, className = "", title = "" }) {
+    if (!href) {
+        return (
+            <div className={className} title={title}>
+                {children}
+            </div>
+        );
+    }
+
+    if (isExternalUrl(href)) {
+        return (
+            <a
+                href={href}
+                target={isHttpUrl(href) ? "_blank" : undefined}
+                rel={isHttpUrl(href) ? "noreferrer" : undefined}
+                className={className}
+                title={title}
+            >
+                {children}
+            </a>
+        );
+    }
+
+    return (
+        <Link href={href} className={className} title={title}>
+            {children}
+        </Link>
+    );
+}
+
 export default function Index({ meta = {}, data = {} }) {
+    const { props } = usePage();
+    
+    const footer = props?.footer || fallbackFooter;
+
+    const groups =
+        Array.isArray(footer?.groups) && footer.groups.length
+            ? footer.groups
+            : fallbackFooter.groups;
+
+    const findGroups =
+        groups.find(
+            (group) =>
+                group.title?.trim().toLowerCase() === "hubungi kami" || group.title?.trim().toLowerCase() === "kontak"
+        ) || null;
+
     const faqs = Array.isArray(data?.faqs) ? data.faqs : [];
-    const contacts = Array.isArray(data?.contacts) ? data.contacts : [];
+    const contacts = findGroups.children || [];
     const quickLinks = Array.isArray(data?.quick_links) ? data.quick_links : [];
 
     return (
@@ -55,16 +120,22 @@ export default function Index({ meta = {}, data = {} }) {
 
                                 <div className="mt-6 space-y-4">
                                     {contacts.map((item) => {
-                                        const Icon = iconMap[item.icon] || HelpCircle;
-
+                                        const label = item?.label || item?.content || item?.title || "-";
+                                        const url = item?.url || "";
+                                    
                                         return (
-                                            <div key={item.label} className="flex items-start gap-3 rounded-3xl bg-white/15 p-4 backdrop-blur">
-                                                <Icon className="h-5 w-5 text-amber-200" />
+                                            <SmartLink
+                                                href={url}
+                                                title={label}
+                                                className={[
+                                                    "group flex items-start gap-3 rounded-3xl bg-white/15 p-4 backdrop-blur",
+                                                ].join(" ")}
+                                            >
+                                                <DynamicIcon name={item.icon}  className="h-5 w-5 text-amber-200" />
                                                 <div>
-                                                    <p className="text-xs font-bold text-sky-100">{item.label}</p>
-                                                    <p className="text-sm font-black">{item.value}</p>
+                                                    <p className="text-xs font-bold text-sky-100">{label}</p>
                                                 </div>
-                                            </div>
+                                            </SmartLink>
                                         );
                                     })}
                                 </div>

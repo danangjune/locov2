@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, LogInIcon } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { appPalettes } from "../../Data/staticData";
 import { classNames } from "../../Utils/helpers";
 import ModeBadge from "./ModeBadge";
+import AppFromBadge from "./AppFromBadge";
 
 export default function AppCard({ app, compact = false, index = 0, onOpen }) {
     const Icon = app.icon;
@@ -55,7 +56,10 @@ export default function AppCard({ app, compact = false, index = 0, onOpen }) {
                         )}
                     </button>
 
-                    <ModeBadge mode={app.mode} />
+                    <div className="flex flex-col gap-2">
+                        {app.mode === "SSO" && <ModeBadge mode={app.mode} />}
+                        <AppFromBadge app_from={app.app_from} />
+                    </div>
                 </div>
 
                 <div className="mt-5 flex flex-1 flex-col">
@@ -101,7 +105,7 @@ export default function AppCard({ app, compact = false, index = 0, onOpen }) {
                             className="inline-flex shrink-0 items-center gap-1 rounded-full bg-slate-900 px-3 py-2 text-xs font-bold text-white transition hover:bg-sky-600"
                         >
                             Buka
-                            <ExternalLink className="h-3.5 w-3.5" />
+                            <LogInIcon className="h-3.5 w-3.5" />
                         </button>
                     </div>
                 </div>

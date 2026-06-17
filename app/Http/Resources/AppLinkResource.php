@@ -28,7 +28,10 @@ class AppLinkResource extends JsonResource
             'image' => is_null($this->image) ? null : asset("storage/apps/{$this->image}"),
             'is_active' => $this->is_active,
             'is_sso' => $this->is_sso,
-
+            'app_from' => $this->whenLoaded('app_from', fn($app_from) => [
+                'id' => $app_from->id,
+                'name' => $app_from->name,
+            ]),
             'urusan' => $this->whenLoaded('urusan', fn($urusan) => [
                 'id' => $urusan->id,
                 'title' => $urusan->title,

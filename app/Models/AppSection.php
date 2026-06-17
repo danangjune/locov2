@@ -13,10 +13,22 @@ class AppSection extends Model
     protected $fillable = [
         'title',
         'description',
+        'sort_order',
+        'statusenabled',
     ];
 
-    public function children() : HasMany 
+    protected function casts(): array
     {
-        return $this->hasMany(AppSectionItem::class, 'section_id');
+        return [
+            'sort_order' => 'integer',
+            'statusenabled' => 'boolean',
+        ];
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(AppSectionItem::class, 'section_id')
+            ->orderBy('sort_order')
+            ->orderBy('id');
     }
 }

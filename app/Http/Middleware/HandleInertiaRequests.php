@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Middleware;
+use App\Services\Pecut\FooterContentService;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -57,6 +58,8 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn () => $request->session()->get('error'),
                 'message' => fn () => $request->session()->get('message'),
             ],
+
+            'footer' => fn () => app(FooterContentService::class)->getFooterData(),
         ]);
     }
 }

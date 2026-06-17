@@ -78,7 +78,7 @@ export default function Header({ currentRoute = "home" }) {
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
                 <Link href="/" className="flex min-w-0 shrink-0 items-center" aria-label="Kembali ke Beranda PECUT">
                     <img
-                        src="/images/logo-pecut-full.png"
+                        src="/images/logo-pecut-full-transparan.png"
                         alt="PECUT Kota Kediri"
                         className="h-9 max-w-[180px] object-contain sm:h-10 sm:max-w-[230px] md:h-11 md:max-w-[270px] xl:h-12 xl:max-w-[320px]"
                     />
@@ -128,17 +128,19 @@ export default function Header({ currentRoute = "home" }) {
                                         <p className="mt-0.5 truncate text-xs font-semibold text-slate-500">{user.email}</p>
                                     </div>
 
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setUserMenuOpen(false);
-                                            window.location.href = dashboardUrl;
-                                        }}
-                                        className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm font-bold text-slate-700 hover:bg-sky-50 hover:text-sky-700"
-                                    >
-                                        <LayoutDashboard className="h-4 w-4" />
-                                        Dashboard Admin
-                                    </button>
+                                    {user.role_id === 1 && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setUserMenuOpen(false);
+                                                window.location.href = dashboardUrl;
+                                            }}
+                                            className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm font-bold text-slate-700 hover:bg-sky-50 hover:text-sky-700"
+                                        >
+                                            <LayoutDashboard className="h-4 w-4" />
+                                            Dashboard Admin
+                                        </button>
+                                    )}
 
                                     <button
                                         type="button"
@@ -202,16 +204,18 @@ export default function Header({ currentRoute = "home" }) {
                                 <p className="px-2 text-sm font-black text-slate-900">{user.name}</p>
                                 <p className="truncate px-2 text-xs font-semibold text-slate-500">{user.email}</p>
 
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMobileMenuOpen(false);
-                                        window.location.href = dashboardUrl;
-                                    }}
-                                    className="mt-3 w-full rounded-full border border-sky-100 bg-white px-4 py-2 font-black text-slate-900"
-                                >
-                                    Dashboard
-                                </button>
+                                {user.role_id === 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setMobileMenuOpen(false);
+                                            window.location.href = dashboardUrl;
+                                        }}
+                                        className="mt-3 w-full rounded-full border border-sky-100 bg-white px-4 py-2 font-black text-slate-900"
+                                    >
+                                        Dashboard
+                                    </button>                                    
+                                )}
 
                                 <button
                                     type="button"

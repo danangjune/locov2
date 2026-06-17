@@ -21,6 +21,7 @@ export default function AppFilter({ filter = {}, data = {} }) {
                 category_id: filter?.category_id || undefined,
                 urusan_id: filter?.urusan_id || undefined,
                 mode: filter?.mode || undefined,
+                app_from_id: filter?.app_from_id || undefined,
                 ...params,
                 page: undefined,
             },
@@ -146,6 +147,38 @@ export default function AppFilter({ filter = {}, data = {} }) {
                                     key={item.label}
                                     type="button"
                                     onClick={() => visit({ mode: item.value })}
+                                    className={classNames(
+                                        "rounded-2xl px-3 py-2 text-xs font-black transition",
+                                        active
+                                            ? "bg-slate-900 text-white"
+                                            : "bg-slate-100 text-slate-600 hover:bg-sky-50 hover:text-sky-700",
+                                    )}
+                                >
+                                    {item.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div>
+                    <p className="mb-3 text-xs font-black uppercase tracking-widest text-slate-400">
+                        Asal Aplikasi
+                    </p>
+
+                    <div className="grid grid-cols-3 gap-2">
+                        {[
+                            { label: "Semua", value: undefined },
+                            { label: "LOCAL", value: "1" },
+                            { label: "PUSAT", value: "2" },
+                        ].map((item) => {
+                            const active = String(filter?.app_from_id || "") === String(item.value || "");
+
+                            return (
+                                <button
+                                    key={item.label}
+                                    type="button"
+                                    onClick={() => visit({ app_from_id: item.value })}
                                     className={classNames(
                                         "rounded-2xl px-3 py-2 text-xs font-black transition",
                                         active
