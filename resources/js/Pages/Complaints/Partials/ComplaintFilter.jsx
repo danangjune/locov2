@@ -1,10 +1,19 @@
 import { router } from "@inertiajs/react";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
+import SearchableSelect from "../../../Components/Form/SearchableSelect";
 
 export default function ComplaintFilter({ filter = {} }) {
     const [search, setSearch] = useState(filter?.search || "");
     const [status, setStatus] = useState(filter?.status || "");
+
+    const optionStatus = [
+        { id: "", title: "Semua" },
+        { id: "open", title: "Belum Selesai" },
+        { id: "finished", title: "Selesai" },
+        { id: "diproses", title: "Diproses" },
+        { id: "diterima", title: "Diterima" },
+    ];
 
     const submit = (event) => {
         event.preventDefault();
@@ -49,20 +58,20 @@ export default function ComplaintFilter({ filter = {} }) {
                 </div>
 
                 <div>
-                    <label className="text-xs font-black uppercase tracking-wide text-slate-400">
-                        Status
-                    </label>
-                    <select
+                    <SearchableSelect
+                        label="Status"
                         value={status}
-                        onChange={(event) => setStatus(event.target.value)}
-                        className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
-                    >
-                        <option value="">Semua status</option>
-                        <option value="open">Belum selesai</option>
-                        <option value="finished">Selesai</option>
-                        <option value="diproses">Diproses</option>
-                        <option value="diterima">Diterima</option>
-                    </select>
+                        onChange={(value) =>
+                            setStatus(value)
+                        }
+                        options={optionStatus || []}
+                        placeholder="Pilih status"
+                        searchPlaceholder="Cari status..."
+                        emptyText="Status tidak ditemukan"
+                        getOptionValue={(item) => item.id}
+                        getOptionLabel={(item) => item.title}
+                        getSearchText={(item) => item.title}
+                    />
                 </div>
 
                 <button

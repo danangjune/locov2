@@ -361,13 +361,13 @@ export default function Index({ meta = {}, data = {} }) {
                                 </div>
                             </div>
                         </div>
-                    </section>
 
-                    <section className="relative mx-auto -mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
-                        <div className="grid gap-4 md:grid-cols-3">
-                            {stats.map((item, index) => (
-                                <StatCard key={`${item.label}-${index}`} item={item} index={index} />
-                            ))}
+                        <div className="relative mx-auto mb-10 max-w-7xl px-4 sm:px-6 lg:px-8">
+                            <div className="grid gap-4 md:grid-cols-3">
+                                {stats.map((item, index) => (
+                                    <StatCard key={`${item.label}-${index}`} item={item} index={index} />
+                                ))}
+                            </div>
                         </div>
                     </section>
 

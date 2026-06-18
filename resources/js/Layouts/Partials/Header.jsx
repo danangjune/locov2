@@ -7,7 +7,7 @@ const navItems = [
     { href: "/", key: "home", label: "Beranda" },
     { href: "/kediri", key: "kediri", label: "Selayang Pandang" },
     { href: "/apps", key: "apps", label: "Aplikasi" },
-    { href: "/complaints", key: "complaint", label: "Aduan Warga" },
+    { href: "/complaints", key: "complaints", label: "Aduan Warga" },
     { href: "/news", key: "news", label: "Berita" },
     { href: "/agenda", key: "agenda", label: "Agenda" },
     { href: "/guide", key: "guide", label: "Panduan" },

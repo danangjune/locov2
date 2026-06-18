@@ -19,6 +19,7 @@ import {
     Database,
     Layers3,
     MonitorPlay,
+    HelpCircle,
     X,
 } from "lucide-react";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -30,17 +31,19 @@ const navigation = [
         match: "/admin/dashboard",
         icon: LayoutDashboard,
     },
+    { type: 'divider', title: 'Manajemen Aplikasi' },
     {
         title: "Apps",
         href: "/admin/apps",
         match: "/admin/apps",
         icon: AppWindow,
     },
+    { type: 'divider', title: 'Beranda' },
     {
-        title: "Panduan",
-        href: "/admin/panduan",
-        match: "/admin/panduan",
-        icon: BookOpen,
+        title: "Slide Hero Beranda",
+        href: "/admin/home-slides",
+        match: "/admin/home-slides",
+        icon: MonitorPlay,
     },
     {
         title: "Selayang Pandang",
@@ -49,29 +52,32 @@ const navigation = [
         icon: Landmark,
     },
     {
-        title: "Halaman Portal",
-        href: "/admin/portal-pages",
-        match: "/admin/portal-pages",
-        icon: FileText,
-    },
-    {
-        title: "Master Referensi",
-        href: "/admin/references",
-        match: "/admin/references",
-        icon: Database,
-    },
-    {
         title: "Section Beranda",
         href: "/admin/home-sections",
         match: "/admin/home-sections",
         icon: Layers3,
     },
     {
-        title: "Slide Beranda",
-        href: "/admin/home-slides",
-        match: "/admin/home-slides",
-        icon: MonitorPlay,
+        title: "Halaman Portal",
+        href: "/admin/portal-pages",
+        match: "/admin/portal-pages",
+        icon: FileText,
     },
+    { type: 'divider', title: 'Master Data' },
+    {
+        title: "Master Referensi",
+        href: "/admin/references",
+        match: "/admin/references",
+        icon: Database,
+    },
+    { type: 'divider', title: 'Panduan' },
+    {
+        title: "Panduan",
+        href: "/admin/panduan",
+        match: "/admin/panduan",
+        icon: BookOpen,
+    },
+    { type: 'divider', title: 'Footer' },
     {
         title: "Content Footer",
         href: "/admin/content-footer",
@@ -168,7 +174,21 @@ export default function AdminLayout({
             </div>
 
             <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-5">
-                {navigation.map((item) => {
+                {navigation.map((item, idx) => {
+                    if (item.type === 'divider') {
+                        return (
+                            <div key={`divider-${idx}`} className="my-3 px-2">
+                                {!sidebarCollapsed && (
+                                    <>
+                                        {item.title ? (
+                                            <div className="mt-4 mb-2 px-3 text-xs font-bold uppercase text-slate-400">{item.title}</div>
+                                        ) : null}
+                                    </>
+                                )}
+                                <div className="h-px bg-slate-100" />
+                            </div>
+                        );
+                    }
                     const Icon = item.icon;
                     const active = isActive(url, item);
                     const baseClass = active

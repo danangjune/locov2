@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { router } from "@inertiajs/react";
 import { RotateCcw, Search } from "lucide-react";
+import SearchableSelect from "../../../Components/Form/SearchableSelect";
 
 export default function NewsFilter({ filter = {}, data = {} }) {
     const [search, setSearch] = useState(filter?.search || "");

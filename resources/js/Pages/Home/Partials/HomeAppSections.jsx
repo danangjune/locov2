@@ -126,7 +126,7 @@ export default function HomeAppSections({ sections = [] }) {
                     })}
                 </div>
 
-                <div className="mt-8 rounded-[2rem] bg-white/70 p-4 shadow-sm shadow-slate-100 ring-1 ring-slate-100 sm:p-6">
+                <div className="mt-8 rounded-[2rem] p-4 shadow-sm bg-white/50 shadow-slate-100 ring-1 ring-slate-100 sm:p-6">
                     <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
                         <div>
                             <p className="text-xs font-black uppercase tracking-widest text-sky-600">
@@ -145,7 +145,7 @@ export default function HomeAppSections({ sections = [] }) {
                         <button
                             type="button"
                             onClick={() => router.visit("/apps")}
-                            className="inline-flex w-fit items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-xs font-black text-white shadow-lg shadow-slate-200 hover:bg-sky-700"
+                            className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-600 hover:bg-slate-50"
                         >
                             Jelajahi Semua
                             <ArrowRight className="h-3.5 w-3.5" />
@@ -153,26 +153,30 @@ export default function HomeAppSections({ sections = [] }) {
                     </div>
 
                     <div className="relative">
-                        <button
-                            type="button"
-                            onClick={() => scrollCarousel(scrollRef, "left")}
-                            className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-sky-100 bg-white text-sky-700 shadow-xl shadow-slate-200 transition hover:bg-sky-50 md:flex"
-                            aria-label={`Geser ${activeSection.title || "section"} ke kiri`}
-                        >
-                            <ChevronLeft className="h-5 w-5" />
-                        </button>
+                        {activeApps.length > 3 && (
+                            <>
+                                <button
+                                    type="button"
+                                    onClick={() => scrollCarousel(scrollRef, "left")}
+                                    className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-sky-100 bg-white text-sky-700 shadow-xl shadow-slate-200 transition hover:bg-sky-50 md:flex"
+                                    aria-label={`Geser ${activeSection.title || "section"} ke kiri`}
+                                >
+                                    <ChevronLeft className="h-5 w-5" />
+                                </button>
 
-                        <button
-                            type="button"
-                            onClick={() => scrollCarousel(scrollRef, "right")}
-                            className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-sky-100 bg-white text-sky-700 shadow-xl shadow-slate-200 transition hover:bg-sky-50 md:flex"
-                            aria-label={`Geser ${activeSection.title || "section"} ke kanan`}
-                        >
-                            <ChevronRight className="h-5 w-5" />
-                        </button>
+                                <button
+                                    type="button"
+                                    onClick={() => scrollCarousel(scrollRef, "right")}
+                                    className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-sky-100 bg-white text-sky-700 shadow-xl shadow-slate-200 transition hover:bg-sky-50 md:flex"
+                                    aria-label={`Geser ${activeSection.title || "section"} ke kanan`}
+                                >
+                                    <ChevronRight className="h-5 w-5" />
+                                </button>
+                            </>
+                        )}
 
-                        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 hidden w-16 bg-gradient-to-r from-white/90 to-transparent md:block" />
-                        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 hidden w-16 bg-gradient-to-l from-white/90 to-transparent md:block" />
+                        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 hidden w-16 bg-gradient-to-r to-transparent md:block" />
+                        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 hidden w-16 bg-gradient-to-l to-transparent md:block" />
 
                         <div
                             ref={scrollRef}

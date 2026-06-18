@@ -58,14 +58,14 @@ export default function Show({ meta = {}, data = {} }) {
 
             <PublicLayout currentRoute="apps">
                 <PageShell>
-                    <section className="relative overflow-hidden bg-gradient-to-br from-sky-600 to-blue-700 text-white">
-                        <div className="absolute -right-20 top-10 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
-                        <div className="absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl" />
+                    <section className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-cyan-50">
+                        <div className="absolute -right-24 top-16 h-72 w-72 rounded-full bg-sky-200/40 blur-3xl" />
+                        <div className="absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-cyan-200/40 blur-3xl" />
 
                         <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                             <Link
                                 href="/apps"
-                                className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-black text-white backdrop-blur hover:bg-white/20"
+                                className="mb-6 inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white px-4 py-2 text-sm font-black text-sky-700 shadow-sm"
                             >
                                 <ArrowLeft className="h-4 w-4" /> Kembali ke daftar aplikasi
                             </Link>
@@ -75,24 +75,24 @@ export default function Show({ meta = {}, data = {} }) {
                                     <div className="mb-5 flex flex-wrap gap-2">
                                         {app.mode === "SSO" && <ModeBadge mode={app.mode} />}
                                         <AppFromBadge app_from={app.app_from} />
-                                        <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-black text-white">
+                                        <span className="rounded-full px-3 py-1 text-xs ring-1 font-bold bg-sky-50 text-sky-700 ring-sky-100">
                                             {app.type}
                                         </span>
-                                        <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-black text-white">
+                                        <span className="rounded-full px-3 py-1 text-xs ring-1 font-bold bg-sky-50 text-sky-700 ring-sky-100">
                                             {app.category}
                                         </span>
                                     </div>
 
-                                    <h1 className="max-w-4xl text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
+                                    <h1 className="max-w-4xl text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl text-slate-950">
                                         {app.name}
                                     </h1>
 
-                                    <p className="mt-5 max-w-3xl text-base leading-8 text-sky-50 sm:text-lg">
+                                    <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
                                         {app.desc}
                                     </p>
                                 </div>
 
-                                <div className="rounded-[2rem] border border-white/20 bg-white/10 p-5 backdrop-blur">
+                                <div className="rounded-[2rem] border border-sky-100 bg-white/90 p-5 shadow-sm shadow-sky-100 backdrop-blur">
                                     <div className="flex items-center gap-4">
                                         <div
                                             className={classNames(
@@ -108,8 +108,8 @@ export default function Show({ meta = {}, data = {} }) {
                                         </div>
 
                                         <div>
-                                            <p className="text-sm font-bold text-sky-100">Status Akses</p>
-                                            <p className="mt-1 text-2xl font-black text-white">{app.mode}</p>
+                                            <p className="text-sm font-bold text-slate-600">Status Akses</p>
+                                            <p className="mt-1 text-2xl font-black text-slate">{app.mode}</p>
                                         </div>
                                     </div>
                                 </div>

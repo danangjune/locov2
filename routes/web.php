@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AppLinkController as AdminAppLinkController;
 use App\Http\Controllers\Admin\ContentFooterController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FooterSettingController;
+use App\Http\Controllers\Admin\HelpInfoPageController;
 use App\Http\Controllers\Admin\HomeSectionController;
 use App\Http\Controllers\Admin\HomeSlideController;
 use App\Http\Controllers\Admin\PanduanController;
@@ -176,6 +177,17 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
         Route::post('/', [HomeSlideController::class, 'store'])->name('store');
         Route::put('/{slide}', [HomeSlideController::class, 'update'])->name('update');
         Route::delete('/{slide}', [HomeSlideController::class, 'destroy'])->name('destroy');
+    });
+
+    // Route Help Info
+    Route::prefix('help-info')->name('admin.help-info.')->group(function () {
+        Route::get('/', [HelpInfoPageController::class, 'index'])->name('index');
+
+        Route::put('/{page}', [HelpInfoPageController::class, 'updatePage'])->name('page.update');
+
+        Route::post('/{page}/sections', [HelpInfoPageController::class, 'storeSection'])->name('sections.store');
+        Route::put('/sections/{section}', [HelpInfoPageController::class, 'updateSection'])->name('sections.update');
+        Route::delete('/sections/{section}', [HelpInfoPageController::class, 'destroySection'])->name('sections.destroy');
     });
 });
 

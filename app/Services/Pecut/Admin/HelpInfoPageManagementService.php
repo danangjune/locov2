@@ -8,29 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class PortalPageManagementService
+class HelpInfoPageManagementService
 {
     private array $managedPages = [
-        'about' => [
-            'label' => 'Tentang PECUT',
-            'title' => 'Tentang PECUT',
-            'subtitle' => 'Portal layanan digital Kota Kediri',
-            'description' => 'PECUT adalah portal layanan digital Pemerintah Kota Kediri yang dirancang untuk memudahkan masyarakat, ASN, dan perangkat daerah dalam mengakses layanan digital secara cepat, efisien, dan terpadu.',
-            'sections' => [
-                [
-                    'title' => 'Portal Efisien Cepat Mudah Terpadu',
-                    'subtitle' => 'Satu pintu akses layanan digital',
-                    'content' => "PECUT menjadi pintu masuk layanan digital Kota Kediri agar pengguna tidak perlu mencari aplikasi secara terpisah.\n\nMelalui portal ini, layanan public digital dan ASN digital dapat dikelompokkan, dicari, serta diakses dengan lebih mudah.",
-                    'sort_order' => 1,
-                ],
-                [
-                    'title' => 'Arah Pengembangan',
-                    'subtitle' => 'Terintegrasi, mudah dicari, dan responsif',
-                    'content' => 'Pengembangan PECUT diarahkan untuk memperkuat integrasi layanan, kemudahan akses, dan penyajian informasi aplikasi yang lebih jelas bagi pengguna.',
-                    'sort_order' => 2,
-                ],
-            ],
-        ],
         'help' => [
             'label' => 'Bantuan',
             'title' => 'Pusat Bantuan',
@@ -71,65 +51,23 @@ class PortalPageManagementService
                 ],
             ],
         ],
-        'privasi-data' => [
-            'label' => 'Privasi Data',
-            'title' => 'Privasi Data',
-            'subtitle' => 'Kebijakan perlindungan dan penggunaan data',
-            'description' => 'Halaman ini menjelaskan gambaran umum pengelolaan data pada portal PECUT sebagai bagian dari layanan digital Pemerintah Kota Kediri.',
-            'sections' => [
-                [
-                    'title' => 'Penggunaan Data',
-                    'subtitle' => 'Data digunakan sesuai kebutuhan layanan',
-                    'content' => "Data yang diproses melalui portal digunakan untuk kebutuhan akses layanan, peningkatan kualitas layanan, pencatatan aktivitas layanan, dan pengamanan sistem.\n\nPengelolaan data dilakukan secara proporsional sesuai kebutuhan penyelenggaraan layanan digital.",
-                    'sort_order' => 1,
-                ],
-                [
-                    'title' => 'Keamanan Data',
-                    'subtitle' => 'Pengamanan akses dan informasi layanan',
-                    'content' => 'Pemerintah Kota Kediri berupaya menjaga keamanan data melalui pengaturan akses, pemantauan sistem, dan penerapan tata kelola keamanan informasi sesuai kebutuhan layanan.',
-                    'sort_order' => 2,
-                ],
-            ],
-        ],
-        'syarat-ketentuan' => [
-            'label' => 'Syarat & Ketentuan',
-            'title' => 'Syarat & Ketentuan',
-            'subtitle' => 'Ketentuan penggunaan portal PECUT',
-            'description' => 'Halaman ini memuat ketentuan umum penggunaan portal PECUT agar layanan digital dapat digunakan secara tertib, aman, dan bertanggung jawab.',
-            'sections' => [
-                [
-                    'title' => 'Ketentuan Penggunaan',
-                    'subtitle' => 'Gunakan layanan secara benar dan bertanggung jawab',
-                    'content' => "Pengguna wajib menggunakan portal PECUT untuk kebutuhan akses layanan digital Pemerintah Kota Kediri secara benar dan tidak menyalahgunakan tautan, data, maupun fitur yang tersedia.\n\nSetiap layanan yang terhubung dapat memiliki ketentuan masing-masing sesuai sistem penyelenggara layanan.",
-                    'sort_order' => 1,
-                ],
-                [
-                    'title' => 'Perubahan Informasi',
-                    'subtitle' => 'Konten dapat diperbarui sesuai kebutuhan layanan',
-                    'content' => 'Informasi, tautan aplikasi, panduan, dan ketentuan pada portal dapat diperbarui sewaktu-waktu untuk menyesuaikan perkembangan layanan digital.',
-                    'sort_order' => 2,
-                ],
-            ],
-        ],
     ];
 
     public function getIndexData(Request $request): array
     {
         $this->ensureDefaultPages();
 
-        $selectedSlug = $request->query('slug', 'about');
+        $selectedSlug = $request->query('slug', 'help');
 
         if (! array_key_exists($selectedSlug, $this->managedPages)) {
-            $selectedSlug = 'about';
+            $selectedSlug = 'help';
         }
-
-        $order = array_keys($this->managedPages);
 
         $pages = PortalPage::query()
             ->with(['sections' => fn ($query) => $query->orderBy('sort_order')->orderBy('id')])
-            ->whereIn('slug', $order)
+            ->whereIn('slug', array_keys($this->managedPages))
+            ->orderByRaw("FIELD(slug, 'help', 'info')")
             ->get()
-            ->sortBy(fn (PortalPage $page) => array_search($page->slug, $order, true))
             ->map(fn (PortalPage $page) => $this->mapPage($page))
             ->values()
             ->all();
@@ -151,6 +89,8 @@ class PortalPageManagementService
 
     public function updatePage(Request $request, PortalPage $page): PortalPage
     {
+        $this->abortIfNotManaged($page);
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
@@ -178,6 +118,8 @@ class PortalPageManagementService
 
     public function storeSection(Request $request, PortalPage $page): PortalPageSection
     {
+        $this->abortIfNotManaged($page);
+
         $validated = $this->validateSection($request);
 
         $payload = $this->sectionPayload($request, $validated);
@@ -192,6 +134,9 @@ class PortalPageManagementService
 
     public function updateSection(Request $request, PortalPageSection $section): PortalPageSection
     {
+        $section->loadMissing('page');
+        $this->abortIfNotManaged($section->page);
+
         $validated = $this->validateSection($request);
 
         $payload = $this->sectionPayload($request, $validated);
@@ -208,6 +153,9 @@ class PortalPageManagementService
 
     public function destroySection(PortalPageSection $section): void
     {
+        $section->loadMissing('page');
+        $this->abortIfNotManaged($section->page);
+
         $this->deleteFile($section->image);
         $section->delete();
     }
@@ -237,6 +185,11 @@ class PortalPageManagementService
                 }
             }
         }
+    }
+
+    private function abortIfNotManaged(?PortalPage $page): void
+    {
+        abort_unless($page && array_key_exists($page->slug, $this->managedPages), 404);
     }
 
     private function validateSection(Request $request): array
@@ -300,7 +253,7 @@ class PortalPageManagementService
             return $path;
         }
 
-        return Storage::url($path);
+        return Storage::disk('public')->url($path);
     }
 
     private function deleteFile(?string $path): void
@@ -311,6 +264,8 @@ class PortalPageManagementService
             return;
         }
 
-        Storage::disk('public')->delete($path);
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
     }
 }

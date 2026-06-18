@@ -6,9 +6,8 @@ import { alertError, alertSuccess, confirmDelete, confirmUpdate } from "../../..
 import SectionFormModal from "./Partials/SectionFormModal";
 
 function publicHref(slug) {
-    if (slug === "about") return "/about";
-    if (slug === "privasi-data") return "/privasi-data";
-    if (slug === "syarat-ketentuan") return "/syarat-ketentuan";
+    if (slug === "help") return "/help";
+    if (slug === "info") return "/info";
     return `/${slug}`;
 }
 
@@ -47,7 +46,7 @@ export default function Index({ meta, filter, data }) {
 
     const selectPage = (page) => {
         router.get(
-            "/admin/portal-pages",
+            "/admin/help-info",
             { slug: page.slug },
             {
                 preserveScroll: true,
@@ -74,13 +73,13 @@ export default function Index({ meta, filter, data }) {
             _method: "PUT",
         }));
 
-        pageForm.post(`/admin/portal-pages/${activePage.id}`, {
+        pageForm.post(`/admin/help-info/${activePage.id}`, {
             forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
                 alertSuccess({
                     title: "Berhasil Diperbarui",
-                    text: "Halaman portal berhasil diperbarui.",
+                    text: "Halaman berhasil diperbarui.",
                 });
             },
             onError: () => {
@@ -102,7 +101,7 @@ export default function Index({ meta, filter, data }) {
 
         if (!result.isConfirmed) return;
 
-        router.delete(`/admin/portal-pages/sections/${section.id}`, {
+        router.delete(`/admin/help-info/sections/${section.id}`, {
             preserveScroll: true,
             onSuccess: () => alertSuccess({ title: "Berhasil Dihapus", text: "Section berhasil dihapus." }),
             onError: () => alertError({ title: "Gagal Menghapus", text: "Section gagal dihapus." }),
@@ -110,14 +109,14 @@ export default function Index({ meta, filter, data }) {
     };
 
     return (
-        <AdminLayout title={meta?.title || "Halaman Portal"}>
+        <AdminLayout title={meta?.title || "Bantuan & Info Layanan"}>
             <div className="space-y-6">
                 <div className="flex flex-col justify-between gap-4 rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 p-6 text-white shadow-xl shadow-slate-200 lg:flex-row lg:items-center">
                     <div>
-                        <p className="text-xs font-black uppercase tracking-[0.3em] text-sky-300">Manajemen Portal</p>
-                        <h1 className="mt-3 text-3xl font-black">Halaman Portal</h1>
+                        <p className="text-xs font-black uppercase tracking-[0.3em] text-sky-300">Manajemen Bantuan</p>
+                        <h1 className="mt-3 text-3xl font-black">Bantuan & Info Layanan</h1>
                         <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-300">
-                            Kelola halaman informasi portal seperti Tentang PECUT, Bantuan, Info Layanan, Privasi Data, dan Syarat & Ketentuan tanpa mengubah kode.
+                            Kelola isi halaman Bantuan (/help) dan Info Layanan (/info) langsung dari admin tanpa mengubah kode.
                         </p>
                     </div>
                     {activePage ? (
@@ -127,12 +126,12 @@ export default function Index({ meta, filter, data }) {
                             rel="noreferrer"
                             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-900 hover:bg-sky-50"
                         >
-                            <Eye className="h-4 w-4" /> Lihat Public
+                            <Eye className="h-4 w-4" /> Lihat Halaman
                         </a>
                     ) : null}
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+                <div className="grid gap-4 md:grid-cols-3">
                     {pages.map((page) => {
                         const active = page.id === activePage?.id;
                         return (
@@ -167,7 +166,7 @@ export default function Index({ meta, filter, data }) {
                         <form onSubmit={savePage} className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
                             <div className="flex items-center justify-between gap-4">
                                 <div>
-                                    <p className="text-xs font-black uppercase tracking-widest text-sky-600">Konten Halaman</p>
+                                    <p className="text-xs font-black uppercase tracking-widest text-sky-600">Konten Bantuan & Info</p>
                                     <h2 className="mt-1 text-xl font-black text-slate-950">{activePage.label}</h2>
                                 </div>
                                 <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-500">/{activePage.slug}</span>

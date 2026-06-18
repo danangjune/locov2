@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { router } from "@inertiajs/react";
 import { Filter, Search, SlidersHorizontal } from "lucide-react";
 import { classNames } from "../../../Utils/helpers";
+import SearchableSelect from "../../../Components/Form/SearchableSelect";
 
 export default function AppFilter({ filter = {}, data = {} }) {
     const [search, setSearch] = useState(filter?.search || "");
@@ -194,22 +195,18 @@ export default function AppFilter({ filter = {}, data = {} }) {
                 </div>
 
                 <div>
-                    <p className="mb-3 text-xs font-black uppercase tracking-widest text-slate-400">
-                        Urusan / OPD
-                    </p>
-
-                    <select
+                    <SearchableSelect
+                        label="Urusan / OPD"
                         value={filter?.urusan_id || ""}
-                        onChange={(event) => visit({ urusan_id: event.target.value || undefined })}
-                        className="h-12 w-full rounded-2xl border border-sky-100 bg-white px-4 text-sm font-bold text-slate-600 outline-none focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
-                    >
-                        <option value="">Semua Urusan</option>
-                        {urusan.map((item) => (
-                            <option key={item.id} value={item.id}>
-                                {item.title}
-                            </option>
-                        ))}
-                    </select>
+                        onChange={(value) => visit({ urusan_id: value || undefined })}
+                        options={urusan || []}
+                        placeholder="Pilih urusan"
+                        searchPlaceholder="Cari urusan atau OPD..."
+                        emptyText="Urusan tidak ditemukan"
+                        getOptionValue={(item) => item.id}
+                        getOptionLabel={(item) => item.title}
+                        getSearchText={(item) => item.title}
+                    />
                 </div>
             </div>
         </aside>

@@ -199,19 +199,11 @@ export default function Index({ meta, filter, data }) {
     };
 
     return (
-        <AdminLayout title={meta?.title || "Slide Beranda"}>
-            <Head title={meta?.title || "Slide Beranda"} />
-
-            <div className="space-y-6">
-                <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
-                    <div>
-                        <p className="text-xs font-black uppercase tracking-[0.28em] text-sky-600">Manajemen Beranda</p>
-                        <h1 className="mt-2 text-3xl font-black text-slate-950">Slide Beranda</h1>
-                        <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-500">
-                            Kelola hero carousel halaman beranda, termasuk judul utama, deskripsi, tombol, urutan, dan gambar.
-                        </p>
-                    </div>
-
+        <AdminLayout 
+            title={meta?.title || "Slide Beranda"}
+            subtitle={meta?.subtitle || "Kelola hero carousel halaman beranda, termasuk judul utama, deskripsi, tombol, urutan, dan gambar."}
+            actions={(
+                <div className="flex flex-wrap gap-3">
                     <button
                         type="button"
                         onClick={() => setModal({ show: true, item: null })}
@@ -220,7 +212,11 @@ export default function Index({ meta, filter, data }) {
                         <Plus className="h-4 w-4" /> Tambah Slide
                     </button>
                 </div>
+            )}
+        >
+            <Head title={meta?.title || "Slide Beranda"} />
 
+            <div className="space-y-6">
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     <StatCard label="Total Slide" value={stats.total} icon={Layers3} />
                     <StatCard label="Slide Aktif" value={stats.active} icon={MonitorPlay} />
@@ -230,8 +226,8 @@ export default function Index({ meta, filter, data }) {
                 <div className="rounded-[2rem] border border-slate-100 bg-white p-4 shadow-sm shadow-slate-100">
                     <form onSubmit={submitSearch} className="grid gap-3 lg:grid-cols-[1fr_220px_auto] lg:items-end">
                         <label className="block">
-                            <span className="text-xs font-black uppercase tracking-widest text-slate-400">Cari Slide</span>
-                            <div className="relative mt-2">
+                            <span className="block mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Cari Slide</span>
+                            <div className="relative">
                                 <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                                 <input
                                     value={search}
@@ -250,8 +246,8 @@ export default function Index({ meta, filter, data }) {
                             placeholder="Pilih status"
                         />
 
-                        <button type="submit" className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black text-white hover:bg-slate-800">
-                            Terapkan
+                        <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-sky-600 px-5 py-3 text-sm font-black text-white hover:bg-sky-700">
+                            <Search className="h-4 w-4" /> Cari
                         </button>
                     </form>
                 </div>

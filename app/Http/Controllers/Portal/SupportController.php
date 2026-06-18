@@ -25,30 +25,12 @@ class SupportController extends Controller
 
     public function help(Request $request, SupportPageService $service)
     {
-        return Inertia::render('Help/Index', [
-            'meta' => [
-                'title' => 'Pusat Bantuan',
-            ],
-            'filter' => (object) [
-                'search' => $request->query('search'),
-                'page' => (int) $request->query('page', 1),
-            ],
-            'data' => $service->getHelpData($request),
-        ]);
+        return $this->staticPage($request, $service, 'help', 'Pusat Bantuan');
     }
 
     public function info(Request $request, SupportPageService $service)
     {
-        return Inertia::render('Info/Index', [
-            'meta' => [
-                'title' => 'Info Layanan',
-            ],
-            'filter' => (object) [
-                'search' => $request->query('search'),
-                'page' => (int) $request->query('page', 1),
-            ],
-            'data' => $service->getInfoData($request),
-        ]);
+        return $this->staticPage($request, $service, 'info', 'Info Layanan');
     }
 
     public function kediri(Request $request, SupportPageService $service)
