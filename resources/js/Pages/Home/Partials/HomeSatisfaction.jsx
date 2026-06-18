@@ -113,7 +113,7 @@ export default function HomeSatisfaction({ satisfaction }) {
                 <SectionHeader
                     eyebrow="Survey Kepuasan"
                     title="Kepuasan Pengguna PECUT"
-                    subtitle="Ringkasan rating dan komentar pengguna aplikasi PECUT."
+                    subtitle="Lihat penilaian dan masukan pengguna terhadap layanan PECUT."
                 />
                 <div className="grid gap-6 lg:grid-cols-[0.95fr_0.85fr_1.2fr] min-h-[250px]">
                     <div className="flex flex-col justify-between rounded-3xl bg-slate-50 p-5">

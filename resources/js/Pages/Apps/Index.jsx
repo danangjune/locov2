@@ -70,7 +70,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                                 <SectionHeader
                                     eyebrow="Hasil Pencarian"
                                     title={`${appsMeta?.total ?? apps.length} aplikasi ditemukan`}
-                                    subtitle="Daftar aplikasi ini berasal langsung dari data backend Laravel melalui Inertia, bukan hash route React lama."
+                                    subtitle="Temukan beragam aplikasi layanan digital Pemerintah Kota Kediri dalam satu portal."
                                 />
 
                                 {error && (

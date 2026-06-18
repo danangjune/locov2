@@ -60,7 +60,9 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
 
                             <div>
                                 <SectionHeader
+                                    eyebrow="Daftar Aduan"
                                     title={`${complaintsMeta?.total ?? complaints.length} aduan terakhir`}
+                                    subtitle="Pantau laporan warga terbaru beserta perkembangan penanganannya."
                                 />
 
                                 {error && (

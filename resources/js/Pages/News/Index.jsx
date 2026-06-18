@@ -66,7 +66,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                         <SectionHeader
                             eyebrow="Daftar Berita"
                             title={`${newsMeta?.total ?? newsPayload.length} berita ditemukan`}
-                            subtitle="Data berita ini dikirim dari Laravel Controller melalui Inertia, sehingga tidak lagi bergantung pada hash route React lama."
+                            subtitle="Ikuti informasi dan kabar terbaru dari Pemerintah Kota Kediri."
                         />
 
                         {error && (

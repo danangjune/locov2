@@ -273,7 +273,7 @@ function HandlingTimeline({ history = [], lastStatus, lastStatusAt, isFinished }
             <SectionHeader
                 eyebrow="Status"
                 title="Progress Penanganan Aduan"
-                subtitle="Riwayat ini dibuat lebih ringkas agar status terbaru dan alur penanganan mudah dipantau."
+                subtitle="Pantau status terkini dan tahapan penanganan laporan secara jelas."
             />
 
             <div className="mt-6 rounded-[1.75rem] bg-gradient-to-br from-sky-50 to-white p-5 ring-1 ring-sky-100">
@@ -438,7 +438,7 @@ export default function Show({ meta = {}, data = {} }) {
                                     <SectionHeader
                                         eyebrow="Isi Aduan"
                                         title="Ringkasan Laporan Warga"
-                                        subtitle="Detail laporan yang ditampilkan sudah dibersihkan dari format HTML agar lebih mudah dibaca."
+                                        subtitle="Informasi yang disampaikan pelapor untuk mendukung proses tindak lanjut."
                                     />
 
                                     <p className="whitespace-pre-line text-base leading-8 text-slate-600">
@@ -457,7 +457,7 @@ export default function Show({ meta = {}, data = {} }) {
                                     <SectionHeader
                                         eyebrow="Bukti"
                                         title="Dokumentasi Aduan"
-                                        subtitle="Satu foto utama ditampilkan sebagai fokus. Foto lainnya tersedia sebagai thumbnail kecil di bawahnya."
+                                        subtitle="Dokumentasi yang dilampirkan pelapor sebagai bukti pendukung laporan."
                                     />
 
                                     <EvidenceGallery images={images} title={complaint.title} />
@@ -469,7 +469,7 @@ export default function Show({ meta = {}, data = {} }) {
                                             <SectionHeader
                                                 eyebrow="Lokasi"
                                                 title="Peta Lokasi Aduan"
-                                                subtitle="Lokasi berdasarkan tautan peta yang tersedia pada data aduan."
+                                                subtitle="Lokasi laporan berdasarkan informasi peta yang disampaikan pelapor."
                                             />
                                         </div>
                                         <iframe
@@ -537,7 +537,7 @@ export default function Show({ meta = {}, data = {} }) {
                             <SectionHeader
                                 eyebrow="Aduan Lainnya"
                                 title="Aduan terbaru yang juga bisa dipantau"
-                                subtitle="Beberapa aduan lain dari data terbaru."
+                                subtitle="Laporan warga terbaru lainnya yang dapat Anda pantau."
                             />
 
                             <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">

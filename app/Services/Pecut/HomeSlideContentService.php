@@ -30,8 +30,8 @@ class HomeSlideContentService
             'body' => $slide->body,
             'url' => $slide->url,
             'button_label' => $slide->button_label ?: 'Jelajahi Aplikasi',
-            'secondary_label' => $slide->secondary_label ?: 'Panduan Pengguna',
-            'secondary_url' => $slide->secondary_url ?: '/guide',
+            'secondary_label' => $slide->secondary_label ?: null,
+            'secondary_url' => $slide->secondary_url ?: null,
             'image' => $this->normalizeImage($slide->image),
         ];
     }

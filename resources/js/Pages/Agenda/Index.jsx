@@ -119,7 +119,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                             <SectionHeader
                                 eyebrow="Daftar Agenda"
                                 title={`${agendaMeta?.total ?? agendas.length} agenda ditemukan`}
-                                subtitle="Data agenda dikirim dari Laravel Controller melalui Inertia, sehingga tidak lagi menggunakan hash route React lama."
+                                subtitle="Temukan agenda kegiatan Pemerintah Kota Kediri dan kegiatan publik yang dapat diikuti."
                             />
 
                             {error && (

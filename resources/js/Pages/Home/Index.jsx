@@ -176,7 +176,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                         <SectionHeader
                             eyebrow="Ruang Portal"
                             title="Pilih Kebutuhan Layanan"
-                            subtitle="Halaman awal dibagi jelas antara aplikasi untuk aparatur pemerintah dan aplikasi untuk masyarakat umum."
+                            subtitle="Pilih layanan digital sesuai kebutuhan masyarakat maupun aparatur pemerintah."
                         />
 
                         <div className="grid gap-5 lg:grid-cols-2">
@@ -262,7 +262,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                             <SectionHeader
                                 eyebrow="Populer"
                                 title="Aplikasi Paling Banyak Dicari"
-                                subtitle="Tampilan carousel untuk layanan prioritas dan aplikasi yang sering digunakan."
+                                subtitle="Akses cepat ke layanan digital yang paling sering digunakan."
                                 action="Lihat semua aplikasi"
                                 onAction={() => goApps("Semua")}
                             />
@@ -322,7 +322,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                         <SectionHeader
                             eyebrow="Aduan Warga"
                             title="Aduan Terbaru Masyarakat"
-                            subtitle="Menampilkan 6 aduan terbaru dari kanal pengaduan sebagai gambaran laporan warga, lokasi, status proses, dan bukti pendukung."
+                            subtitle="Ikuti laporan warga terbaru beserta status tindak lanjutnya."
                             action="Lihat kanal aduan"
                             onAction={() => navigate("complaints")}
                         />
@@ -373,7 +373,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                         <SectionHeader
                             eyebrow="Informasi Kota"
                             title="Berita Terkini Kota Kediri"
-                            subtitle="Berita ditampilkan dari website resmi Pemerintah Kota Kediri."
+                            subtitle="Informasi dan kabar terbaru dari Pemerintah Kota Kediri."
                             action="Lihat seluruh berita"
                             onAction={() => navigate("news")}
                         />
@@ -421,7 +421,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                             <SectionHeader
                                 eyebrow="Kalender Kota"
                                 title="Agenda Terdekat"
-                                subtitle="Agenda pemerintah dan agenda publik ditampilkan agar masyarakat dan ASN mudah mengikuti kegiatan kota."
+                                subtitle="Jadwal kegiatan pemerintah dan publik yang dapat diikuti masyarakat."
                                 action="Lihat kalender lengkap"
                                 onAction={() => navigate("agenda")}
                             />

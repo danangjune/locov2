@@ -88,7 +88,7 @@ export default function HomeAppSections({ sections = [] }) {
                 <SectionHeader
                     eyebrow="Layanan Pilihan"
                     title="Kumpulan Aplikasi Prioritas"
-                    subtitle="Pilih salah satu section untuk menampilkan aplikasi yang sudah diatur dari admin. Section lain disembunyikan agar beranda tetap rapi."
+                    subtitle="Pilih kategori layanan untuk menemukan aplikasi sesuai kebutuhan Anda."
                 />
 
                 <div className="mt-8 flex gap-3 overflow-x-auto pb-2 overflow-y-auto" role="tablist">
