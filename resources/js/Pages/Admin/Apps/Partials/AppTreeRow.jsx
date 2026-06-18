@@ -27,13 +27,21 @@ function Badge({ children, tone = "slate" }) {
     };
 
     return (
-        <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-black ${tones[tone] || tones.slate}`}>
+        <span
+            className={`inline-flex rounded-full px-2.5 py-1 text-xs font-black ${tones[tone] || tones.slate}`}
+        >
             {children}
         </span>
     );
 }
 
-export default function AppTreeRow({ item, depth = 0, expanded = {}, onToggle, onMove }) {
+export default function AppTreeRow({
+    item,
+    depth = 0,
+    expanded = {},
+    onToggle,
+    onMove,
+}) {
     const children = Array.isArray(item?.children) ? item.children : [];
     const hasChildren = children.length > 0;
     const isOpen = expanded[item.id] !== false;
@@ -77,9 +85,14 @@ export default function AppTreeRow({ item, depth = 0, expanded = {}, onToggle, o
 
     return (
         <>
-            <tr className={`${!item.is_active ? "bg-rose-50/60" : "bg-white"} hover:bg-slate-50`}>
+            <tr
+                className={`${!item.is_active ? "bg-rose-50/60" : "bg-white"} hover:bg-slate-50`}
+            >
                 <td className="whitespace-nowrap px-4 py-4 align-top">
-                    <div className="flex items-start gap-3" style={{ paddingLeft: depth * 24 }}>
+                    <div
+                        className="flex items-start gap-3"
+                        style={{ paddingLeft: depth * 24 }}
+                    >
                         <button
                             type="button"
                             onClick={() => hasChildren && onToggle(item.id)}
@@ -90,7 +103,11 @@ export default function AppTreeRow({ item, depth = 0, expanded = {}, onToggle, o
                             }`}
                         >
                             {hasChildren ? (
-                                isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
+                                isOpen ? (
+                                    <ChevronDown className="h-4 w-4" />
+                                ) : (
+                                    <ChevronRight className="h-4 w-4" />
+                                )
                             ) : (
                                 <span className="h-1.5 w-1.5 rounded-full bg-slate-300" />
                             )}
@@ -98,10 +115,23 @@ export default function AppTreeRow({ item, depth = 0, expanded = {}, onToggle, o
 
                         <div>
                             <div className="flex flex-wrap items-center gap-2">
-                                <p className="font-black text-slate-900">{item.name}</p>
-                                {hasChildren && <Badge tone="sky">{children.length} child</Badge>}
-                                {!item.is_active && <Badge tone="rose">Nonaktif</Badge>}
-                                {item.is_sso && <Badge tone="emerald">SSO</Badge>}
+                                <p className="font-black text-slate-900">
+                                    {item.name}
+                                </p>
+                                {hasChildren && (
+                                    <Badge tone="sky">
+                                        {children.length} child
+                                    </Badge>
+                                )}
+                                {!item.is_active && (
+                                    <Badge tone="rose">Nonaktif</Badge>
+                                )}
+                                {item.is_sso && (
+                                    <Badge tone="emerald">SSO</Badge>
+                                )}
+                                {item.is_popular && (
+                                    <Badge tone="amber">Populer</Badge>
+                                )}
                             </div>
                             <div className="mt-1 flex flex-wrap items-center gap-2 text-xs font-bold text-slate-400">
                                 <span>#{item.id}</span>
@@ -130,7 +160,11 @@ export default function AppTreeRow({ item, depth = 0, expanded = {}, onToggle, o
 
                 <td className="px-4 py-4 align-top">
                     <div className="flex flex-col gap-2">
-                        <Badge tone={item.app_from_id === 2 ? "emerald" : "amber"}>{item.app_from?.name || "-"}</Badge>
+                        <Badge
+                            tone={item.app_from_id === 2 ? "emerald" : "amber"}
+                        >
+                            {item.app_from?.name || "-"}
+                        </Badge>
                         {item.url ? (
                             <a
                                 href={item.url}
@@ -142,7 +176,9 @@ export default function AppTreeRow({ item, depth = 0, expanded = {}, onToggle, o
                                 <span className="truncate">{item.url}</span>
                             </a>
                         ) : (
-                            <span className="text-xs font-bold text-slate-400">Belum ada URL</span>
+                            <span className="text-xs font-bold text-slate-400">
+                                Belum ada URL
+                            </span>
                         )}
                     </div>
                 </td>
@@ -183,16 +219,18 @@ export default function AppTreeRow({ item, depth = 0, expanded = {}, onToggle, o
                 </td>
             </tr>
 
-            {hasChildren && isOpen && children.map((child) => (
-                <AppTreeRow
-                    key={child.id}
-                    item={child}
-                    depth={depth + 1}
-                    expanded={expanded}
-                    onToggle={onToggle}
-                    onMove={onMove}
-                />
-            ))}
+            {hasChildren &&
+                isOpen &&
+                children.map((child) => (
+                    <AppTreeRow
+                        key={child.id}
+                        item={child}
+                        depth={depth + 1}
+                        expanded={expanded}
+                        onToggle={onToggle}
+                        onMove={onMove}
+                    />
+                ))}
         </>
     );
 }

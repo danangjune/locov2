@@ -48,6 +48,7 @@ class AppManagementService
                 'app_from_id' => $parent?->app_from_id ?: 1,
                 'is_active' => true,
                 'is_sso' => false,
+                'is_popular' => false,
             ],
         ];
     }
@@ -151,7 +152,7 @@ class AppManagementService
 
         return [
             'items' => collect($paginator->items())
-                ->map(fn (AppLink $item) => $this->mapApp($item))
+                ->map(fn(AppLink $item) => $this->mapApp($item))
                 ->values()
                 ->all(),
             'meta' => [
@@ -275,7 +276,7 @@ class AppManagementService
             'categories' => Category::query()
                 ->orderBy('id')
                 ->get(['id', 'title', 'sub_title'])
-                ->map(fn (Category $item) => [
+                ->map(fn(Category $item) => [
                     'id' => $item->id,
                     'title' => $item->title,
                     'sub_title' => $item->sub_title,
@@ -285,7 +286,7 @@ class AppManagementService
             'urusan' => Urusan::query()
                 ->orderBy('title')
                 ->get(['id', 'title', 'icon_name'])
-                ->map(fn (Urusan $item) => [
+                ->map(fn(Urusan $item) => [
                     'id' => $item->id,
                     'title' => $item->title,
                     'icon_name' => $item->icon_name,
@@ -295,7 +296,7 @@ class AppManagementService
             'app_from' => AppFrom::query()
                 ->orderBy('id')
                 ->get(['id', 'name'])
-                ->map(fn (AppFrom $item) => [
+                ->map(fn(AppFrom $item) => [
                     'id' => $item->id,
                     'name' => $item->name,
                 ])
@@ -308,7 +309,7 @@ class AppManagementService
     {
         return AppLink::query()
             ->with(['category', 'urusan'])
-            ->when($excludeId, fn ($query) => $query->where('id', '!=', $excludeId))
+            ->when($excludeId, fn($query) => $query->where('id', '!=', $excludeId))
             ->orderBy('name')
             ->get()
             ->filter(function (AppLink $item) use ($excludeId) {
@@ -318,7 +319,7 @@ class AppManagementService
 
                 return ! $this->isInvalidParent($excludeId, (int) $item->id);
             })
-            ->map(fn (AppLink $item) => [
+            ->map(fn(AppLink $item) => [
                 'id' => $item->id,
                 'name' => $item->name,
                 'alias' => $item->alias,
@@ -334,9 +335,9 @@ class AppManagementService
     {
         $children = $withChildren && $app->childrenRecursive
             ? collect($app->childrenRecursive)
-                ->map(fn (AppLink $child) => $this->mapApp($child))
-                ->values()
-                ->all()
+            ->map(fn(AppLink $child) => $this->mapApp($child))
+            ->values()
+            ->all()
             : [];
 
         return [
@@ -352,6 +353,7 @@ class AppManagementService
             'image_url' => $app->image ? asset('storage/apps/' . $app->image) : null,
             'is_active' => (bool) $app->is_active,
             'is_sso' => (bool) $app->is_sso,
+            'is_popular' => (bool) $app->is_popular,
             'category_id' => $app->category_id,
             'urusan_id' => $app->urusan_id,
             'app_from_id' => $app->app_from_id,

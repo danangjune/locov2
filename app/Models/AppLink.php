@@ -26,6 +26,7 @@ class AppLink extends Model
         'image',
         'is_active',
         'is_sso',
+        'is_popular',
         'app_from_id',
     ];
 
@@ -34,37 +35,38 @@ class AppLink extends Model
         return [
             'is_active' => 'boolean',
             'is_sso' => 'boolean',
+            'is_popular' => 'boolean',
         ];
     }
 
     // Anake Sopo ae
-    public function children() : HasMany
+    public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent')->with(['parentRoot', 'urusan', 'app_from']);
     }
 
-    public function childrenRecursive() : HasMany 
+    public function childrenRecursive(): HasMany
     {
         return $this->children()->with('childrenRecursive');
     }
 
     // Iki anake sopo
-    public function parentRoot() 
+    public function parentRoot()
     {
         return $this->belongsTo(self::class, 'parent');
     }
 
-    public function urusan() : BelongsTo 
+    public function urusan(): BelongsTo
     {
         return $this->belongsTo(Urusan::class, 'urusan_id');
     }
 
-    public function category() : BelongsTo 
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function app_from() : BelongsTo 
+    public function app_from(): BelongsTo
     {
         return $this->belongsTo(AppFrom::class, 'app_from_id');
     }

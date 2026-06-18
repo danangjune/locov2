@@ -197,11 +197,11 @@ class HomeService
         }
 
         $items = collect($rows['data'])
-            ->filter(fn ($item) => (bool) data_get($item, 'is_aduan', false))
-            ->sortByDesc(fn ($item) => data_get($item, 'created_at'))
+            ->filter(fn($item) => (bool) data_get($item, 'is_aduan', false))
+            ->sortByDesc(fn($item) => data_get($item, 'created_at'))
             ->take($limit)
             ->values()
-            ->map(fn ($item) => $this->mapComplaint($item))
+            ->map(fn($item) => $this->mapComplaint($item))
             ->values()
             ->all();
 
@@ -282,8 +282,8 @@ class HomeService
             ->all();
 
         $latestHistory = collect($history)
-            ->filter(fn ($historyItem) => ! empty($historyItem['created_at']))
-            ->sortByDesc(fn ($historyItem) => $historyItem['created_at'])
+            ->filter(fn($historyItem) => ! empty($historyItem['created_at']))
+            ->sortByDesc(fn($historyItem) => $historyItem['created_at'])
             ->first();
 
         $lastStatus = data_get($latestHistory, 'status', data_get($item, 'last_status', '-'));

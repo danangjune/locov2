@@ -63,6 +63,7 @@ class AppLinkController extends Controller
         $validated['app_from_id'] = $validated['app_from_id'] ?? 1;
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['is_sso'] = $request->boolean('is_sso', false);
+        $validated['is_popular'] = $request->boolean('is_popular', false);
         $validated['code'] = $service->generateCode($validated['parent']);
 
         if ($request->hasFile('image')) {
@@ -104,6 +105,7 @@ class AppLinkController extends Controller
         $validated['app_from_id'] = $validated['app_from_id'] ?? 1;
         $validated['is_active'] = $request->boolean('is_active', false);
         $validated['is_sso'] = $request->boolean('is_sso', false);
+        $validated['is_popular'] = $request->boolean('is_popular', false);
 
         if ($service->isInvalidParent($app->id, (int) $validated['parent'])) {
             return back()->withErrors([
@@ -179,6 +181,7 @@ class AppLinkController extends Controller
             'image' => [$isUpdate ? 'nullable' : 'nullable', 'image', 'max:4096'],
             'is_active' => ['nullable', 'boolean'],
             'is_sso' => ['nullable', 'boolean'],
+            'is_popular' => ['nullable', 'boolean'],
             'app_from_id' => ['nullable', 'exists:app_from,id'],
         ]);
     }
