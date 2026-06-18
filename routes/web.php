@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ContentFooterController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FooterSettingController;
 use App\Http\Controllers\Admin\HomeSectionController;
+use App\Http\Controllers\Admin\HomeSlideController;
 use App\Http\Controllers\Admin\PanduanController;
 use App\Http\Controllers\Admin\PortalPageController;
 use App\Http\Controllers\Admin\ReferenceController;
@@ -167,6 +168,14 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
         Route::post('/sections/{section}/items', [HomeSectionController::class, 'storeItem'])->name('items.store');
         Route::put('/items/{item}', [HomeSectionController::class, 'updateItem'])->name('items.update');
         Route::delete('/items/{item}', [HomeSectionController::class, 'destroyItem'])->name('items.destroy');
+    });
+
+    // Route Home Slides
+    Route::prefix('home-slides')->name('admin.home-slides.')->group(function () {
+        Route::get('/', [HomeSlideController::class, 'index'])->name('index');
+        Route::post('/', [HomeSlideController::class, 'store'])->name('store');
+        Route::put('/{slide}', [HomeSlideController::class, 'update'])->name('update');
+        Route::delete('/{slide}', [HomeSlideController::class, 'destroy'])->name('destroy');
     });
 });
 

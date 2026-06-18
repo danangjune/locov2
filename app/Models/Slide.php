@@ -11,10 +11,21 @@ class Slide extends Model
 
     protected $fillable = [
         'title',
+        'subtitle',
         'body',
         'url',
+        'button_label',
+        'secondary_label',
+        'secondary_url',
         'image',
+        'sort_order',
+        'statusenabled',
         'created_by',
         'updated_by',
+    ];
+
+    protected $casts = [
+        'statusenabled' => 'boolean',
+        'sort_order' => 'integer',
     ];
 }

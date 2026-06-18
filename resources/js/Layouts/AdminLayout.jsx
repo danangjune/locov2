@@ -18,6 +18,7 @@ import {
     UserCircle,
     Database,
     Layers3,
+    MonitorPlay,
     X,
 } from "lucide-react";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -64,6 +65,12 @@ const navigation = [
         href: "/admin/home-sections",
         match: "/admin/home-sections",
         icon: Layers3,
+    },
+    {
+        title: "Slide Beranda",
+        href: "/admin/home-slides",
+        match: "/admin/home-slides",
+        icon: MonitorPlay,
     },
     {
         title: "Content Footer",

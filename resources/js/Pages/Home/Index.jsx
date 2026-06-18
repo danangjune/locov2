@@ -22,6 +22,7 @@ import NewsCard from "../../Components/News/NewsCard";
 import MiniCalendar from "../../Components/Agenda/MiniCalendar";
 import ComplaintCard from "../../Components/Complaints/ComplaintCard";
 import HomeAppSections from "./Partials/HomeAppSections";
+import HomeHero from "./Partials/HomeHero";
 
 import {
     appData,
@@ -41,6 +42,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
     const newsPayload = Array.isArray(data?.news?.items) ? data.news.items : [];
     const complaintsPayload = Array.isArray(data?.complaints?.items) ? data.complaints.items : [];
     const homeSections = Array.isArray(data?.home_sections) ? data.home_sections : [];
+    const slides = Array.isArray(data?.slides) ? data.slides : [];
     const errors = data?.errors || {};
 
     const apps = appsPayload.length
@@ -151,7 +153,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
             <Head title={meta?.title || "PECUT Kota Kediri"} />
             <PublicLayout currentRoute="home">
                 <PageShell>
-            <section className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-cyan-50">
+            {/* <section className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-cyan-50">
                 <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-sky-200/40 blur-3xl" />
                 <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-200/40 blur-3xl" />
 
@@ -332,7 +334,17 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                         </div>
                     </motion.div>
                 </div>
-            </section>
+            </section> */}
+
+            <HomeHero
+                slides={slides}
+                stats={{
+                    appsCount: appsLoading ? "..." : `${activeApps.length}+`,
+                    spaceCount: "2",
+                    accessLabel: "24/7",
+                }}
+                onNavigate={navigate}
+            />
 
             <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <SectionHeader

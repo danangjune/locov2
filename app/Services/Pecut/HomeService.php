@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use App\Services\Pecut\HomeSectionContentService;
+use App\Services\Pecut\HomeSlideContentService;
 
 class HomeService
 {
@@ -17,6 +18,7 @@ class HomeService
         $apps = $this->getApps($request);
         $news = $this->getNews(10);
         $complaints = $this->getComplaints(6);
+        $slides = app(HomeSlideContentService::class)->getSlides();
 
         return [
             'apps' => [
@@ -37,6 +39,7 @@ class HomeService
                 'complaints' => $complaints['error'],
             ],
             'home_sections' => app(HomeSectionContentService::class)->getSections(),
+            'slides' => $slides,
         ];
     }
 
