@@ -28,8 +28,23 @@ export default function HomeHero({ slides = [], stats = {}, onNavigate }) {
     const activeSlide = items[activeIndex] || items[0];
     const hasMany = items.length > 1;
 
+    function isExternalUrl(url = "") {
+        return (
+            url.startsWith("http://") ||
+            url.startsWith("https://") ||
+            url.startsWith("mailto:") ||
+            url.startsWith("tel:") ||
+            url.startsWith("https://wa.me") ||
+            url.startsWith("whatsapp://")
+        );
+    }
     const goToUrl = (url = "/apps") => {
         if (!url) return;
+
+        if (isExternalUrl(url)) {
+            window.open(url, "_blank");
+            return;
+        }
 
         if (typeof onNavigate === "function") {
             onNavigate(url);

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
-import { Bell, Menu, X, UserCircle, LayoutDashboard, LogOut } from "lucide-react";
+import { BookMarked, Menu, X, UserCircle, LayoutDashboard, LogOut } from "lucide-react";
 import { classNames } from "../../Utils/helpers";
 
 const navItems = [
@@ -11,7 +11,6 @@ const navItems = [
     { href: "/news", key: "news", label: "Berita" },
     { href: "/agenda", key: "agenda", label: "Agenda" },
     { href: "/guide", key: "guide", label: "Panduan" },
-    { href: "/help", key: "help", label: "Bantuan" },
 ];
 
 export default function Header({ currentRoute = "home" }) {
@@ -103,11 +102,11 @@ export default function Header({ currentRoute = "home" }) {
                 <div className="hidden shrink-0 items-center gap-3 xl:flex">
                     <button
                         type="button"
-                        onClick={() => router.visit("/info")}
+                        onClick={() => router.visit("/survey-kepuasan")}
                         className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-bold text-sky-700 hover:bg-sky-100"
                     >
-                        <Bell className="h-4 w-4" />
-                        Info Layanan
+                        <BookMarked className="h-4 w-4" />
+                        Survey Kepuasan
                     </button>
 
                     {user ? (

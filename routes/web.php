@@ -20,6 +20,7 @@ use App\Http\Controllers\Portal\AppController;
 use App\Http\Controllers\Portal\ComplaintController;
 use App\Http\Controllers\Portal\NewsController;
 use App\Http\Controllers\Portal\SupportController;
+use App\Http\Controllers\Portal\SurveyController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -62,6 +63,9 @@ Route::get('/guide', [SupportController::class, 'guide'])->name('guide.index');
 Route::get('/help', [SupportController::class, 'help'])->name('help.index');
 Route::get('/info', [SupportController::class, 'info'])->name('info.index');
 Route::get('/kediri', [SupportController::class, 'kediri'])->name('kediri');
+
+// Route Survey
+Route::get('/survey-kepuasan', [SurveyController::class, 'index'])->name('survey.index');
 
 // Route Login SSO & Profile
 Route::prefix('auth')->group(function () {

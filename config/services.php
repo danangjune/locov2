@@ -40,4 +40,14 @@ return [
         'appkey' => env('ADUAN_API_KEY'),
     ],
 
+    'survey_digital' => [
+        'url' => env('SURVEY_DIGITAL_URL'),
+        'embed_url' => env('SURVEY_DIGITAL_EMBED_URL'),
+
+        'app_id' => env('SURVEY_DIGITAL_APP_ID', 395),
+        'token' => env('SURVEY_DIGITAL_TOKEN'),
+        'refresh_token' => env('SURVEY_DIGITAL_REFRESH_TOKEN'),
+        'timeout' => env('SURVEY_DIGITAL_TIMEOUT', 8),
+    ],
+
 ];
