@@ -397,7 +397,7 @@ export default function Show({ meta = {}, data = {} }) {
         <>
             <Head title={title} />
 
-            <PublicLayout currentRoute={config.currentRoute} withFloatingHelp={slug !== "help"}>
+            <PublicLayout currentRoute={config.currentRoute}>
                 <PageShell>
                     <StaticHero page={page} config={config} />
 
