@@ -86,7 +86,7 @@ export default function Index({ meta = {}, data = {} }) {
         <>
             <Head title={meta?.title || "Pusat Bantuan"} />
 
-            <PublicLayout currentRoute="help" withFloatingHelp={false}>
+            <PublicLayout currentRoute="help">
                 <PageShell>
                     <PageHero
                         eyebrow="Bantuan"

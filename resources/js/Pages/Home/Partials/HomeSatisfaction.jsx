@@ -165,7 +165,7 @@ export default function HomeSatisfaction({ satisfaction }) {
                         </div>
                     </div>
 
-                    <div className="rounded-3xl border border-slate-100 bg-white p-5 max-h-[275px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+                    <div className="rounded-3xl border border-slate-100 bg-white p-5">
                         <div className="flex items-center justify-between gap-3">
                             <h3 className="text-sm font-black text-slate-950">Komentar Terbaru</h3>
                             {comments.length ? (
@@ -176,7 +176,7 @@ export default function HomeSatisfaction({ satisfaction }) {
                         </div>
 
                         {comments.length ? (
-                            <div className="mt-4 max-h-60 space-y-3">
+                            <div className="mt-4 max-h-48 space-y-3 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
                                 {comments.map((item) => (
                                     <CommentItem key={`${item.respondent_id}-${item.answer_at}`} item={item} />
                                 ))}

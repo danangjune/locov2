@@ -150,7 +150,7 @@ export default function HomeHero({ slides = [], stats = {}, onNavigate }) {
                             <img
                                 src={activeSlide.image}
                                 alt={activeSlide.title || "Slide Beranda"}
-                                className="h-[360px] w-full rounded-[1.75rem] object-cover"
+                                className="h-[360px] w-full rounded-[1.75rem] object-contain"
                                 loading="eager"
                             />
                         ) : (
