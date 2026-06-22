@@ -22,8 +22,6 @@ class FooterSettingManagementService
         $setting = $this->getOrCreateSetting();
 
         $validated = $request->validate([
-            'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
-            'logo_path' => ['nullable', 'string', 'max:1000'],
             'description' => ['required', 'string', 'max:2000'],
             'copyright_text' => ['nullable', 'string', 'max:255'],
             'bottom_text' => ['nullable', 'string', 'max:255'],
@@ -36,13 +34,6 @@ class FooterSettingManagementService
             'bottom_text' => $validated['bottom_text'] ?: 'PECUT · Portal Efisien Cepat Mudah Terpadu',
             'statusenabled' => $request->boolean('statusenabled', true),
         ];
-
-        if ($request->hasFile('logo')) {
-            $this->deleteImage($setting->logo_path);
-            $payload['logo_path'] = $this->storeLogo($request);
-        } elseif (array_key_exists('logo_path', $validated) && trim((string) $validated['logo_path']) !== '') {
-            $payload['logo_path'] = trim((string) $validated['logo_path']);
-        }
 
         $setting->update($payload);
 
@@ -67,54 +58,10 @@ class FooterSettingManagementService
     {
         return [
             'id' => $setting->id,
-            'logo_path' => $this->normalizeImage($setting->logo_path),
-            'logo_path_raw' => $setting->logo_path,
             'description' => $setting->description,
             'copyright_text' => $setting->copyright_text,
             'bottom_text' => $setting->bottom_text,
             'statusenabled' => (bool) $setting->statusenabled,
         ];
-    }
-
-    private function storeLogo(Request $request): ?string
-    {
-        if (! $request->hasFile('logo')) {
-            return null;
-        }
-
-        $fileName = $request->file('logo')->hashName();
-        $request->file('logo')->storeAs('public/footer-settings', $fileName);
-
-        return 'storage/footer-settings/' . $fileName;
-    }
-
-    private function deleteImage(?string $image): void
-    {
-        $image = trim((string) $image);
-
-        if ($image === '' || str_starts_with($image, 'http://') || str_starts_with($image, 'https://') || str_starts_with($image, '/images/')) {
-            return;
-        }
-
-        $path = str_replace('storage/', 'public/', ltrim($image, '/'));
-
-        if (Storage::exists($path)) {
-            Storage::delete($path);
-        }
-    }
-
-    private function normalizeImage(?string $image): ?string
-    {
-        $image = trim((string) $image);
-
-        if ($image === '') {
-            return null;
-        }
-
-        if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://') || str_starts_with($image, '/')) {
-            return $image;
-        }
-
-        return '/' . ltrim($image, '/');
     }
 }

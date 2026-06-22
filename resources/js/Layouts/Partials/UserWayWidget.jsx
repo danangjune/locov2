@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { usePage } from "@inertiajs/react";
 
 const SCRIPT_ID = "pecut-userway-widget";
 const USERWAY_ACCOUNT = "FCl1e8LsIe";
@@ -8,6 +9,13 @@ const USERWAY_ACCOUNT = "FCl1e8LsIe";
  * Launcher digantikan oleh tombol React pada FloatingQuickActions.jsx.
  */
 export default function UserWayWidget() {
+    const { props } = usePage();
+
+    const themePrimary =
+        props?.theme?.colors?.secondary_color ||
+        props?.theme?.colors?.secondary_color ||
+        "#1e6fa5";
+
     useEffect(() => {
         const exposeUserWay = (event) => {
             const instance = event?.detail?.userWayInstance || window.UserWay;
@@ -44,7 +52,7 @@ export default function UserWayWidget() {
             script.async = true;
             script.src = "https://cdn.userway.org/widget.js";
             script.setAttribute("data-account", USERWAY_ACCOUNT);
-            script.setAttribute("data-color", "#1e6fa5");
+            script.setAttribute("data-color", themePrimary);
             script.setAttribute("data-position", "3");
             script.setAttribute("data-size", "small");
             script.setAttribute("data-mobile", "true");

@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { Head, useForm, usePage } from "@inertiajs/react";
-import { Image as ImageIcon, Save, Settings2 } from "lucide-react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { ExternalLink, Image as ImageIcon, Save, Settings2 } from "lucide-react";
 
 import AdminLayout from "../../../Layouts/AdminLayout";
 import { alertError, alertSuccess, confirmUpdate } from "../../../Utils/swal";
+import BrandLogo from "../../../Components/Brand/BrandLogo";
 
 export default function Index({ meta = {}, data = {} }) {
     const { props } = usePage();
@@ -85,38 +86,30 @@ export default function Index({ meta = {}, data = {} }) {
                         </div>
 
                         <div className="grid gap-5">
-                            <label className="block">
-                                <span className="text-xs font-black uppercase tracking-widest text-slate-400">
-                                    Logo Footer
-                                </span>
-                                <input
-                                    type="file"
-                                    accept="image/png,image/jpeg,image/jpg,image/webp,image/svg+xml"
-                                    onChange={(e) => form.setData("logo", e.target.files?.[0] || null)}
-                                    className="mt-2 block w-full text-sm font-semibold text-slate-600 file:mr-4 file:rounded-xl file:border-0 file:bg-sky-600 file:px-4 file:py-2 file:text-sm file:font-black file:text-white hover:file:bg-sky-700"
-                                />
-                                {form.errors.logo && (
-                                    <p className="mt-2 text-xs font-bold text-rose-600">{form.errors.logo}</p>
-                                )}
-                            </label>
+                            <div className="mb-5 rounded-3xl border border-sky-100 bg-sky-50/70 p-4">
+                                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white text-sky-600 shadow-sm">
+                                            <ImageIcon className="h-5 w-5" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-black text-slate-900">
+                                                Logo footer mengikuti Logo Portal
+                                            </p>
+                                            <p className="mt-1 text-xs font-semibold leading-5 text-slate-500">
+                                                Ubah logo header/footer, icon, dan favicon melalui menu khusus agar konsisten di seluruh portal.
+                                            </p>
+                                        </div>
+                                    </div>
 
-                            <label className="block">
-                                <span className="text-xs font-black uppercase tracking-widest text-slate-400">
-                                    Path Logo Manual
-                                </span>
-                                <input
-                                    value={form.data.logo_path || ""}
-                                    onChange={(e) => form.setData("logo_path", e.target.value)}
-                                    placeholder="/images/logo-pecut-full-transparan.png"
-                                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none focus:border-sky-300"
-                                />
-                                <p className="mt-2 text-xs font-semibold text-slate-400">
-                                    Boleh dikosongkan jika memakai upload logo. Jika diisi, gunakan path seperti /images/logo-pecut-full-transparan.png atau URL lengkap.
-                                </p>
-                                {form.errors.logo_path && (
-                                    <p className="mt-2 text-xs font-bold text-rose-600">{form.errors.logo_path}</p>
-                                )}
-                            </label>
+                                    <Link
+                                        href="/admin/logo-setting"
+                                        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-4 py-3 text-xs font-black text-sky-700 shadow-sm ring-1 ring-sky-100 hover:bg-sky-50"
+                                    >
+                                        Buka Logo Portal <ExternalLink className="h-3.5 w-3.5" />
+                                    </Link>
+                                </div>
+                            </div>
 
                             <label className="block">
                                 <span className="text-xs font-black uppercase tracking-widest text-slate-400">
@@ -209,12 +202,12 @@ export default function Index({ meta = {}, data = {} }) {
                             </div>
                         </div>
 
-                        <div className="rounded-[2rem] bg-slate-950 p-6 text-white">
+                        <div className="rounded-[2rem] theme-footer p-6 text-white">
                             <div className="inline-flex rounded-xl bg-white px-3 py-1 shadow-xl shadow-sky-950/20">
-                                <img
-                                    src={setting?.logo_path || "/images/logo-pecut-full-transparan.png"}
-                                    alt="Preview logo footer"
-                                    className="h-11 max-w-[260px] object-contain"
+                                <BrandLogo
+                                    variant="footer"
+                                    mode="dynamic"
+                                    className="h-12 w-auto"
                                 />
                             </div>
 

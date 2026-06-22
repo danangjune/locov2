@@ -430,7 +430,7 @@ export default function Index({ meta = {}, data = {} }) {
                             <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
                                 <h3 className="text-base font-black text-slate-950">Cara SVG Dibaca</h3>
                                 <p className="mt-2 text-sm leading-7 text-slate-500">
-                                    Sistem otomatis memetakan <b>.cls-1</b> sebagai warna utama dan <b>.cls-2/.cls-3</b> sebagai warna sekunder. Ini sudah cocok dengan SVG vector yang kamu kirim.
+                                    Sistem otomatis memetakan <b>.cls-1</b> sebagai warna utama dan <b>.cls-2/.cls-3</b> sebagai warna sekunder.
                                 </p>
                             </div>
                         </div>
