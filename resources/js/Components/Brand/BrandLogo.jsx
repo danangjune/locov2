@@ -33,7 +33,6 @@ function LogoSvgThemeStyle({ scopeId }) {
             }
 
             #${scopeId}.brand-logo-svg .cls-2,
-            #${scopeId}.brand-logo-svg .cls-3,
             #${scopeId}.brand-logo-svg text,
             #${scopeId}.brand-logo-svg [fill="#0158b1" i],
             #${scopeId}.brand-logo-svg [fill="#0058b1" i],
@@ -41,6 +40,7 @@ function LogoSvgThemeStyle({ scopeId }) {
                 fill: var(--logo-secondary) !important;
             }
 
+            #${scopeId}.brand-logo-svg .cls-3,
             #${scopeId}.brand-logo-svg .logo-accent,
             #${scopeId}.brand-logo-svg .cls-accent,
             #${scopeId}.brand-logo-svg [data-logo-color="accent"] {

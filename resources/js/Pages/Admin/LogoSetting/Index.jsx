@@ -34,13 +34,13 @@ function LogoThemeStyle({ scopeId }) {
             }
 
             #${scopeId}.logo-preview-svg .cls-2,
-            #${scopeId}.logo-preview-svg .cls-3,
             #${scopeId}.logo-preview-svg text,
             #${scopeId}.logo-preview-svg [fill="#0158b1" i],
             #${scopeId}.logo-preview-svg [fill="#0058b1" i] {
                 fill: var(--logo-secondary) !important;
             }
 
+            #${scopeId}.logo-preview-svg .cls-3,
             #${scopeId}.logo-preview-svg .logo-accent,
             #${scopeId}.logo-preview-svg .cls-accent,
             #${scopeId}.logo-preview-svg [data-logo-color="accent"] {
@@ -132,7 +132,7 @@ function UploadSvgBox({ value, currentSvg, error, onChange, onRemove }) {
                         Upload logo dalam format SVG agar warna bisa disesuaikan dengan tema portal.
                     </p>
                     <p className="mt-2 text-xs font-bold text-slate-400">
-                        Wajib SVG. Rekomendasi: vector clean, transparan, ukuran maksimal 2MB.
+                        Wajib SVG. Rekomendasi: vector clean, maksimal 3 tone warna, transparan, ukuran maksimal 2MB.
                     </p>
                 </div>
 
