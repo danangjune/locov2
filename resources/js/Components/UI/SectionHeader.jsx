@@ -11,17 +11,17 @@ export default function SectionHeader({
         <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
                 {eyebrow && (
-                    <p className="mb-2 text-sm font-bold uppercase tracking-[0.2em] text-sky-600">
+                    <p className="mb-2 text-sm font-bold uppercase tracking-[0.2em] theme-text-primary">
                         {eyebrow}
                     </p>
                 )}
 
-                <h2 className="text-3xl font-black tracking-tight text-slate-900 md:text-4xl">
+                <h2 className="text-3xl font-black tracking-tight theme-text md:text-4xl">
                     {title}
                 </h2>
 
                 {subtitle && (
-                    <p className="mt-2 max-w-2xl text-base text-slate-500">
+                    <p className="mt-2 max-w-2xl text-base theme-muted">
                         {subtitle}
                     </p>
                 )}
@@ -30,7 +30,7 @@ export default function SectionHeader({
             {action && (
                 <button
                     onClick={onAction}
-                    className="inline-flex w-fit items-center gap-2 rounded-full border border-sky-200 bg-white px-4 py-2 text-sm font-bold text-sky-700 shadow-sm hover:bg-sky-50"
+                    className="inline-flex w-fit items-center gap-2 rounded-full border theme-border-primary-soft theme-bg-surface px-4 py-2 text-sm font-bold theme-text-primary shadow-sm theme-hover-bg-primary-soft"
                 >
                     {action}
                     <ArrowRight className="h-4 w-4" />

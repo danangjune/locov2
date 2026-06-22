@@ -58,7 +58,7 @@ function DistributionRow({ item }) {
                 <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                <div className="h-full rounded-full bg-sky-500" style={{ width: `${percent}%` }} />
+                <div className="h-full rounded-full theme-bg-primary" style={{ width: `${percent}%` }} />
             </div>
             <div className="text-right text-xs font-bold text-slate-400">{percent}%</div>
         </div>
@@ -108,7 +108,7 @@ export default function HomeSatisfaction({ satisfaction }) {
     }
 
     return (
-        <section className="bg-white py-12 sm:py-14">
+        <section className="theme-bg-surface py-12 sm:py-14">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <SectionHeader
                     eyebrow="Survey Kepuasan"
@@ -137,13 +137,13 @@ export default function HomeSatisfaction({ satisfaction }) {
 
                         <div className="mt-5 grid grid-cols-2 gap-3">
                             <div className="rounded-2xl bg-white p-3 ring-1 ring-slate-100">
-                                <UsersRound className="h-4 w-4 text-sky-500" />
+                                <UsersRound className="h-4 w-4 theme-text-primary" />
                                 <p className="mt-2 text-xl font-black text-slate-950">{totalRespondents}</p>
                                 <p className="text-xs font-bold text-slate-400">Responden</p>
                             </div>
 
                             <div className="rounded-2xl bg-white p-3 ring-1 ring-slate-100">
-                                <MessageSquareText className="h-4 w-4 text-sky-500" />
+                                <MessageSquareText className="h-4 w-4 theme-text-primary" />
                                 <p className="mt-2 text-xl font-black text-slate-950">{comments.length}</p>
                                 <p className="text-xs font-bold text-slate-400">Komentar</p>
                             </div>
@@ -183,7 +183,7 @@ export default function HomeSatisfaction({ satisfaction }) {
                             </div>
                         ) : (
                             <div className="mt-4 rounded-2xl bg-slate-50 p-6 text-center">
-                                <MessageSquareText className="mx-auto h-7 w-7 text-sky-500" />
+                                <MessageSquareText className="mx-auto h-7 w-7 theme-text-primary" />
                                 <p className="mt-3 text-sm font-bold text-slate-600">
                                     Belum ada komentar PECUT.
                                 </p>

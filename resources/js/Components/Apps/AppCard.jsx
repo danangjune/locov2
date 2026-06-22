@@ -20,7 +20,7 @@ export default function AppCard({ app, compact = false, index = 0, onOpen }) {
             whileHover={{ y: -5 }}
             transition={{ duration: 0.2 }}
             className={classNames(
-                "group relative flex h-full overflow-hidden rounded-3xl border border-slate-100 bg-white p-5 shadow-sm transition hover:border-slate-200 hover:shadow-xl",
+                "group relative flex h-full overflow-hidden rounded-3xl theme-card p-5 transition hover:shadow-xl",
                 compact ? "min-h-[285px]" : "min-h-[335px]",
             )}
         >
@@ -76,7 +76,7 @@ export default function AppCard({ app, compact = false, index = 0, onOpen }) {
                         type="button"
                         onClick={onOpen}
                         className={classNames(
-                            "mt-1 block text-left font-extrabold leading-snug text-slate-900 hover:text-sky-700",
+                            "mt-1 block text-left font-extrabold leading-snug theme-text theme-hover-text-primary",
                             compact
                                 ? "line-clamp-2 text-lg"
                                 : "line-clamp-2 text-xl",
@@ -87,7 +87,7 @@ export default function AppCard({ app, compact = false, index = 0, onOpen }) {
 
                     <p
                         className={classNames(
-                            "mt-3 text-sm leading-6 text-slate-500",
+                            "mt-3 text-sm leading-6 theme-muted",
                             compact ? "line-clamp-2" : "line-clamp-4",
                         )}
                     >
@@ -102,7 +102,7 @@ export default function AppCard({ app, compact = false, index = 0, onOpen }) {
                         <button
                             type="button"
                             onClick={onOpen}
-                            className="inline-flex shrink-0 items-center gap-1 rounded-full bg-slate-900 px-3 py-2 text-xs font-bold text-white transition hover:bg-sky-600"
+                            className="inline-flex shrink-0 items-center gap-1 rounded-full theme-bg-primary px-3 py-2 text-xs font-bold text-white transition hover:bg-[color-mix(in_srgb,var(--theme-primary),black_12%)]"
                         >
                             Buka
                             <LogInIcon className="h-3.5 w-3.5" />

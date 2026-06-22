@@ -106,7 +106,7 @@ export default function HomeAppSections({ sections = [] }) {
                                 className={[
                                     "shrink-0 rounded-full px-5 py-3 text-sm font-black ring-1 transition",
                                     isActive
-                                        ? "bg-sky-600 text-white shadow-xl shadow-sky-100 ring-sky-600"
+                                        ? "bg-sky-600 text-white shadow-xl shadow-sky-100 ring-sky-200"
                                         : "bg-white text-slate-600 ring-slate-100 hover:bg-sky-50 hover:text-sky-700 hover:ring-sky-100",
                                 ].join(" ")}
                             >

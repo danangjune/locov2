@@ -20,9 +20,13 @@ import {
     Layers3,
     MonitorPlay,
     HelpCircle,
+    Palette,
+    Image,
     X,
 } from "lucide-react";
 import "sweetalert2/dist/sweetalert2.min.css";
+import ThemeStyle from "../Components/Theme/ThemeStyle";
+import BrandLogo from "../Components/Brand/BrandLogo";
 
 const navigation = [
     {
@@ -90,6 +94,19 @@ const navigation = [
         match: "/admin/footer-setting",
         icon: Settings2,
     },
+    { type: 'divider', title: 'Theme' },
+    {
+        title: "Logo Portal",
+        href: "/admin/logo-setting",
+        match: "/admin/logo-setting",
+        icon: Image,
+    },
+    {
+        title: "Tampilan Portal",
+        href: "/admin/theme-setting",
+        match: "/admin/theme-setting",
+        icon: Palette,
+    },
 ];
 
 function isActive(currentUrl, item) {
@@ -128,15 +145,15 @@ export default function AdminLayout({
     };
 
     const SidebarContent = ({ mobile = false }) => (
-        <div className="flex h-full flex-col bg-white">
+        <div className="flex h-full flex-col theme-bg-surface">
             <div className="flex h-20 items-center justify-between border-b border-slate-100 px-5">
 
                 {!sidebarCollapsed && (
                     <Link href="/" className="flex items-center gap-3" title="Buka Portal">
-                        <img
-                            src="/images/logo-pecut-full-transparan.png"
-                            alt="PECUT Kota Kediri"
-                            className="h-10 max-w-[210px] object-contain"
+                        <BrandLogo
+                            variant="header"
+                            mode="dynamic"
+                            className="h-11 w-auto"
                         />
                     </Link>
                 )}
@@ -242,7 +259,7 @@ export default function AdminLayout({
                     href="/"
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-black text-white shadow-lg shadow-slate-200 transition hover:-translate-y-0.5 hover:bg-sky-700"
+                    className="flex items-center justify-center gap-2 rounded-2xl theme-bg-primary px-4 py-3 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,var(--theme-primary),black_12%)]"
                 >
                     {(!sidebarCollapsed || mobile) && <span>Lihat Portal</span>}
                     <ExternalLink className="h-4 w-4" />
@@ -253,9 +270,10 @@ export default function AdminLayout({
 
     return (
         <>
+            <ThemeStyle />
             <Head title={title} />
 
-            <div className="min-h-screen bg-slate-100 text-slate-900">
+            <div className="min-h-screen theme-bg-page theme-text">
                 {sidebarOpen && (
                     <div className="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm lg:hidden" onClick={() => setSidebarOpen(false)} />
                 )}
@@ -273,7 +291,7 @@ export default function AdminLayout({
                 </aside>
 
                 <div className={`transition-all duration-300 ${sidebarCollapsed ? "lg:pl-24" : "lg:pl-72"}`}>
-                    <header className="sticky top-0 z-20 border-b border-slate-100 bg-white/90 backdrop-blur-xl">
+                    <header className="sticky top-0 z-20 border-b border-slate-100 theme-bg-surface-translucent backdrop-blur-xl">
                         <div className="flex h-20 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
                             <div className="flex min-w-0 items-center gap-3">
                                 <button
@@ -349,7 +367,7 @@ export default function AdminLayout({
 
                     <main className="min-h-[calc(100vh-5rem)] px-4 py-6 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-7xl">
-                            <div className="mb-6 rounded-3xl border border-white bg-white/70 p-5 shadow-sm backdrop-blur-xl sm:p-6">
+                            <div className="mb-6 rounded-3xl border border-white theme-bg-surface-translucent p-5 shadow-sm backdrop-blur-xl sm:p-6">
                                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                                     <div>
                                         <p className="text-sm font-bold uppercase tracking-widest text-sky-600">
@@ -365,7 +383,7 @@ export default function AdminLayout({
                                         )}
                                     </div>
 
-                                    <div className="flex items-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-xs font-black uppercase tracking-wider text-white">
+                                    <div className="flex items-center gap-2 rounded-2xl theme-bg-primary px-4 py-3 text-xs font-black uppercase tracking-wider text-white">
                                         <Settings className="h-4 w-4" />
                                         Admin Workspace
                                     </div>
@@ -379,7 +397,7 @@ export default function AdminLayout({
                     <footer className="border-t border-slate-200 bg-white px-4 py-4 text-xs font-semibold text-slate-500 sm:px-6 lg:px-8">
                         <div className="mx-auto flex max-w-7xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                             <span>
-                                Copyright © {new Date().getFullYear()} <b className="text-sky-700">PECUT</b>.
+                                Copyright © {new Date().getFullYear()} <b className="theme-text-primary">PECUT</b>.
                             </span>
                             <span>Dinas Komunikasi dan Informatika Kota Kediri</span>
                         </div>

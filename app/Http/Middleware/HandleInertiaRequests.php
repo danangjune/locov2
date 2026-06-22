@@ -2,10 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Pecut\BrandLogoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Middleware;
 use App\Services\Pecut\FooterContentService;
+use App\Services\Pecut\ThemeContentService;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -60,6 +62,10 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'footer' => fn () => app(FooterContentService::class)->getFooterData(),
+
+            'theme' => fn () => app(ThemeContentService::class)->getThemeData(),
+
+            'brandLogo' => fn () => app(BrandLogoService::class)->getLogoData(),
         ]);
     }
 }

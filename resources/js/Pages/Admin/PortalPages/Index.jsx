@@ -110,28 +110,22 @@ export default function Index({ meta, filter, data }) {
     };
 
     return (
-        <AdminLayout title={meta?.title || "Halaman Portal"}>
+        <AdminLayout 
+            title={meta?.title || "Halaman Portal"}
+            subtitle={meta?.subtitle || "Kelola file panduan PECUT."}
+            actions={
+                activePage ? (
+                    <a
+                        href={publicHref(activePage.slug)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-2xl bg-sky-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-sky-100 hover:bg-sky-700"
+                    >
+                        <Eye className="h-4 w-4" /> Lihat Public
+                    </a>
+                ) : null}
+        >
             <div className="space-y-6">
-                <div className="flex flex-col justify-between gap-4 rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 p-6 text-white shadow-xl shadow-slate-200 lg:flex-row lg:items-center">
-                    <div>
-                        <p className="text-xs font-black uppercase tracking-[0.3em] text-sky-300">Manajemen Portal</p>
-                        <h1 className="mt-3 text-3xl font-black">Halaman Portal</h1>
-                        <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-300">
-                            Kelola halaman informasi portal seperti Tentang PECUT, Bantuan, Info Layanan, Privasi Data, dan Syarat & Ketentuan tanpa mengubah kode.
-                        </p>
-                    </div>
-                    {activePage ? (
-                        <a
-                            href={publicHref(activePage.slug)}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-900 hover:bg-sky-50"
-                        >
-                            <Eye className="h-4 w-4" /> Lihat Public
-                        </a>
-                    ) : null}
-                </div>
-
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
                     {pages.map((page) => {
                         const active = page.id === activePage?.id;

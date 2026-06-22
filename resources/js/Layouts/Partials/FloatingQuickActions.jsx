@@ -24,9 +24,9 @@ function CircleButton({ label, className = "", children, ...props }) {
             aria-label={label}
             className={[
                 "group relative grid h-12 w-12 shrink-0 place-items-center rounded-full",
-                "border border-white/80 bg-sky-600 shadow-lg shadow-slate-900/20",
+                "border border-white/80 theme-bg-primary shadow-lg shadow-slate-900/20",
                 "transition duration-200 hover:-translate-y-1 hover:shadow-xl",
-                "focus:outline-none focus-visible:ring-4 focus-visible:ring-sky-200",
+                "focus:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_srgb,var(--theme-primary),white_72%)]",
                 className,
             ].join(" ")}
             {...props}
@@ -40,9 +40,9 @@ function CircleButton({ label, className = "", children, ...props }) {
 function CircleLink({ label, className = "", children, external = false, href }) {
     const classes = [
         "group relative grid h-12 w-12 shrink-0 place-items-center rounded-full",
-        "border border-white/80 bg-sky-600 shadow-lg shadow-slate-900/20",
+        "border border-white/80 theme-bg-primary shadow-lg shadow-slate-900/20",
         "transition duration-200 hover:-translate-y-1 hover:shadow-xl",
-        "focus:outline-none focus-visible:ring-4 focus-visible:ring-sky-200",
+        "focus:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_srgb,var(--theme-primary),white_72%)]",
         className,
     ].join(" ");
 
@@ -127,7 +127,7 @@ export default function FloatingQuickActions() {
             <CircleLink
                 href="/help"
                 label="Bantuan PECUT"
-                className="bg-sky-600 text-white hover:bg-sky-700 hover:text-white"
+                className="theme-bg-primary text-white hover:bg-[color-mix(in_srgb,var(--theme-primary),black_12%)] hover:text-white"
             >
                 <CircleHelp className="h-5 w-5" strokeWidth={2.25} />
             </CircleLink>
@@ -136,7 +136,7 @@ export default function FloatingQuickActions() {
                 href={LAPOR_MBAK_WALI_URL}
                 external
                 label="Lapor Mbak Wali"
-                className="bg-sky-600 text-white hover:bg-sky-700"
+                className="theme-bg-primary text-white hover:bg-[color-mix(in_srgb,var(--theme-primary),black_12%)]"
             >
                 <MessagesSquare className="h-5 w-5" strokeWidth={2.25} />
             </CircleLink>
@@ -144,7 +144,7 @@ export default function FloatingQuickActions() {
             <CircleButton
                 label="Menu Aksesibilitas"
                 onClick={openUserWay}
-                className="overflow-hidden bg-[#1e6fa5] p-1 text-white hover:bg-[#165c8a]"
+                className="overflow-hidden theme-bg-primary p-1 text-white hover:bg-[color-mix(in_srgb,var(--theme-primary),black_12%)]"
             >
                 <Accessibility className="h-5 w-5" strokeWidth={2.25} />
 

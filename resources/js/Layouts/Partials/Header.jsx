@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
 import { BookMarked, Menu, X, UserCircle, LayoutDashboard, LogOut } from "lucide-react";
 import { classNames } from "../../Utils/helpers";
+import BrandLogo from "../../Components/Brand/BrandLogo";
 
 const navItems = [
     { href: "/", key: "home", label: "Beranda" },
@@ -76,10 +77,10 @@ export default function Header({ currentRoute = "home" }) {
         <header className="sticky top-0 z-50 border-b border-sky-100/80 bg-white/90 backdrop-blur-xl">
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
                 <Link href="/" className="flex min-w-0 shrink-0 items-center" aria-label="Kembali ke Beranda PECUT">
-                    <img
-                        src="/images/logo-pecut-full-transparan.png"
-                        alt="PECUT Kota Kediri"
-                        className="h-9 max-w-[180px] object-contain sm:h-10 sm:max-w-[230px] md:h-11 md:max-w-[270px] xl:h-12 xl:max-w-[320px]"
+                    <BrandLogo
+                        variant="header"
+                        mode="dynamic"
+                        className="h-11 w-auto"
                     />
                 </Link>
 

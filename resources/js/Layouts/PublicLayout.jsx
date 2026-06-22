@@ -3,6 +3,7 @@ import Header from "./Partials/Header";
 import Footer from "./Partials/Footer";
 import FloatingQuickActions from "./Partials/FloatingQuickActions";
 import UserWayWidget from "./Partials/UserWayWidget";
+import ThemeStyle from "../Components/Theme/ThemeStyle";
 
 export default function PublicLayout({
     children,
@@ -10,7 +11,9 @@ export default function PublicLayout({
     withFloatingHelp = true,
 }) {
     return (
-        <div className="min-h-screen bg-white font-sans text-slate-900">
+        <div className="min-h-screen theme-bg-page font-sans theme-text">
+            <ThemeStyle />
+
             <Header currentRoute={currentRoute} />
             {children}
             <Footer />

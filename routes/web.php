@@ -7,10 +7,12 @@ use App\Http\Controllers\Admin\FooterSettingController;
 use App\Http\Controllers\Admin\HelpInfoPageController;
 use App\Http\Controllers\Admin\HomeSectionController;
 use App\Http\Controllers\Admin\HomeSlideController;
+use App\Http\Controllers\Admin\LogoSettingController;
 use App\Http\Controllers\Admin\PanduanController;
 use App\Http\Controllers\Admin\PortalPageController;
 use App\Http\Controllers\Admin\ReferenceController;
 use App\Http\Controllers\Admin\SelayangPandangController;
+use App\Http\Controllers\Admin\ThemeSettingController;
 use App\Http\Controllers\Api\AgendaController;
 use App\Http\Controllers\AppLinkController;
 use App\Http\Controllers\Auth\LoginController;
@@ -192,6 +194,20 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
         Route::post('/{page}/sections', [HelpInfoPageController::class, 'storeSection'])->name('sections.store');
         Route::put('/sections/{section}', [HelpInfoPageController::class, 'updateSection'])->name('sections.update');
         Route::delete('/sections/{section}', [HelpInfoPageController::class, 'destroySection'])->name('sections.destroy');
+    });
+
+    // Route Theme Setting
+    Route::prefix('theme-setting')->name('admin.theme-setting.')->group(function () {
+        Route::get('/', [ThemeSettingController::class, 'index'])->name('index');
+        Route::put('/', [ThemeSettingController::class, 'update'])->name('update');
+        Route::post('/reset', [ThemeSettingController::class, 'reset'])->name('reset');
+    });
+
+    // Route Logo Setting
+    Route::prefix('logo-setting')->name('admin.logo-setting.')->group(function () {
+        Route::get('/', [LogoSettingController::class, 'index'])->name('index');
+        Route::post('/', [LogoSettingController::class, 'update'])->name('update');
+        Route::post('/reset', [LogoSettingController::class, 'reset'])->name('reset');
     });
 });
 

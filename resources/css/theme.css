@@ -1,0 +1,407 @@
+:root {
+    --theme-primary: #1e6fa5;
+    --theme-secondary: #15547d;
+    --theme-accent: #38bdf8;
+    --theme-background: #f8fafc;
+    --theme-surface: #ffffff;
+    --theme-text: #0f172a;
+    --theme-muted: #64748b;
+}
+
+.theme-bg-page {
+    background-color: var(--theme-background);
+}
+
+.theme-bg-surface {
+    background-color: var(--theme-surface);
+}
+
+.theme-text {
+    color: var(--theme-text);
+}
+
+.theme-muted {
+    color: var(--theme-muted);
+}
+
+.theme-text-primary {
+    color: var(--theme-primary);
+}
+
+.theme-text-secondary {
+    color: var(--theme-secondary);
+}
+
+.theme-text-accent {
+    color: var(--theme-accent);
+}
+
+.theme-bg-primary {
+    background-color: var(--theme-primary);
+}
+
+.theme-bg-secondary {
+    background-color: var(--theme-secondary);
+}
+
+.theme-bg-accent {
+    background-color: var(--theme-accent);
+}
+
+.theme-bg-primary-soft {
+    background-color: color-mix(in srgb, var(--theme-primary), white 92%);
+}
+
+.theme-bg-accent-soft {
+    background-color: color-mix(in srgb, var(--theme-accent), white 88%);
+}
+
+.theme-border-primary-soft {
+    border-color: color-mix(in srgb, var(--theme-primary), white 76%);
+}
+
+.theme-ring-primary-soft {
+    --tw-ring-color: color-mix(in srgb, var(--theme-primary), white 70%);
+}
+
+.theme-gradient-primary {
+    background-image: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
+}
+
+.theme-gradient-soft {
+    background-image:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--theme-primary), transparent 82%), transparent 34rem),
+        radial-gradient(circle at bottom right, color-mix(in srgb, var(--theme-accent), transparent 84%), transparent 32rem),
+        linear-gradient(180deg, #ffffff, var(--theme-background));
+}
+
+.theme-link {
+    color: var(--theme-primary);
+    transition: color 180ms ease;
+}
+
+.theme-link:hover {
+    color: color-mix(in srgb, var(--theme-primary), black 18%);
+}
+
+.btn-theme-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 1rem;
+    background-color: var(--theme-primary);
+    color: #ffffff;
+    font-weight: 900;
+    transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+    box-shadow: 0 14px 30px color-mix(in srgb, var(--theme-primary), transparent 80%);
+}
+
+.btn-theme-primary:hover {
+    transform: translateY(-1px);
+    background-color: color-mix(in srgb, var(--theme-primary), black 12%);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--theme-primary), transparent 72%);
+}
+
+.btn-theme-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--theme-primary), white 62%);
+    background-color: color-mix(in srgb, var(--theme-primary), white 96%);
+    color: var(--theme-primary);
+    font-weight: 900;
+    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.btn-theme-outline:hover {
+    transform: translateY(-1px);
+    background-color: color-mix(in srgb, var(--theme-primary), white 90%);
+}
+
+.theme-focus:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--theme-primary), white 35%);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-primary), transparent 84%);
+}
+
+.theme-section-line {
+    width: 2.75rem;
+    height: 0.25rem;
+    border-radius: 9999px;
+    background-color: var(--theme-primary);
+}
+
+.theme-card {
+    border: 1px solid color-mix(in srgb, var(--theme-primary), white 88%);
+    background: var(--theme-surface);
+    box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   PECUT Theme Compatibility Layer
+   ---------------------------------------------------------
+   Tujuan: class Tailwind lama seperti bg-sky-600, text-sky-700,
+   border-sky-100, dll otomatis mengikuti warna dari Admin > Tampilan Portal.
+   Dengan ini komponen lama tidak harus diganti satu per satu.
+   Warna status seperti red/green/amber tetap dibiarkan statis.
+   ========================================================= */
+:root {
+    --theme-primary-soft: color-mix(in srgb, var(--theme-primary), white 92%);
+    --theme-primary-soft-2: color-mix(in srgb, var(--theme-primary), white 84%);
+    --theme-primary-border: color-mix(in srgb, var(--theme-primary), white 76%);
+    --theme-primary-hover: color-mix(in srgb, var(--theme-primary), black 12%);
+    --theme-primary-strong: color-mix(in srgb, var(--theme-primary), black 18%);
+    --theme-accent-soft: color-mix(in srgb, var(--theme-accent), white 88%);
+    --theme-footer-bg: color-mix(in srgb, var(--theme-secondary), black 62%);
+    --theme-footer-bg-soft: color-mix(in srgb, var(--theme-secondary), black 50%);
+}
+
+.theme-footer {
+    background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--theme-primary), transparent 82%), transparent 28rem),
+        radial-gradient(circle at bottom right, color-mix(in srgb, var(--theme-accent), transparent 84%), transparent 28rem),
+        linear-gradient(135deg, var(--theme-footer-bg), var(--theme-footer-bg-soft));
+}
+
+.theme-footer-muted {
+    color: color-mix(in srgb, white, var(--theme-footer-bg) 28%);
+}
+
+.theme-footer-link {
+    color: color-mix(in srgb, white, var(--theme-accent) 20%);
+}
+
+.theme-footer-link:hover {
+    color: #ffffff;
+}
+
+.theme-top-border {
+    border-color: var(--theme-primary-border);
+}
+
+.theme-nav-active {
+    color: var(--theme-primary);
+}
+
+.theme-nav-soft {
+    background-color: var(--theme-primary-soft);
+    color: var(--theme-primary);
+}
+
+.theme-icon-soft {
+    background-color: var(--theme-primary-soft);
+    color: var(--theme-primary);
+}
+
+/* Text identity colors */
+.text-sky-300,
+.text-sky-400,
+.text-sky-500,
+.text-sky-600,
+.text-sky-700,
+.text-blue-500,
+.text-blue-600,
+.text-blue-700,
+.text-cyan-500,
+.text-cyan-600,
+.text-cyan-700 {
+    color: var(--theme-primary) !important;
+}
+
+.text-sky-50,
+.text-blue-50,
+.text-cyan-50 {
+    color: color-mix(in srgb, white, var(--theme-primary) 12%) !important;
+}
+
+.hover\:text-sky-600:hover,
+.hover\:text-sky-700:hover,
+.hover\:text-blue-600:hover,
+.hover\:text-blue-700:hover,
+.hover\:text-cyan-600:hover,
+.hover\:text-cyan-700:hover {
+    color: var(--theme-primary-hover) !important;
+}
+
+/* Background identity colors */
+.bg-sky-50,
+.bg-blue-50,
+.bg-cyan-50 {
+    background-color: var(--theme-primary-soft) !important;
+}
+
+.bg-sky-100,
+.bg-blue-100,
+.bg-cyan-100 {
+    background-color: var(--theme-primary-soft-2) !important;
+}
+
+.bg-sky-200,
+.bg-blue-200,
+.bg-cyan-200 {
+    background-color: color-mix(in srgb, var(--theme-primary), white 70%) !important;
+}
+
+.bg-sky-300,
+.bg-sky-400,
+.bg-sky-500,
+.bg-sky-600,
+.bg-blue-500,
+.bg-blue-600,
+.bg-cyan-500,
+.bg-cyan-600 {
+    background-color: var(--theme-primary) !important;
+}
+
+.hover\:bg-sky-50:hover,
+.hover\:bg-blue-50:hover,
+.hover\:bg-cyan-50:hover {
+    background-color: var(--theme-primary-soft) !important;
+}
+
+.hover\:bg-sky-100:hover,
+.hover\:bg-blue-100:hover,
+.hover\:bg-cyan-100:hover {
+    background-color: var(--theme-primary-soft-2) !important;
+}
+
+.hover\:bg-sky-600:hover,
+.hover\:bg-sky-700:hover,
+.hover\:bg-blue-600:hover,
+.hover\:bg-blue-700:hover,
+.hover\:bg-cyan-600:hover,
+.hover\:bg-cyan-700:hover {
+    background-color: var(--theme-primary-hover) !important;
+}
+
+/* Border and ring identity colors */
+.border-sky-50,
+.border-sky-100,
+.border-sky-200,
+.border-blue-100,
+.border-blue-200,
+.border-cyan-100,
+.border-cyan-200,
+.border-sky-100\/80 {
+    border-color: var(--theme-primary-border) !important;
+}
+
+.hover\:border-sky-200:hover,
+.hover\:border-sky-300:hover,
+.hover\:border-blue-200:hover,
+.hover\:border-cyan-200:hover {
+    border-color: color-mix(in srgb, var(--theme-primary), white 58%) !important;
+}
+
+.ring-sky-100,
+.ring-sky-200,
+.ring-blue-100,
+.ring-cyan-100,
+.focus\:ring-sky-100:focus,
+.focus\:ring-sky-200:focus,
+.focus-visible\:ring-sky-200:focus-visible {
+    --tw-ring-color: color-mix(in srgb, var(--theme-primary), white 74%) !important;
+}
+
+.focus\:border-sky-300:focus,
+.focus\:border-sky-400:focus,
+.focus\:border-blue-300:focus,
+.focus\:border-cyan-300:focus {
+    border-color: color-mix(in srgb, var(--theme-primary), white 42%) !important;
+}
+
+/* Gradient identity colors */
+.from-sky-50,
+.from-blue-50,
+.from-cyan-50 {
+    --tw-gradient-from: var(--theme-primary-soft) var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: color-mix(in srgb, var(--theme-primary-soft), transparent 100%) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.via-sky-50,
+.via-blue-50,
+.via-cyan-50 {
+    --tw-gradient-to: color-mix(in srgb, var(--theme-primary-soft), transparent 100%) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--theme-primary-soft) var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+.from-sky-500,
+.from-sky-600,
+.from-blue-600,
+.from-cyan-600 {
+    --tw-gradient-from: var(--theme-primary) var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: color-mix(in srgb, var(--theme-primary), transparent 100%) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.to-sky-500,
+.to-sky-600,
+.to-sky-700,
+.to-blue-500,
+.to-blue-600,
+.to-blue-700,
+.to-cyan-400,
+.to-cyan-500,
+.to-cyan-600,
+.to-cyan-700 {
+    --tw-gradient-to: var(--theme-secondary) var(--tw-gradient-to-position) !important;
+}
+
+.via-sky-400,
+.via-sky-500,
+.via-sky-600,
+.via-cyan-400,
+.via-cyan-500 {
+    --tw-gradient-to: color-mix(in srgb, var(--theme-accent), transparent 100%) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--theme-accent) var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+/* Shadows using identity colors */
+.shadow-sky-100,
+.shadow-sky-200,
+.shadow-cyan-100,
+.shadow-blue-100 {
+    --tw-shadow-color: color-mix(in srgb, var(--theme-primary), transparent 82%) !important;
+    --tw-shadow: var(--tw-shadow-colored) !important;
+}
+
+/* Scrollbar helper used by survey/comment sections */
+.scrollbar-thumb-slate-200::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--theme-primary), white 76%) !important;
+}
+
+/* Arbitrary old PECUT blue fallback */
+.bg-\[\#1e6fa5\] {
+    background-color: var(--theme-primary) !important;
+}
+
+.hover\:bg-\[\#165c8a\]:hover {
+    background-color: var(--theme-primary-hover) !important;
+}
+
+
+.theme-hover-bg-primary-soft:hover {
+    background-color: var(--theme-primary-soft) !important;
+}
+
+.theme-hover-text-primary:hover {
+    color: var(--theme-primary-hover) !important;
+}
+
+.theme-bg-surface-translucent {
+    background-color: color-mix(in srgb, var(--theme-surface), transparent 12%);
+}
+
+
+.theme-footer-top-line {
+    background-image: linear-gradient(90deg, transparent, color-mix(in srgb, var(--theme-accent), transparent 35%), transparent);
+}
+
+.theme-bg-accent-soft-token {
+    background-color: color-mix(in srgb, var(--theme-accent), transparent 88%);
+}

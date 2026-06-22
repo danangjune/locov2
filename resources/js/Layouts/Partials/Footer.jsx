@@ -1,6 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 import { ExternalLink } from "lucide-react";
 import { DynamicIcon } from "../../Utils/iconRegistry";
+import BrandLogo from "../../Components/Brand/BrandLogo";
 
 const fallbackFooter = {
     logo: "/images/logo-pecut-full-transparan.png",
@@ -70,7 +71,7 @@ function FooterImageItem({ item }) {
                 url ? "hover:bg-white/10" : "",
             ].join(" ")}
         >
-            <div className="relative grid h-16 place-items-center overflow-hidden rounded-xl bg-slate-900/60">
+            <div className="relative grid h-16 place-items-center overflow-hidden rounded-xl theme-bg-muted">
                 <img
                     src={item.image}
                     alt={label}
@@ -91,12 +92,12 @@ function FooterTextItem({ item }) {
             href={url}
             title={label}
             className={[
-                "group flex w-fit max-w-full items-center gap-2 text-sm leading-6 text-slate-300 transition",
+                "group flex w-fit max-w-full items-center gap-2 text-sm leading-6 theme-footer-muted transition",
                 url ? "hover:text-white" : "",
             ].join(" ")}
         >
             {item?.icon && (
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-sky-400/10 text-sky-300">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full theme-bg-accent-soft-token theme-footer-link">
                     <DynamicIcon name={item.icon} className="h-3.5 w-3.5" />
                 </span>
             )}
@@ -117,7 +118,7 @@ function FooterGroup({ group }) {
                 {group?.title || group?.content || "Footer"}
             </h4>
 
-            <div className="mt-4 h-1 w-9 rounded-full bg-sky-400" />
+            <div className="mt-4 h-1 w-9 rounded-full theme-bg-accent" />
 
             <div className="mt-6 space-y-5">
                 {imageChildren.length ? (
@@ -178,11 +179,11 @@ export default function Footer() {
     const bottomText = footer?.bottom_text || fallbackFooter.bottom_text;
 
     return (
-        <footer className="relative overflow-hidden bg-slate-950 text-white">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-400/40 to-transparent" />
+        <footer className="relative overflow-hidden theme-footer text-white">
+            <div className="absolute inset-x-0 top-0 h-px theme-footer-top-line" />
 
-            <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" />
-            <div className="absolute -right-24 bottom-10 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
+            <div className="absolute -left-24 top-10 h-72 w-72 rounded-full theme-bg-primary blur-3xl" />
+            <div className="absolute -right-24 bottom-10 h-72 w-72 rounded-full theme-bg-primary blur-3xl" />
 
             <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div className="grid gap-12 lg:grid-cols-2">
@@ -192,14 +193,14 @@ export default function Footer() {
                             className="inline-flex rounded-xl bg-white px-3 py-1 shadow-xl shadow-sky-950/20"
                             aria-label="Kembali ke Beranda PECUT"
                         >
-                            <img
-                                src={logo}
-                                alt="PECUT Kota Kediri"
-                                className="h-11 max-w-[280px] object-contain"
+                            <BrandLogo
+                                variant="footer"
+                                mode="dynamic"
+                                className="h-12 w-auto"
                             />
                         </Link>
 
-                        <p className="mt-7 text-sm leading-8 text-slate-300">
+                        <p className="mt-7 text-sm leading-8 theme-footer-muted">
                             {description}
                         </p>
                     </div>
@@ -217,7 +218,7 @@ export default function Footer() {
             <div className="relative border-t border-white/10 bg-slate-950/80">
                 <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-5 text-center text-xs font-semibold text-slate-400 sm:flex-row sm:px-6 lg:px-8">
                     <p>{copyright}</p>
-                    <p className="text-sky-300">{bottomText}</p>
+                    <p className="theme-footer-link">{bottomText}</p>
                 </div>
             </div>
         </footer>

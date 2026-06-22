@@ -3,8 +3,9 @@ import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
 
 import "../css/pecut.css";
+import "../css/theme.css";
 import "../css/app.css";
-import './bootstrap';
+import "./bootstrap";
 
 createInertiaApp({
     title: (title) =>
