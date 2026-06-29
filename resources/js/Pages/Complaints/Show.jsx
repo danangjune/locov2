@@ -432,8 +432,8 @@ export default function Show({ meta = {}, data = {} }) {
                     </section>
 
                     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-                            <div className="space-y-8">
+                        <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+                            <div className="min-w-0 space-y-8">
                                 <div className="rounded-[2rem] border border-slate-100 bg-white p-6 shadow-sm shadow-slate-100">
                                     <SectionHeader
                                         eyebrow="Isi Aduan"
@@ -453,7 +453,7 @@ export default function Show({ meta = {}, data = {} }) {
                                     isFinished={complaint.isFinished}
                                 />
 
-                                <div className="rounded-[2rem] border border-slate-100 bg-white p-6 shadow-sm shadow-slate-100">
+                                <div className="min-w-0 overflow-hidden rounded-[2rem] border border-slate-100 bg-white p-6 shadow-sm shadow-slate-100">
                                     <SectionHeader
                                         eyebrow="Bukti"
                                         title="Dokumentasi Aduan"

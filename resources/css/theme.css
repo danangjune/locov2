@@ -332,8 +332,13 @@
 
 .from-sky-500,
 .from-sky-600,
+.from-sky-700,
+.from-blue-700,
 .from-blue-600,
-.from-cyan-600 {
+.from-blue-500,
+.from-cyan-700,
+.from-cyan-600,
+.from-cyan-500 {
     --tw-gradient-from: var(--theme-primary) var(--tw-gradient-from-position) !important;
     --tw-gradient-to: color-mix(in srgb, var(--theme-primary), transparent 100%) var(--tw-gradient-to-position) !important;
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
@@ -355,8 +360,15 @@
 .via-sky-400,
 .via-sky-500,
 .via-sky-600,
+.via-sky-700,
 .via-cyan-400,
-.via-cyan-500 {
+.via-cyan-500,
+.via-cyan-600,
+.via-cyan-700,
+.via-blue-400,
+.via-blue-500,
+.via-blue-600,
+.via-blue-700 {
     --tw-gradient-to: color-mix(in srgb, var(--theme-accent), transparent 100%) var(--tw-gradient-to-position) !important;
     --tw-gradient-stops: var(--tw-gradient-from), var(--theme-accent) var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
 }

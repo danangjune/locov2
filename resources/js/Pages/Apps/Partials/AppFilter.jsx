@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { Filter, Search, SlidersHorizontal } from "lucide-react";
 import { classNames } from "../../../Utils/helpers";
 import SearchableSelect from "../../../Components/Form/SearchableSelect";
 
 export default function AppFilter({ filter = {}, data = {} }) {
     const [search, setSearch] = useState(filter?.search || "");
+
+    const { props } = usePage();
+    const auth = props?.auth || {};
 
     useEffect(() => {
         setSearch(filter?.search || "");
@@ -80,55 +83,57 @@ export default function AppFilter({ filter = {}, data = {} }) {
             </form>
 
             <div className="space-y-6">
-                <div>
-                    <p className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400">
-                        <Filter className="h-3.5 w-3.5" /> Jenis Portal
-                    </p>
+                {auth.user?.is_asn && (
+                    <div>
+                        <p className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400">
+                            <Filter className="h-3.5 w-3.5" /> Jenis Portal
+                        </p>
 
-                    <div className="space-y-2">
-                        <button
-                            type="button"
-                            onClick={() => visit({ category_id: undefined })}
-                            className={classNames(
-                                "flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left text-sm font-bold transition",
-                                !filter?.category_id
-                                    ? "bg-sky-600 text-white shadow-lg shadow-sky-100"
-                                    : "text-slate-600 hover:bg-sky-50 hover:text-sky-700",
-                            )}
-                        >
-                            <span>Semua Portal</span>
-                            <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs">
-                                {data?.stats?.total ?? 0}
-                            </span>
-                        </button>
+                        <div className="space-y-2">
+                            <button
+                                type="button"
+                                onClick={() => visit({ category_id: undefined })}
+                                className={classNames(
+                                    "flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left text-sm font-bold transition",
+                                    !filter?.category_id
+                                        ? "bg-sky-600 text-white shadow-lg shadow-sky-100"
+                                        : "text-slate-600 hover:bg-sky-50 hover:text-sky-700",
+                                )}
+                            >
+                                <span>Semua Portal</span>
+                                <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs">
+                                    {data?.stats?.total ?? 0}
+                                </span>
+                            </button>
 
-                        {categories.map((category) => {
-                            const active = String(filter?.category_id || "") === String(category.id);
+                            {categories.map((category) => {
+                                const active = String(filter?.category_id || "") === String(category.id);
 
-                            return (
-                                <button
-                                    key={category.id}
-                                    type="button"
-                                    onClick={() => visit({ category_id: category.id })}
-                                    className={classNames(
-                                        "flex w-full items-center justify-between gap-3 rounded-2xl px-3 py-2.5 text-left text-sm font-bold transition",
-                                        active
-                                            ? "bg-sky-600 text-white shadow-lg shadow-sky-100"
-                                            : "text-slate-600 hover:bg-sky-50 hover:text-sky-700",
-                                    )}
-                                >
-                                    <span className="line-clamp-2 flex-1">{category.title}</span>
-                                    <span className={classNames(
-                                        "shrink-0 rounded-full px-2 py-0.5 text-xs font-black",
-                                        active ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500",
-                                    )}>
-                                        {category.count}
-                                    </span>
-                                </button>
-                            );
-                        })}
+                                return (
+                                    <button
+                                        key={category.id}
+                                        type="button"
+                                        onClick={() => visit({ category_id: category.id })}
+                                        className={classNames(
+                                            "flex w-full items-center justify-between gap-3 rounded-2xl px-3 py-2.5 text-left text-sm font-bold transition",
+                                            active
+                                                ? "bg-sky-600 text-white shadow-lg shadow-sky-100"
+                                                : "text-slate-600 hover:bg-sky-50 hover:text-sky-700",
+                                        )}
+                                    >
+                                        <span className="line-clamp-2 flex-1">{category.title}</span>
+                                        <span className={classNames(
+                                            "shrink-0 rounded-full px-2 py-0.5 text-xs font-black",
+                                            active ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500",
+                                        )}>
+                                            {category.count}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <div>
                     <p className="mb-3 text-xs font-black uppercase tracking-widest text-slate-400">

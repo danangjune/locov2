@@ -36,8 +36,9 @@ return [
     ],
 
     'aduan' => [
-        'url' => env('ADUAN_API_URL'),
+        'api_url' => env('ADUAN_API_URL') . '/api',
         'appkey' => env('ADUAN_API_KEY'),
+        'base_url' => env('ADUAN_API_URL'),
     ],
 
     'survey_digital' => [

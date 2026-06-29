@@ -8,6 +8,7 @@ import ComplaintCard from "../../Components/Complaints/ComplaintCard";
 
 import ComplaintFilter from "./Partials/ComplaintFilter";
 import ComplaintPagination from "./Partials/ComplaintPagination";
+import ComplaintStatusChecker from "../../Components/Complaints/ComplaintStatusChecker";
 
 export default function Index({ meta = {}, filter = {}, data = {} }) {
     const complaints = Array.isArray(data?.complaints?.items)
@@ -33,7 +34,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                         <div className="absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-sky-200/40 blur-3xl" />
 
                         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-                            <div className="max-w-3xl">
+                            <div className="max-w-3xl mb-5">
                                 <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-rose-100 bg-white px-4 py-2 text-sm font-black text-rose-700 shadow-sm">
                                     <MessageSquareText className="h-4 w-4" />{" "}
                                     Transparansi Aduan
@@ -49,6 +50,11 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                                     penanganannya secara informatif.
                                 </p>
                             </div>
+                            
+                            <ComplaintStatusChecker
+                                title="Cek Status Aduan"
+                                subtitle="Gunakan nomor tiket dari Lapor Mbak Wali untuk memantau perkembangan laporan Anda secara langsung."
+                            />
                         </div>
                     </section>
 

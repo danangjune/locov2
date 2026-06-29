@@ -20,6 +20,7 @@ use App\Http\Controllers\FooterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Portal\AppController;
 use App\Http\Controllers\Portal\ComplaintController;
+use App\Http\Controllers\Portal\ComplaintStatusController;
 use App\Http\Controllers\Portal\NewsController;
 use App\Http\Controllers\Portal\SupportController;
 use App\Http\Controllers\Portal\SurveyController;
@@ -59,6 +60,7 @@ Route::get('/agenda/{slug}', [AgendaController::class, 'show'])->name('agenda.sh
 // Route Aduan
 Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
 Route::get('/complaints/{slug}', [ComplaintController::class, 'show'])->name('complaints.show');
+Route::post('/complaints/status-check', [ComplaintController::class, 'statusCheck'])->name('complaints.status-check');
 
 // Route Bantuan
 Route::get('/guide', [SupportController::class, 'guide'])->name('guide.index');

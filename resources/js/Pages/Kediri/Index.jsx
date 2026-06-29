@@ -408,7 +408,7 @@ export default function Index({ meta = {}, data = {} }) {
                     </section>
 
                     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-sky-700 via-sky-600 to-cyan-500 p-7 text-white shadow-2xl shadow-sky-200 md:p-9">
+                        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-sky-700 to-cyan-500 p-7 text-white shadow-2xl shadow-sky-200 md:p-9">
                             <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/15 blur-3xl" />
                             <div className="absolute -bottom-24 left-10 h-72 w-72 rounded-full bg-amber-300/20 blur-3xl" />
 

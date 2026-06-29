@@ -45,6 +45,7 @@ class HandleInertiaRequests extends Middleware
                     'nip' => $user->nip ?? null,
                     'role_id' => $user->role_id ?? null,
                     'is_verified' => (bool) ($user->is_verified ?? false),
+                    'is_asn' => $user->nip ? true : false,
                 ] : null,
             ],
 

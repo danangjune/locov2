@@ -164,7 +164,7 @@ class ComplaintService
 
     private function fetchAduanRows(): array
     {
-        $url = config('services.aduan.url');
+        $url = config('services.aduan.api_url') . "/aduan/list-aduan";
         $appKey = config('services.aduan.appkey');
 
         if (! $url || ! $appKey) {

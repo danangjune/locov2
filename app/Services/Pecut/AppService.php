@@ -7,6 +7,7 @@ use App\Models\AppLink;
 use App\Models\Category;
 use App\Models\Urusan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AppService
@@ -73,11 +74,16 @@ class AppService
                 ->with(['urusan', 'category', 'app_from'])
                 ->where('is_active', true)
                 ->whereDoesntHave('children');
-
-            if ($categoryId && $categoryId !== 'all') {
-                $query->where('category_id', $categoryId);
+            $auth = Auth::user();
+            $is_asn = $auth ? ($auth->nip ? true : false) : false;
+            if($is_asn) {
+                if ($categoryId && $categoryId !== 'all') {
+                    $query->where('category_id', $categoryId);
+                } else {
+                    $query->whereIn('category_id', [1, 2]);
+                }
             } else {
-                $query->whereIn('category_id', [1, 2]);
+                $query->where('category_id', 1);
             }
 
             if ($urusanId && $urusanId !== 'all') {

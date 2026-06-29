@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Head, router } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import {
     ArrowRight,
@@ -23,6 +23,7 @@ import MiniCalendar from "../../Components/Agenda/MiniCalendar";
 import ComplaintCard from "../../Components/Complaints/ComplaintCard";
 import HomeAppSections from "./Partials/HomeAppSections";
 import HomeHero from "./Partials/HomeHero";
+import ComplaintStatusChecker from "../../Components/Complaints/ComplaintStatusChecker";
 
 import {
     appData,
@@ -37,6 +38,9 @@ import { classNames, mapApiApp } from "../../Utils/helpers";
 export default function Index({ meta = {}, filter = {}, data = {} }) {
     const [_activeType, setActiveType] = useState("Semua");
     const [_activeCategory, setActiveCategory] = useState("Semua Aplikasi");
+    
+    const { props } = usePage();
+    const auth = props?.auth || {};
 
     const appsPayload = Array.isArray(data?.apps?.items) ? data.apps.items : [];
     const newsPayload = Array.isArray(data?.news?.items) ? data.news.items : [];
@@ -135,6 +139,30 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
         (app) => app.type === "Public Digital",
     ).length;
 
+    const ruangPortal = [
+        {
+            title: "Public Digital",
+            desc: "Kumpulan aplikasi layanan masyarakat seperti pengaduan, surat, pajak, kesehatan, pendidikan, data, dan informasi publik.",
+            icon: Users,
+            count: appsLoading
+                ? "..."
+                : `${publicCount} aplikasi`,
+            gradient: "from-cyan-500 to-sky-600",
+        },
+    ];
+
+    if (auth.user?.is_asn){
+        ruangPortal.push({
+            title: "ASN Digital",
+            desc: "Kumpulan aplikasi internal untuk ASN, OPD, kelurahan, kecamatan, administrasi, laporan, dan layanan pemerintahan.",
+            icon: Building2,
+            count: appsLoading
+                ? "..."
+                : `${asnCount} aplikasi`,
+            gradient: "from-sky-600 to-blue-700",
+        });
+    }
+
     const ssoCount = activeApps.filter((app) => app.mode === "SSO").length;
     const linkCount = activeApps.filter((app) => app.mode === "Link").length;
 
@@ -179,27 +207,8 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                             subtitle="Pilih layanan digital sesuai kebutuhan masyarakat maupun aparatur pemerintah."
                         />
 
-                        <div className="grid gap-5 lg:grid-cols-2">
-                            {[
-                                {
-                                    title: "ASN Digital",
-                                    desc: "Kumpulan aplikasi internal untuk ASN, OPD, kelurahan, kecamatan, administrasi, laporan, dan layanan pemerintahan.",
-                                    icon: Building2,
-                                    count: appsLoading
-                                        ? "..."
-                                        : `${asnCount} aplikasi`,
-                                    gradient: "from-sky-600 to-blue-700",
-                                },
-                                {
-                                    title: "Public Digital",
-                                    desc: "Kumpulan aplikasi layanan masyarakat seperti pengaduan, surat, pajak, kesehatan, pendidikan, data, dan informasi publik.",
-                                    icon: Users,
-                                    count: appsLoading
-                                        ? "..."
-                                        : `${publicCount} aplikasi`,
-                                    gradient: "from-cyan-500 to-sky-600",
-                                },
-                            ].map((item) => (
+                        <div className="grid gap-5 md:grid-cols-2">
+                            {ruangPortal.map((item) => (
                                 <motion.div
                                     key={item.title}
                                     whileHover={{ y: -4 }}
