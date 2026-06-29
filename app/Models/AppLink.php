@@ -27,6 +27,8 @@ class AppLink extends Model
         'is_active',
         'is_sso',
         'is_popular',
+        'visit_count',
+        'last_visited_at',
         'app_from_id',
     ];
 
@@ -36,6 +38,8 @@ class AppLink extends Model
             'is_active' => 'boolean',
             'is_sso' => 'boolean',
             'is_popular' => 'boolean',
+            'visit_count' => 'integer',
+            'last_visited_at' => 'datetime',
         ];
     }
 

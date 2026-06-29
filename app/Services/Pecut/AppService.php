@@ -6,6 +6,7 @@ use App\Http\Resources\AppLinkResource;
 use App\Models\AppLink;
 use App\Models\Category;
 use App\Models\Urusan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -39,13 +40,22 @@ class AppService
             ->where('is_active', true)
             ->findOrFail($id);
 
+        DB::transaction(function () use ($app) {
+            $app->increment('visit_count');
+            $app->forceFill([
+                'last_visited_at' => now(),
+            ])->save();
+        });
+
+        $app->refresh();
+
         $related = AppLink::query()
             ->with(['urusan', 'category'])
             ->where('is_active', true)
             ->whereDoesntHave('children')
             ->where('id', '!=', $app->id)
             ->where('category_id', $app->category_id)
-            ->when($app->urusan_id, fn ($query) => $query->where('urusan_id', $app->urusan_id))
+            ->when($app->urusan_id, fn($query) => $query->where('urusan_id', $app->urusan_id))
             ->orderByDesc('is_sso')
             ->orderBy('name')
             ->limit(4)
@@ -76,7 +86,7 @@ class AppService
                 ->whereDoesntHave('children');
             $auth = Auth::user();
             $is_asn = $auth ? ($auth->nip ? true : false) : false;
-            if($is_asn) {
+            if ($is_asn) {
                 if ($categoryId && $categoryId !== 'all') {
                     $query->where('category_id', $categoryId);
                 } else {
@@ -107,8 +117,8 @@ class AppService
                     $sub->where('name', 'like', "%{$search}%")
                         ->orWhere('alias', 'like', "%{$search}%")
                         ->orWhere('description', 'like', "%{$search}%")
-                        ->orWhereHas('urusan', fn ($q) => $q->where('title', 'like', "%{$search}%"))
-                        ->orWhereHas('category', fn ($q) => $q->where('title', 'like', "%{$search}%"));
+                        ->orWhereHas('urusan', fn($q) => $q->where('title', 'like', "%{$search}%"))
+                        ->orWhereHas('category', fn($q) => $q->where('title', 'like', "%{$search}%"));
                 });
             }
 

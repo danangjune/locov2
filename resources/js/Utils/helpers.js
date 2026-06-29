@@ -114,6 +114,7 @@ export function mapApiApp(item, index = 0) {
     const categoryId = Number(item?.category_id ?? item?.category?.id);
     const portalType = categoryId === 2 ? "ASN Digital" : "Public Digital";
     const logo = normalizeAppLogo(item);
+    const visitCount = Number(item?.visit_count || 0);
 
     return {
         id: item.id,
@@ -136,6 +137,7 @@ export function mapApiApp(item, index = 0) {
         categoryId,
         mode: item.is_sso ? "SSO" : "Link",
         app_from: item.app_from?.name,
+        visit_count: visitCount,
         popular:
             typeof item.is_popular === "boolean" ? item.is_popular : index < 12,
         icon: getAppIcon(item),

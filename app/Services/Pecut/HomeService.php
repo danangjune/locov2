@@ -69,6 +69,8 @@ class HomeService
             }
 
             $apps = $query
+                ->orderByDesc('visit_count')
+                ->orderByDesc('is_popular')
                 ->orderBy('category_id')
                 ->orderBy('name')
                 ->get();

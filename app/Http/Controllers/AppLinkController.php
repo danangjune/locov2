@@ -206,6 +206,9 @@ class AppLinkController extends Controller
     public function redirect($id)
     {
         $apps = AppLink::findOrFail($id);
+        $apps->increment('visit_count');
+        $apps->last_visited_at = now();
+        $apps->save();
 
         return response()->json([
             'is_auth' => Auth::check(),

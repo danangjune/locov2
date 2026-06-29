@@ -38,7 +38,7 @@ import { classNames, mapApiApp } from "../../Utils/helpers";
 export default function Index({ meta = {}, filter = {}, data = {} }) {
     const [_activeType, setActiveType] = useState("Semua");
     const [_activeCategory, setActiveCategory] = useState("Semua Aplikasi");
-    
+
     const { props } = usePage();
     const auth = props?.auth || {};
 
@@ -115,10 +115,32 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
     const activeNews = Array.isArray(news) ? news : [];
     const activeComplaints = Array.isArray(complaints) ? complaints : [];
 
-    const selectedPopularApps = activeApps.filter((app) => app.popular);
+    const appsByVisit = [...activeApps].sort((left, right) => {
+        const leftCount = Number(left?.visit_count || 0);
+        const rightCount = Number(right?.visit_count || 0);
+
+        if (rightCount !== leftCount) {
+            return rightCount - leftCount;
+        }
+
+        if (Boolean(right?.popular) !== Boolean(left?.popular)) {
+            return Boolean(right?.popular) ? 1 : -1;
+        }
+
+        return String(left?.name || "").localeCompare(
+            String(right?.name || ""),
+        );
+    });
+
+    const hasVisitSignal = appsByVisit.some(
+        (app) => Number(app?.visit_count || 0) > 0,
+    );
+    const selectedPopularApps = hasVisitSignal
+        ? appsByVisit
+        : activeApps.filter((app) => app.popular);
     const popularApps = selectedPopularApps.length
         ? selectedPopularApps.slice(0, 12)
-        : activeApps.slice(0, 12);
+        : appsByVisit.slice(0, 12);
 
     const popularScrollRef = useRef(null);
 
@@ -144,21 +166,17 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
             title: "Public Digital",
             desc: "Kumpulan aplikasi layanan masyarakat seperti pengaduan, surat, pajak, kesehatan, pendidikan, data, dan informasi publik.",
             icon: Users,
-            count: appsLoading
-                ? "..."
-                : `${publicCount} aplikasi`,
+            count: appsLoading ? "..." : `${publicCount} aplikasi`,
             gradient: "from-cyan-500 to-sky-600",
         },
     ];
 
-    if (auth.user?.is_asn){
+    if (auth.user?.is_asn) {
         ruangPortal.push({
             title: "ASN Digital",
             desc: "Kumpulan aplikasi internal untuk ASN, OPD, kelurahan, kecamatan, administrasi, laporan, dan layanan pemerintahan.",
             icon: Building2,
-            count: appsLoading
-                ? "..."
-                : `${asnCount} aplikasi`,
+            count: appsLoading ? "..." : `${asnCount} aplikasi`,
             gradient: "from-sky-600 to-blue-700",
         });
     }
@@ -270,8 +288,8 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <SectionHeader
                                 eyebrow="Populer"
-                                title="Aplikasi Paling Banyak Dicari"
-                                subtitle="Akses cepat ke layanan digital yang paling sering digunakan."
+                                title="Aplikasi Paling Sering Diakses"
+                                subtitle="Urutan otomatis berdasarkan jumlah kunjungan pengguna."
                                 action="Lihat semua aplikasi"
                                 onAction={() => goApps("Semua")}
                             />

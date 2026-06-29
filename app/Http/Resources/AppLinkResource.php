@@ -29,6 +29,8 @@ class AppLinkResource extends JsonResource
             'is_active' => $this->is_active,
             'is_sso' => $this->is_sso,
             'is_popular' => $this->is_popular,
+            'visit_count' => (int) ($this->visit_count ?? 0),
+            'last_visited_at' => optional($this->last_visited_at)?->toIso8601String(),
             'app_from' => $this->whenLoaded('app_from', fn($app_from) => [
                 'id' => $app_from->id,
                 'name' => $app_from->name,
