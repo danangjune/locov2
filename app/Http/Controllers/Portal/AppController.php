@@ -14,6 +14,7 @@ class AppController extends Controller
         $search = $request->query('search');
         $categoryId = $request->query('category_id');
         $urusanId = $request->query('urusan_id');
+        $opdId = $request->query('opd_id');
         $mode = $request->query('mode');
         $app_from_id = $request->query('app_from_id');
         $page = (int) $request->query('page', 1);
@@ -26,6 +27,7 @@ class AppController extends Controller
                 'search' => $search,
                 'category_id' => $categoryId,
                 'urusan_id' => $urusanId,
+                'opd_id' => $opdId,
                 'mode' => $mode,
                 'app_from_id' => $app_from_id,
                 'page' => $page,

@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 
 class AppService
 {
+    private const URUSAN_PERANGKAT_DAERAH = 40;
     public function getIndexData(Request $request): array
     {
         $apps = $this->getPaginatedApps($request);
@@ -25,6 +26,7 @@ class AppService
             ],
             'categories' => $this->getCategoryOptions(),
             'urusan' => $this->getUrusanOptions(),
+            'opd' => $this->getOpdOptions(),
             'errors' => [
                 'apps' => $apps['error'],
             ],
@@ -75,6 +77,7 @@ class AppService
             $search = trim((string) $request->query('search', ''));
             $categoryId = $request->query('category_id');
             $urusanId = $request->query('urusan_id');
+            $opdId = $request->query('opd_id');
             $mode = $request->query('mode');
             $app_from_id = $request->query('app_from_id');
             $perPage = (int) $request->query('per_page', 12);
@@ -98,6 +101,13 @@ class AppService
 
             if ($urusanId && $urusanId !== 'all') {
                 $query->where('urusan_id', $urusanId);
+            }
+
+            if ($opdId && $opdId !== 'all') {
+                $descendantIds = $this->getAllDescendantIds((int) $opdId);
+                if (!empty($descendantIds)) {
+                    $query->whereIn('parent', $descendantIds);
+                }
             }
 
             if ($mode === 'sso') {
@@ -209,6 +219,7 @@ class AppService
 
         return Urusan::query()
             ->whereIn('id', $ids)
+            ->where('id', '!=', self::URUSAN_PERANGKAT_DAERAH)
             ->orderBy('title')
             ->get()
             ->map(function (Urusan $urusan) {
@@ -219,6 +230,40 @@ class AppService
             })
             ->values()
             ->all();
+    }
+
+    private function getOpdOptions(): array
+    {
+        return AppLink::query()
+            ->where('urusan_id', self::URUSAN_PERANGKAT_DAERAH)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get()
+            ->map(function (AppLink $opd) {
+                return [
+                    'id' => $opd->id,
+                    'title' => $opd->name,
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
+    private function getAllDescendantIds(int $parentId): array
+    {
+        $ids = [$parentId];
+        $children = AppLink::where('parent', $parentId)
+            ->where('is_active', true)
+            ->pluck('id')
+            ->toArray();
+
+        foreach ($children as $childId) {
+            $ids[] = $childId;
+            $descendantIds = $this->getAllDescendantIds($childId);
+            $ids = array_merge($ids, $descendantIds);
+        }
+
+        return array_values(array_unique($ids));
     }
 
     private function extractIdFromSlug(string $slug): int

@@ -16,6 +16,7 @@ export default function AppFilter({ filter = {}, data = {} }) {
 
     const categories = Array.isArray(data?.categories) ? data.categories : [];
     const urusan = Array.isArray(data?.urusan) ? data.urusan : [];
+    const opd = Array.isArray(data?.opd) ? data.opd : [];
 
     const visit = (params = {}) => {
         router.get(
@@ -24,6 +25,7 @@ export default function AppFilter({ filter = {}, data = {} }) {
                 search: search || undefined,
                 category_id: filter?.category_id || undefined,
                 urusan_id: filter?.urusan_id || undefined,
+                opd_id: filter?.opd_id || undefined,
                 mode: filter?.mode || undefined,
                 app_from_id: filter?.app_from_id || undefined,
                 ...params,
@@ -201,13 +203,28 @@ export default function AppFilter({ filter = {}, data = {} }) {
 
                 <div>
                     <SearchableSelect
-                        label="Urusan / OPD"
+                        label="Urusan"
                         value={filter?.urusan_id || ""}
-                        onChange={(value) => visit({ urusan_id: value || undefined })}
+                        onChange={(value) => visit({ urusan_id: value || undefined, opd_id: undefined })}
                         options={urusan || []}
                         placeholder="Pilih urusan"
-                        searchPlaceholder="Cari urusan atau OPD..."
+                        searchPlaceholder="Cari urusan..."
                         emptyText="Urusan tidak ditemukan"
+                        getOptionValue={(item) => item.id}
+                        getOptionLabel={(item) => item.title}
+                        getSearchText={(item) => item.title}
+                    />
+                </div>
+
+                <div>
+                    <SearchableSelect
+                        label="OPD"
+                        value={filter?.opd_id || ""}
+                        onChange={(value) => visit({ opd_id: value || undefined, urusan_id: undefined })}
+                        options={opd || []}
+                        placeholder="Pilih OPD"
+                        searchPlaceholder="Cari OPD..."
+                        emptyText="OPD tidak ditemukan"
                         getOptionValue={(item) => item.id}
                         getOptionLabel={(item) => item.title}
                         getSearchText={(item) => item.title}
