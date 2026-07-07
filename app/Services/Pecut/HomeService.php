@@ -16,8 +16,11 @@ class HomeService
     public function getHomeData(Request $request): array
     {
         $apps = $this->getApps($request);
-        $news = $this->getNews(10);
-        $complaints = $this->getComplaints(6);
+        // Beranda PECUT difokuskan sebagai portal aplikasi.
+        // Konten pendukung cukup dimuat ringkas agar komposisi halaman tetap proporsional.
+        $news = $this->getNews(3);
+        $agendas = $this->getAgendas(3);
+        $complaints = $this->getComplaints(3);
         $slides = app(HomeSlideContentService::class)->getSlides();
 
         return [
@@ -33,9 +36,15 @@ class HomeService
                 'items' => $complaints['items'],
                 'meta' => $complaints['meta'],
             ],
+            'agendas' => [
+                'items' => $agendas['items'],
+                'calendar' => $agendas['calendar'],
+                'meta' => $agendas['meta'],
+            ],
             'errors' => [
                 'apps' => $apps['error'],
                 'news' => $news['error'],
+                'agenda' => $agendas['error'],
                 'complaints' => $complaints['error'],
             ],
             'home_sections' => app(HomeSectionContentService::class)->getSections(),
@@ -103,81 +112,12 @@ class HomeService
 
     public function getNews(int $limit = 10): array
     {
-        $limit = max(1, min($limit, 30));
+        return app(NewsService::class)->getHomeItems($limit);
+    }
 
-        try {
-            $response = Http::withoutVerifying()
-                ->timeout(30)
-                ->get('https://kedirikota.go.id/api/berita');
-
-            if (! $response->successful()) {
-                return [
-                    'items' => [],
-                    'meta' => [
-                        'source' => 'https://kedirikota.go.id/api/berita',
-                        'status' => $response->status(),
-                        'total' => 0,
-                        'limit' => $limit,
-                    ],
-                    'error' => 'Gagal mengambil berita dari website resmi Kota Kediri.',
-                ];
-            }
-
-            $payload = json_decode($response->body());
-            $berita = isset($payload->berita) ? json_decode($payload->berita) : [];
-
-            $items = collect($berita)
-                ->take($limit)
-                ->values()
-                ->map(function ($item, $index) {
-                    $id = $item->idpost ?? $item->id ?? ($index + 1);
-                    $title = $this->cleanText($item->judul ?? $item->title ?? 'Berita Kota Kediri');
-                    $slug = $item->judulurl ?? Str::slug($title);
-                    $description = $this->cleanText($item->deskripsi ?? $item->isi ?? '');
-                    $image = $this->normalizeBeritaImage($item->linkgambar ?? $item->gambar ?? null);
-                    $dateRaw = $item->tanggal
-                        ?? $item->tgl
-                        ?? $item->tglpost
-                        ?? $item->created_at
-                        ?? null;
-
-                    return [
-                        'id' => $id,
-                        'slug' => (string) $slug,
-                        'title' => $title,
-                        'date' => $this->formatDate($dateRaw),
-                        'tag' => $this->cleanText($item->kategori ?? 'Kota Kediri'),
-                        'excerpt' => $description ? Str::limit($description, 170) : Str::limit($title, 170),
-                        'image' => $image,
-                        'url' => "https://www.kedirikota.go.id/p/berita/{$id}/{$slug}",
-                        'content' => array_values(array_filter([
-                            $description ?: 'Informasi berita resmi Pemerintah Kota Kediri.',
-                            'Baca berita lengkap melalui tautan website resmi Pemerintah Kota Kediri.',
-                        ])),
-                    ];
-                })
-                ->all();
-
-            return [
-                'items' => $items,
-                'meta' => [
-                    'source' => 'https://kedirikota.go.id/api/berita',
-                    'total' => count($items),
-                    'limit' => $limit,
-                ],
-                'error' => null,
-            ];
-        } catch (\Throwable $th) {
-            return [
-                'items' => [],
-                'meta' => [
-                    'source' => 'https://kedirikota.go.id/api/berita',
-                    'total' => 0,
-                    'limit' => $limit,
-                ],
-                'error' => config('app.debug') ? $th->getMessage() : 'Terjadi kesalahan saat mengambil berita.',
-            ];
-        }
+    public function getAgendas(int $limit = 4): array
+    {
+        return app(AgendaService::class)->getHomeItems($limit);
     }
 
     public function getComplaints(int $limit = 6): array

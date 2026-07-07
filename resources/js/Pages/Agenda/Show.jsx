@@ -50,6 +50,17 @@ export default function Show({ meta = {}, data = {} }) {
 
     const isGovernment = agenda.type === "Agenda Pemerintah";
 
+    const openAgendaExternal = (item) => {
+        const targetUrl = item?.external_url || item?.detail_url || item?.url;
+
+        if (targetUrl) {
+            window.open(targetUrl, "_blank", "noopener,noreferrer");
+            return;
+        }
+
+        router.visit(`/agenda/${item.slug}`);
+    };
+
     return (
         <>
             <Head title={meta?.title || agenda.title || "Detail Agenda"} />
@@ -179,7 +190,7 @@ export default function Show({ meta = {}, data = {} }) {
                                         key={item.slug}
                                         agenda={item}
                                         variant={item.type === "Agenda Pemerintah" ? "government" : "public"}
-                                        onOpen={() => router.visit(`/agenda/${item.slug}`)}
+                                        onOpen={() => openAgendaExternal(item)}
                                     />
                                 ))}
                             </div>

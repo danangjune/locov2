@@ -2,15 +2,13 @@ import { useRef, useState } from "react";
 import { Head, router, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import {
-    ArrowRight,
     Building2,
+    CalendarDays,
     ChevronLeft,
     ChevronRight,
-    CloudSun,
-    Link as LinkIcon,
-    LockKeyhole,
+    ExternalLink,
     MapPin,
-    Star,
+    Newspaper,
     Users,
 } from "lucide-react";
 
@@ -18,22 +16,138 @@ import PublicLayout from "../../Layouts/PublicLayout";
 import PageShell from "../../Components/UI/PageShell";
 import SectionHeader from "../../Components/UI/SectionHeader";
 import AppCard from "../../Components/Apps/AppCard";
-import NewsCard from "../../Components/News/NewsCard";
-import MiniCalendar from "../../Components/Agenda/MiniCalendar";
-import ComplaintCard from "../../Components/Complaints/ComplaintCard";
 import HomeAppSections from "./Partials/HomeAppSections";
 import HomeHero from "./Partials/HomeHero";
 import ComplaintStatusChecker from "../../Components/Complaints/ComplaintStatusChecker";
 
-import {
-    appData,
-    appPalettes,
-    agendaGovernmentData,
-    agendaPublicData,
-    allAgendaData,
-} from "../../Data/staticData";
+import { appData } from "../../Data/staticData";
 
 import { classNames, mapApiApp } from "../../Utils/helpers";
+
+
+function SupportingPanel({ icon: Icon, eyebrow, title, actionLabel, onAction, children, subtitle }) {
+    return (
+        <motion.div
+            whileHover={{ y: -3 }}
+            className="theme-card flex min-w-0 flex-col rounded-[2rem] p-5"
+        >
+            <div className="mb-4 flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                    <div className="inline-flex items-center gap-2 rounded-full theme-bg-primary-soft px-3 py-1.5 text-[11px] font-black uppercase tracking-widest theme-text-primary ring-1 theme-ring-primary-soft">
+                        <Icon className="h-3.5 w-3.5" />
+                        {eyebrow}
+                    </div>
+                    <h3 className="mt-3 text-xl font-black leading-tight theme-text">
+                        {title}
+                    </h3>
+                    {subtitle && (
+                        <p className="mt-2 max-w-2xl text-sm theme-muted">
+                            {subtitle}
+                        </p>
+                    )}
+                </div>
+
+                {actionLabel ? (
+                    <button
+                        type="button"
+                        onClick={onAction}
+                        className="shrink-0 rounded-full theme-bg-primary-soft px-3 py-2 text-xs font-black theme-text-primary transition theme-hover-bg-primary-soft"
+                    >
+                        {actionLabel}
+                    </button>
+                ) : null}
+            </div>
+
+            <div className="min-w-0 flex-1">{children}</div>
+        </motion.div>
+    );
+}
+
+function CompactNotice({ children }) {
+    return (
+        <div className="rounded-2xl border border-dashed theme-border-primary-soft theme-bg-primary-soft px-4 py-3 text-sm font-bold theme-muted">
+            {children}
+        </div>
+    );
+}
+
+function CompactNewsList({ items = [], onOpen }) {
+    if (!items.length) {
+        return <CompactNotice>Berita terbaru belum tersedia.</CompactNotice>;
+    }
+
+    return (
+        <div className="space-y-3">
+            {items.map((item) => (
+                <button
+                    key={item.slug || item.id || item.title}
+                    type="button"
+                    onClick={() => onOpen(item)}
+                    className="group grid w-full min-w-0 grid-cols-[76px_1fr] gap-3 rounded-2xl border theme-border-primary-soft theme-bg-surface p-2 text-left transition theme-hover-bg-primary-soft"
+                >
+                    <img
+                        src={item.image}
+                        alt={item.title || "Berita Kota Kediri"}
+                        className="h-20 w-full rounded-xl object-cover"
+                        loading="lazy"
+                    />
+
+                    <div className="min-w-0 py-1">
+                        <p className="text-[11px] font-black uppercase tracking-wider theme-muted">
+                            {item.date || item.published_label || "Kota Kediri"}
+                        </p>
+                        <h4 className="mt-1 line-clamp-2 text-sm font-black leading-snug theme-text group-hover:text-sky-700">
+                            {item.title || "Berita Kota Kediri"}
+                        </h4>
+                        <span className="mt-2 inline-flex items-center gap-1 text-xs font-black theme-text-primary">
+                            Baca
+                            <ExternalLink className="h-3.5 w-3.5" />
+                        </span>
+                    </div>
+                </button>
+            ))}
+        </div>
+    );
+}
+
+function CompactAgendaList({ items = [], onOpen }) {
+    if (!items.length) {
+        return <CompactNotice>Agenda terdekat belum tersedia.</CompactNotice>;
+    }
+
+    return (
+        <div className="space-y-3">
+            {items.map((item) => (
+                <button
+                    key={item.slug || item.id || item.title}
+                    type="button"
+                    onClick={() => onOpen(item)}
+                    className="group flex w-full min-w-0 gap-3 rounded-2xl border theme-border-primary-soft theme-bg-surface p-3 text-left transition theme-hover-bg-primary-soft"
+                >
+                    <img
+                        src={item.image}
+                        alt={item.title || "Agenda Kota Kediri"}
+                        className="h-20 w-20 rounded-xl object-cover"
+                        loading="lazy"
+                    />
+
+                    <div className="min-w-0 flex-1">
+                        <p className="text-[11px] font-black uppercase tracking-wider theme-muted">
+                            {item.fullDate || item.start_label || "Tanggal belum tersedia"}
+                        </p>
+                        <h4 className="mt-1 line-clamp-2 text-sm font-black leading-snug theme-text group-hover:text-sky-700">
+                            {item.title || "Agenda Kota Kediri"}
+                        </h4>
+                        <p className="mt-2 flex items-center gap-1 text-xs font-bold theme-muted">
+                            <MapPin className="h-3.5 w-3.5 shrink-0 theme-text-primary" />
+                            <span className="line-clamp-1">{item.location || "Kota Kediri"}</span>
+                        </p>
+                    </div>
+                </button>
+            ))}
+        </div>
+    );
+}
 
 export default function Index({ meta = {}, filter = {}, data = {} }) {
     const [_activeType, setActiveType] = useState("Semua");
@@ -42,10 +156,12 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
     const { props } = usePage();
     const auth = props?.auth || {};
 
+    if (!auth.user?.is_asn) data.apps.items = data?.apps?.items.filter((item) => item?.category?.id === 1);
+
     const appsPayload = Array.isArray(data?.apps?.items) ? data.apps.items : [];
     const newsPayload = Array.isArray(data?.news?.items) ? data.news.items : [];
-    const complaintsPayload = Array.isArray(data?.complaints?.items)
-        ? data.complaints.items
+    const agendasPayload = Array.isArray(data?.agendas?.items)
+        ? data.agendas.items
         : [];
     const homeSections = Array.isArray(data?.home_sections)
         ? data.home_sections
@@ -58,12 +174,10 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
         : appData;
 
     const news = newsPayload;
-    const complaints = complaintsPayload;
     const appsLoading = false;
-    const complaintsLoading = false;
-    const complaintsError = errors?.complaints || "";
     const newsLoading = false;
     const newsError = errors?.news || "";
+    const agendaError = errors?.agenda || "";
 
     const navigate = (path = "home") => {
         const cleanPath = String(path).replace(/^\/+/, "");
@@ -113,7 +227,37 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
 
     const activeApps = apps.length ? apps : appData;
     const activeNews = Array.isArray(news) ? news : [];
-    const activeComplaints = Array.isArray(complaints) ? complaints : [];
+    const activeAgendas = Array.isArray(agendasPayload) ? agendasPayload : [];
+
+    const openNews = (newsItem) => {
+        const targetUrl = newsItem?.external_url || newsItem?.detail_url || newsItem?.url;
+
+        if (targetUrl) {
+            window.open(targetUrl, "_blank", "noopener,noreferrer");
+            return;
+        }
+
+        navigate(`news/${newsItem?.slug}`);
+    };
+
+    const openAgenda = (agendaItem) => {
+        const targetUrl = agendaItem?.external_url || agendaItem?.detail_url || agendaItem?.url;
+
+        if (targetUrl) {
+            window.open(targetUrl, "_blank", "noopener,noreferrer");
+            return;
+        }
+
+        if (!agendaItem?.slug) {
+            navigate("agenda");
+            return;
+        }
+
+        navigate(`agenda/${agendaItem.slug}`);
+    };
+
+    const compactNews = activeNews.slice(0, 3);
+    const compactAgendas = activeAgendas.slice(0, 3);
 
     const appsByVisit = [...activeApps].sort((left, right) => {
         const leftCount = Number(left?.visit_count || 0);
@@ -181,14 +325,6 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
         });
     }
 
-    const ssoCount = activeApps.filter((app) => app.mode === "SSO").length;
-    const linkCount = activeApps.filter((app) => app.mode === "Link").length;
-
-    const [selectedAgendaDate, setSelectedAgendaDate] = useState(null);
-
-    const homeAgendaList = selectedAgendaDate
-        ? allAgendaData.filter((item) => item.date === selectedAgendaDate)
-        : allAgendaData.slice(0, 4);
 
     const goApps = (type = "Semua", category = null) => {
         setActiveType(type);
@@ -343,229 +479,73 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                     <HomeAppSections sections={homeSections} />
 
                     <section
-                        id="aduan-warga"
-                        className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8"
+                        id="informasi-pendukung"
+                        className="mx-auto max-w-7xl scroll-mt-24 px-4 py-12 sm:px-6 lg:px-8"
                     >
                         <SectionHeader
-                            eyebrow="Aduan Warga"
-                            title="Aduan Terbaru Masyarakat"
-                            subtitle="Ikuti laporan warga terbaru beserta status tindak lanjutnya."
-                            action="Lihat kanal aduan"
-                            onAction={() => navigate("complaints")}
+                            eyebrow="Pendukung Portal"
+                            title="Informasi Pendukung Secara Ringkas"
+                            subtitle="Temukan informasi penting seputar aduan, berita, dan agenda Kota Kediri secara ringkas dalam satu halaman."
                         />
 
-                        {complaintsError && (
-                            <div className="mb-5 rounded-3xl bg-amber-50 px-5 py-4">
-                                <p className="text-sm font-bold text-amber-800">
-                                    Aduan terbaru belum berhasil dimuat.
-                                </p>
+                        <div className="grid min-w-0 gap-5 xl:grid-cols-3">
+                            <div className="min-w-0">
+                                <ComplaintStatusChecker
+                                    compact
+                                    showResultDetails={false}
+                                    complaintsUrl="/complaints"
+                                    title="Cek Status Aduan"
+                                    subtitle="Masukkan nomor tiket Lapor Mbak Wali untuk melihat status terakhir."
+                                />
                             </div>
-                        )}
 
-                        {complaintsLoading ? (
-                            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                                {[1, 2, 3, 4, 5, 6].map((item) => (
-                                    <div
-                                        key={item}
-                                        className="h-[420px] animate-pulse rounded-[2rem] bg-slate-100"
-                                    />
-                                ))}
-                            </div>
-                        ) : activeComplaints.length > 0 ? (
-                            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                                {activeComplaints
-                                    .slice(0, 6)
-                                    .map((complaint) => (
-                                        <ComplaintCard
-                                            key={complaint.slug}
-                                            complaint={complaint}
-                                            onOpen={() =>
-                                                navigate(
-                                                    `aduan/${complaint.slug}`,
-                                                )
-                                            }
-                                        />
-                                    ))}
-                            </div>
-                        ) : (
-                            <div className="rounded-[2rem] border border-dashed border-sky-200 bg-sky-50/50 p-8 text-center">
-                                <p className="text-sm font-bold text-slate-600">
-                                    Aduan terbaru belum tersedia.
-                                </p>
-                            </div>
-                        )}
-                    </section>
-
-                    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-                        <SectionHeader
-                            eyebrow="Informasi Kota"
-                            title="Berita Terkini Kota Kediri"
-                            subtitle="Informasi dan kabar terbaru dari Pemerintah Kota Kediri."
-                            action="Lihat seluruh berita"
-                            onAction={() => navigate("news")}
-                        />
-
-                        {newsError && (
-                            <div className="mb-5 rounded-3xl bg-amber-50 px-5 py-4">
-                                <p className="text-sm font-bold text-amber-800">
-                                    Berita asli belum berhasil dimuat.
-                                </p>
-                            </div>
-                        )}
-
-                        {newsLoading ? (
-                            <div className="grid gap-6 lg:grid-cols-3">
-                                {[1, 2, 3].map((item) => (
-                                    <div
-                                        key={item}
-                                        className="h-96 animate-pulse rounded-[2rem] bg-slate-100"
-                                    />
-                                ))}
-                            </div>
-                        ) : activeNews.length > 0 ? (
-                            <div className="grid gap-6 lg:grid-cols-3">
-                                {activeNews.slice(0, 3).map((newsItem) => (
-                                    <NewsCard
-                                        key={newsItem.slug}
-                                        news={newsItem}
-                                        onOpen={() =>
-                                            navigate(`news/${newsItem.slug}`)
-                                        }
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="rounded-[2rem] border border-dashed border-sky-200 bg-sky-50/50 p-8 text-center">
-                                <p className="text-sm font-bold text-slate-600">
-                                    Berita belum tersedia atau gagal dimuat.
-                                </p>
-                            </div>
-                        )}
-                    </section>
-
-                    <section className="bg-slate-50/70 py-16">
-                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <SectionHeader
-                                eyebrow="Kalender Kota"
-                                title="Agenda Terdekat"
-                                subtitle="Jadwal kegiatan pemerintah dan publik yang dapat diikuti masyarakat."
-                                action="Lihat kalender lengkap"
-                                onAction={() => navigate("agenda")}
-                            />
-
-                            <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-                                <div className="grid gap-6">
-                                    <MiniCalendar
-                                        title="Agenda Pemerintah"
-                                        month="Mei"
-                                        year="2026"
-                                        eventDates={agendaGovernmentData.map(
-                                            (item) => item.date,
-                                        )}
-                                        color="sky"
-                                        selectedDate={selectedAgendaDate}
-                                        onDateClick={setSelectedAgendaDate}
-                                    />
-
-                                    <MiniCalendar
-                                        title="Agenda Publik"
-                                        month="Mei"
-                                        year="2026"
-                                        eventDates={agendaPublicData.map(
-                                            (item) => item.date,
-                                        )}
-                                        color="amber"
-                                        selectedDate={selectedAgendaDate}
-                                        onDateClick={setSelectedAgendaDate}
-                                    />
-                                </div>
-
-                                <div className="rounded-[2rem] border border-slate-100 bg-white p-5 shadow-sm shadow-slate-100">
-                                    <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                        <div>
-                                            <p className="text-sm font-black uppercase tracking-[0.2em] text-sky-600">
-                                                Daftar Agenda
-                                            </p>
-
-                                            <h3 className="mt-1 text-2xl font-black text-slate-900">
-                                                {selectedAgendaDate
-                                                    ? `Agenda Tanggal ${selectedAgendaDate} Mei 2026`
-                                                    : "Agenda Terbaru"}
-                                            </h3>
-                                        </div>
-
-                                        {selectedAgendaDate && (
-                                            <button
-                                                onClick={() =>
-                                                    setSelectedAgendaDate(null)
-                                                }
-                                                className="w-fit rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 hover:bg-sky-50 hover:text-sky-700"
-                                            >
-                                                Tampilkan Semua
-                                            </button>
-                                        )}
+                            <SupportingPanel
+                                icon={Newspaper}
+                                eyebrow="Berita"
+                                title="Berita Terkini"
+                                subtitle="Informasi terbaru seputar Kota Kediri."
+                                actionLabel="Semua"
+                                onAction={() => navigate("news")}
+                            >
+                                {newsError ? (
+                                    <div className="mb-3 rounded-2xl bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800">
+                                        Berita belum berhasil dimuat dari website resmi Kota Kediri.
                                     </div>
+                                ) : null}
 
-                                    <div className="space-y-4">
-                                        {homeAgendaList.map((agenda) => (
-                                            <button
-                                                key={agenda.slug}
-                                                onClick={() =>
-                                                    navigate(
-                                                        `agenda/${agenda.slug}`,
-                                                    )
-                                                }
-                                                className="group grid w-full gap-4 rounded-3xl border border-slate-100 bg-slate-50 p-3 text-left transition hover:border-sky-200 hover:bg-sky-50 sm:grid-cols-[120px_1fr]"
-                                            >
-                                                <img
-                                                    src={agenda.image}
-                                                    alt={agenda.title}
-                                                    className="h-28 w-full rounded-2xl object-cover sm:h-full"
-                                                />
-
-                                                <div className="p-1">
-                                                    <div className="mb-2 flex flex-wrap items-center gap-2">
-                                                        <span
-                                                            className={classNames(
-                                                                "rounded-full px-3 py-1 text-xs font-black",
-                                                                agenda.type ===
-                                                                    "Agenda Pemerintah"
-                                                                    ? "bg-sky-100 text-sky-700"
-                                                                    : "bg-amber-100 text-amber-700",
-                                                            )}
-                                                        >
-                                                            {agenda.type ===
-                                                            "Agenda Pemerintah"
-                                                                ? "Pemerintah"
-                                                                : "Publik"}
-                                                        </span>
-
-                                                        <span className="text-xs font-bold text-slate-400">
-                                                            {agenda.fullDate} •{" "}
-                                                            {agenda.time}
-                                                        </span>
-                                                    </div>
-
-                                                    <h4 className="line-clamp-2 text-base font-black text-slate-900 group-hover:text-sky-700">
-                                                        {agenda.title}
-                                                    </h4>
-
-                                                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">
-                                                        {agenda.description}
-                                                    </p>
-
-                                                    <p className="mt-3 flex items-center gap-2 text-xs font-bold text-slate-400">
-                                                        <MapPin className="h-4 w-4 text-sky-600" />
-                                                        {agenda.location}
-                                                    </p>
-                                                </div>
-                                            </button>
+                                {newsLoading ? (
+                                    <div className="space-y-3">
+                                        {[1, 2, 3].map((item) => (
+                                            <div
+                                                key={item}
+                                                className="h-24 animate-pulse rounded-2xl theme-bg-primary-soft"
+                                            />
                                         ))}
                                     </div>
-                                </div>
-                            </div>
+                                ) : (
+                                    <CompactNewsList items={compactNews} onOpen={openNews} />
+                                )}
+                            </SupportingPanel>
+
+                            <SupportingPanel
+                                icon={CalendarDays}
+                                eyebrow="Agenda"
+                                title="Agenda Terdekat"
+                                subtitle="Jadwal kegiatan dan acara penting di Kota Kediri."
+                                actionLabel="Semua"
+                                onAction={() => navigate("agenda")}
+                            >
+                                {agendaError ? (
+                                    <div className="mb-3 rounded-2xl bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800">
+                                        Agenda belum berhasil dimuat dari website resmi Kota Kediri.
+                                    </div>
+                                ) : null}
+
+                                <CompactAgendaList items={compactAgendas} onOpen={openAgenda} />
+                            </SupportingPanel>
                         </div>
                     </section>
+
                 </PageShell>
             </PublicLayout>
         </>

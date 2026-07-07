@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\PortalPageController;
 use App\Http\Controllers\Admin\ReferenceController;
 use App\Http\Controllers\Admin\SelayangPandangController;
 use App\Http\Controllers\Admin\ThemeSettingController;
-use App\Http\Controllers\Api\AgendaController;
+use App\Http\Controllers\Portal\AgendaController;
 use App\Http\Controllers\AppLinkController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\FooterController;

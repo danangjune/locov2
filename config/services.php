@@ -51,4 +51,10 @@ return [
         'timeout' => env('SURVEY_DIGITAL_TIMEOUT', 8),
     ],
 
+    'kediri_kota' => [
+        'base_url' => env('APP_URL_KEDIRIKOTA'),
+        'url' => env('APP_URL_KEDIRIKOTA'), // compatibility alias
+        'timeout' => env('KEDIRI_KOTA_API_TIMEOUT', 10),
+    ],
+
 ];

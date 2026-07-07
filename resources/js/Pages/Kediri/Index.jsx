@@ -11,6 +11,8 @@ import {
     Route,
     Sparkles,
     Waves,
+    Mars,
+    Venus,
 } from "lucide-react";
 
 import PublicLayout from "../../Layouts/PublicLayout";
@@ -97,7 +99,7 @@ function getParagraphParts(text) {
 }
 
 function StatCard({ item, index }) {
-    const icons = [MapPinned, Building2, Compass];
+    const icons = [MapPinned, Building2, Compass, Mars, Venus];
     const Icon = icons[index % icons.length];
 
     return (
@@ -107,10 +109,10 @@ function StatCard({ item, index }) {
                     <Icon className="h-6 w-6" />
                 </div>
                 <div>
-                    <p className="text-3xl font-black tracking-tight text-slate-950">
+                    <p className="text-xl font-black tracking-tight text-slate-950">
                         {item.value}
                     </p>
-                    <p className="mt-1 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                    <p className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
                         {item.label}
                     </p>
                 </div>
@@ -363,7 +365,7 @@ export default function Index({ meta = {}, data = {} }) {
                         </div>
 
                         <div className="relative mx-auto mb-10 max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <div className="grid gap-4 md:grid-cols-3">
+                            <div className="grid gap-4 md:grid-cols-5">
                                 {stats.map((item, index) => (
                                     <StatCard key={`${item.label}-${index}`} item={item} index={index} />
                                 ))}
@@ -383,7 +385,7 @@ export default function Index({ meta = {}, data = {} }) {
                                         Mengenal Kediri dari wilayah, sejarah, dan pelayanan
                                     </h2>
                                     <p className="mt-4 text-base leading-8 text-slate-600">
-                                        Konten disusun menjadi tiga bagian utama agar seluruh narasi tetap lengkap, mudah dibaca, dan tidak terlalu penuh gambar.
+                                        Mengenal Kota Kediri lebih dekat melalui informasi wilayah, sejarah, dan layanan publik dalam tampilan yang ringkas dan mudah dipahami.
                                     </p>
                                 </div>
                                 <div className="rounded-3xl border border-slate-100 bg-white px-5 py-4 text-sm font-extrabold text-slate-600 shadow-sm shadow-slate-100">

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 import AppCard from "../../../Components/Apps/AppCard";
@@ -46,6 +46,20 @@ function openApp(app) {
 export default function HomeAppSections({ sections = [] }) {
     const scrollRef = useRef(null);
     const [activeKey, setActiveKey] = useState("");
+
+    const { props } = usePage();
+    const auth = props?.auth || {};
+
+    if (!auth.user?.is_asn) {
+        sections = sections
+        .map((section) => ({
+            ...section,
+            items: section.items?.filter(
+                (item) => item?.category?.id === 1
+            ) ?? [],
+        }))
+        .filter((section) => section.items.length > 0);
+    }
 
     const rows = useMemo(() => {
         if (!Array.isArray(sections)) return [];

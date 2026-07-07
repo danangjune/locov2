@@ -152,56 +152,7 @@ class SupportPageService
 
     public function getKediriData(Request $request): array
     {
-        try {
-            $page = PortalPage::query()
-                ->with([
-                    'sections' => fn ($query) => $query->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
-                    'stats' => fn ($query) => $query->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
-                ])
-                ->where('slug', 'kediri')
-                ->where('statusenabled', true)
-                ->first();
-
-            if (! $page) {
-                return $this->fallbackKediriData();
-            }
-
-            $sections = $page->sections
-                ->map(fn (PortalPageSection $section) => [
-                    'id' => $section->id,
-                    'title' => $section->title,
-                    'subtitle' => $section->subtitle,
-                    'image' => $section->image ? $this->makeFileUrl($section->image) : null,
-                    'description' => $this->splitParagraphs($section->content),
-                ])
-                ->values()
-                ->all();
-
-            $stats = $page->stats
-                ->map(fn (PortalPageStat $stat) => [
-                    'id' => $stat->id,
-                    'label' => $stat->label,
-                    'value' => $stat->value,
-                ])
-                ->values()
-                ->all();
-
-            $fallback = $this->fallbackKediriData();
-
-            return [
-                'page' => [
-                    'id' => $page->id,
-                    'title' => $page->title ?: 'Selayang Pandang Kota Kediri',
-                    'subtitle' => $page->subtitle ?: 'Kota Kediri dalam satu pandang',
-                    'description' => $page->description ?: $fallback['page']['description'],
-                    'hero_image' => $page->hero_image ? $this->makeFileUrl($page->hero_image) : null,
-                ],
-                'sections' => count($sections) ? $sections : $fallback['sections'],
-                'stats' => count($stats) ? $stats : $fallback['stats'],
-            ];
-        } catch (\Throwable $th) {
-            return $this->fallbackKediriData();
-        }
+        return app(SelayangPandangPublicService::class)->getData();
     }
 
 

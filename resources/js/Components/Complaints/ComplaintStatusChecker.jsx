@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from "react";
+import { usePage } from "@inertiajs/react";
 import {
     AlertCircle,
+    ArrowRight,
     Building2,
     CheckCircle2,
     Clock3,
@@ -47,7 +49,7 @@ function InfoPill({ icon, label, value, href }) {
     if (!value) return null;
 
     const content = (
-        <div className="group flex min-w-0 items-center gap-3 rounded-2xl border theme-border-primary-soft theme-bg-surface px-3 py-2.5 text-sm font-semibold theme-muted transition hover:theme-bg-primary-soft">
+        <div className="group flex min-w-0 items-center gap-3 rounded-2xl border theme-border-primary-soft theme-bg-surface px-3 py-2.5 text-sm font-semibold theme-muted transition theme-hover-bg-primary-soft">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl theme-bg-primary-soft theme-text-primary">
                 {icon}
             </span>
@@ -297,15 +299,89 @@ function DetailMessages({ details = [] }) {
     );
 }
 
-function ComplaintResult({ complaint }) {
+function CompactStatusResult({ complaint, complaintsUrl = "/complaints" }) {
+    const status = complaint?.current_status || {};
+    const skpd = Array.isArray(complaint?.skpd) ? complaint.skpd.join(", ") : "";
+
+    return (
+        <div className="mt-4 rounded-[1.5rem] border theme-border-primary-soft theme-bg-surface p-4">
+            <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-2 rounded-full theme-bg-primary px-3 py-1.5 text-[11px] font-black uppercase tracking-widest text-white">
+                    <Ticket className="h-3.5 w-3.5" />
+                    {complaint.ticket || "-"}
+                </span>
+                <span
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-black uppercase tracking-widest ring-1 ${statusClass(status.theme)}`}
+                >
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    {status.name || "Status belum tersedia"}
+                </span>
+            </div>
+
+            <h3 className="mt-3 line-clamp-2 text-lg font-black leading-snug theme-text">
+                {complaint.topic || "Aduan Masyarakat"}
+                {complaint.sub_topic ? (
+                    <span className="theme-muted"> · {complaint.sub_topic}</span>
+                ) : null}
+            </h3>
+
+            <div className="mt-3 grid gap-2 text-xs font-bold theme-muted">
+                {skpd ? (
+                    <p className="flex min-w-0 items-center gap-2">
+                        <Building2 className="h-4 w-4 shrink-0 theme-text-primary" />
+                        <span className="truncate">{skpd}</span>
+                    </p>
+                ) : null}
+
+                {complaint.location ? (
+                    <p className="flex min-w-0 items-center gap-2">
+                        <MapPin className="h-4 w-4 shrink-0 theme-text-primary" />
+                        <span className="truncate">{complaint.location}</span>
+                    </p>
+                ) : null}
+
+                <p className="flex min-w-0 items-center gap-2">
+                    <Clock3 className="h-4 w-4 shrink-0 theme-text-primary" />
+                    <span className="truncate">
+                        Update: {status.created_at_human || status.created_at || "-"}
+                    </span>
+                </p>
+            </div>
+
+            <a
+                href={complaintsUrl}
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl theme-bg-primary px-4 py-3 text-sm font-black text-white shadow-lg shadow-slate-200 transition hover:-translate-y-0.5"
+            >
+                Lihat Halaman Aduan
+                <ArrowRight className="h-4 w-4" />
+            </a>
+        </div>
+    );
+}
+
+function ComplaintResult({ complaint, compactResult = false, showDetails = true, complaintsUrl = "/complaints", auth = {} }) {
+    if (compactResult) {
+        return <CompactStatusResult complaint={complaint} complaintsUrl={complaintsUrl} />;
+    }
+
     return (
         <div className="mt-6 space-y-5">
             <StatusSummary complaint={complaint} />
 
-            <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-                <HistoryTimeline histories={complaint.histories} />
-                <DetailMessages details={complaint.details} />
-            </div>
+            {showDetails ? (
+                <>
+                    {auth?.user ? (
+                        <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+                            <HistoryTimeline histories={complaint.histories} />
+                            <DetailMessages details={complaint.details} />
+                        </div>
+                    ) : (
+                        <div>
+                            <HistoryTimeline histories={complaint.histories} />
+                        </div>
+                    )}
+                </>
+            ) : null}
         </div>
     );
 }
@@ -315,11 +391,16 @@ export default function ComplaintStatusChecker({
     subtitle = "Masukkan nomor tiket Lapor Mbak Wali untuk memantau perkembangan laporan Anda.",
     defaultTicket = "",
     compact = false,
+    showResultDetails = true,
+    complaintsUrl = "/complaints",
 }) {
     const [ticket, setTicket] = useState(cleanTicket(defaultTicket));
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [complaint, setComplaint] = useState(null);
+
+    const { props } = usePage();
+    const auth = props?.auth || {};
 
     const hasResult = Boolean(complaint);
 
@@ -345,10 +426,12 @@ export default function ComplaintStatusChecker({
         try {
             const response = await fetch("/complaints/status-check", {
                 method: "POST",
+                credentials: "same-origin",
                 headers: {
                     "Content-Type": "application/json",
                     Accept: "application/json",
                     "X-CSRF-TOKEN": csrfToken() || "",
+                    "X-Requested-With": "XMLHttpRequest",
                 },
                 body: JSON.stringify({ ticket: cleaned }),
             });
@@ -370,36 +453,46 @@ export default function ComplaintStatusChecker({
 
     return (
         <section className={compact ? "" : "py-4 mt-4 mb-2"}>
-            <div className="theme-card rounded-[2rem] p-4 sm:p-6">
-                <div className="grid gap-6 lg:grid-cols-[1fr_0.95fr] lg:items-center">
+            <div className={compact ? "theme-card rounded-[2rem] p-5" : "theme-card rounded-[2rem] p-4 sm:p-6"}>
+                <div className={compact ? "grid gap-4" : "grid gap-6 lg:grid-cols-[1fr_0.95fr] lg:items-center"}>
                     <div>
-                        <div className="inline-flex items-center gap-2 rounded-full theme-bg-primary-soft px-3 py-1.5 text-xs font-black uppercase tracking-widest theme-text-primary ring-1 theme-ring-primary-soft theme-border-primary-soft">
-                            <Ticket className="h-3.5 w-3.5" />
-                            Ticket
+                        <div className="mb-4 flex items-start justify-between gap-4">
+                            <div className="inline-flex items-center gap-2 rounded-full theme-bg-primary-soft px-3 py-1.5 text-xs font-black uppercase tracking-widest theme-text-primary ring-1 theme-ring-primary-soft theme-border-primary-soft">
+                                <Ticket className="h-3.5 w-3.5" />
+                                Ticket
+                            </div>
+                            {compact ? (
+                                <a
+                                    href={complaintsUrl}
+                                    className="shrink-0 rounded-full theme-bg-primary-soft px-3 py-2 text-xs font-black theme-text-primary transition theme-hover-bg-primary-soft"
+                                >
+                                    Semua
+                                </a>
+                            ) : null}
                         </div>
-                        <h2 className="mt-4 text-2xl font-black tracking-tight theme-text sm:text-3xl">
+                        <h2 className={compact ? "mt-3 text-xl font-black tracking-tight theme-text" : "mt-4 text-2xl font-black tracking-tight theme-text sm:text-3xl"}>
                             {title}
                         </h2>
-                        <p className="mt-3 max-w-2xl text-sm leading-7 theme-muted">
+                        <p className={compact ? "mt-2 text-sm leading-6 theme-muted" : "mt-3 max-w-2xl text-sm leading-7 theme-muted"}>
                             {subtitle}
                         </p>
                     </div>
 
-                    <form onSubmit={submit} className="rounded-[1.75rem] theme-bg-page p-3 ring-1 theme-ring-primary-soft theme-border-primary-soft">
-                        <div className="flex flex-col gap-3 sm:flex-row">
+                    <form onSubmit={submit} className={compact ? "rounded-[1.5rem] theme-bg-page p-3 ring-1 theme-ring-primary-soft theme-border-primary-soft" : "rounded-[1.75rem] theme-bg-page p-3 ring-1 theme-ring-primary-soft theme-border-primary-soft"}>
+                        <div className={compact ? "flex flex-col gap-3" : "flex flex-col gap-3 sm:flex-row"}>
                             <div className="relative flex-1">
                                 <Ticket className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 theme-muted" />
                                 <input
                                     value={ticket}
                                     onChange={(event) => setTicket(cleanTicket(event.target.value))}
                                     placeholder="Masukkan nomor tiket"
-                                    className="theme-focus h-14 w-full rounded-2xl border theme-border-primary-soft theme-bg-surface pl-12 pr-4 text-sm font-black uppercase tracking-widest theme-text shadow-sm transition placeholder:normal-case placeholder:tracking-normal placeholder:text-slate-400"
+                                        className={compact ? "theme-focus h-12 w-full rounded-2xl border theme-border-primary-soft theme-bg-surface pl-12 pr-4 text-sm font-black uppercase tracking-widest theme-text shadow-sm transition placeholder:normal-case placeholder:tracking-normal placeholder:text-slate-400" : "theme-focus h-14 w-full rounded-2xl border theme-border-primary-soft theme-bg-surface pl-12 pr-4 text-sm font-black uppercase tracking-widest theme-text shadow-sm transition placeholder:normal-case placeholder:tracking-normal placeholder:text-slate-400"}
                                 />
                             </div>
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="btn-theme-primary h-14 px-5 text-sm disabled:cursor-not-allowed disabled:opacity-70"
+                                className={compact ? "btn-theme-primary h-12 px-5 text-sm disabled:cursor-not-allowed disabled:opacity-70" : "btn-theme-primary h-14 px-5 text-sm disabled:cursor-not-allowed disabled:opacity-70"}
                             >
                                 {loading ? (
                                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -410,7 +503,7 @@ export default function ComplaintStatusChecker({
                             </button>
                         </div>
 
-                        <p className="mt-3 px-1 text-xs font-semibold theme-muted">
+                        <p className={compact ? "mt-2 px-1 text-xs font-semibold theme-muted" : "mt-3 px-1 text-xs font-semibold theme-muted"}>
                             {exampleText}
                         </p>
                     </form>
@@ -423,7 +516,15 @@ export default function ComplaintStatusChecker({
                     </div>
                 ) : null}
 
-                {hasResult ? <ComplaintResult complaint={complaint} /> : null}
+                {hasResult ? (
+                    <ComplaintResult
+                        complaint={complaint}
+                        compactResult={compact}
+                        showDetails={showResultDetails}
+                        complaintsUrl={complaintsUrl}
+                        auth={auth}
+                    />
+                ) : null}
             </div>
         </section>
     );

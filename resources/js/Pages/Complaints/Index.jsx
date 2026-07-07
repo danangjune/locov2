@@ -78,7 +78,7 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
                                 )}
 
                                 {complaints.length ? (
-                                    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                                    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-2">
                                         {complaints.map((complaint) => (
                                             <ComplaintCard
                                                 key={

@@ -3,6 +3,12 @@ import { motion } from "framer-motion";
 import { classNames } from "../../Utils/helpers";
 
 export default function NewsCard({ news, onOpen, large = false }) {
+    const openNews = () => {
+        if (onOpen) {
+            onOpen(news);
+        }
+    };
+
     return (
         <motion.article
             whileHover={{ y: -4 }}
@@ -12,7 +18,8 @@ export default function NewsCard({ news, onOpen, large = false }) {
             )}
         >
             <button
-                onClick={onOpen}
+                type="button"
+                onClick={openNews}
                 className={classNames(
                     "relative block w-full overflow-hidden text-left",
                     large ? "h-64 lg:h-full" : "h-56",
@@ -35,7 +42,8 @@ export default function NewsCard({ news, onOpen, large = false }) {
                 <p className="text-xs font-bold text-slate-400">{news.date}</p>
 
                 <button
-                    onClick={onOpen}
+                    type="button"
+                    onClick={openNews}
                     className="mt-2 block text-left text-lg font-black leading-snug text-slate-900 hover:text-sky-700"
                 >
                     {news.title}
@@ -46,7 +54,8 @@ export default function NewsCard({ news, onOpen, large = false }) {
                 </p>
 
                 <button
-                    onClick={onOpen}
+                    type="button"
+                    onClick={openNews}
                     className="mt-5 inline-flex items-center gap-2 text-sm font-black text-sky-700"
                 >
                     Baca selengkapnya

@@ -15,6 +15,13 @@ export default function Index({ meta = {}, filter = {}, data = {} }) {
     const error = data?.errors?.news || "";
 
     const openDetail = (news) => {
+        const targetUrl = news?.external_url || news?.detail_url || news?.url;
+
+        if (targetUrl) {
+            window.open(targetUrl, "_blank", "noopener,noreferrer");
+            return;
+        }
+
         router.visit(`/news/${news.slug}`);
     };
 

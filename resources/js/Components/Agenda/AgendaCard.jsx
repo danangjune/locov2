@@ -2,8 +2,14 @@ import { CalendarDays, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { classNames } from "../../Utils/helpers";
 
-export default function AgendaCard({ agenda, variant = "government", onOpen }) {
+export default function AgendaCard({ agenda = {}, variant = "government", onOpen }) {
     const isGovernment = variant === "government";
+
+    const openAgenda = () => {
+        if (onOpen) {
+            onOpen(agenda);
+        }
+    };
 
     return (
         <motion.div
@@ -11,13 +17,15 @@ export default function AgendaCard({ agenda, variant = "government", onOpen }) {
             className="overflow-hidden rounded-[2rem] border border-slate-100 bg-white shadow-sm shadow-slate-100"
         >
             <button
-                onClick={onOpen}
+                type="button"
+                onClick={openAgenda}
                 className="relative block h-44 w-full overflow-hidden text-left"
             >
                 <img
                     src={agenda.image}
-                    alt={agenda.title}
+                    alt={agenda.title || "Agenda Kota Kediri"}
                     className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                    loading="lazy"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-slate-950/10 to-transparent" />
@@ -38,7 +46,7 @@ export default function AgendaCard({ agenda, variant = "government", onOpen }) {
                 <div className="flex items-center gap-3">
                     <div
                         className={classNames(
-                            "flex h-12 w-12 items-center justify-center rounded-2xl",
+                            "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl",
                             isGovernment
                                 ? "bg-sky-50 text-sky-700"
                                 : "bg-amber-50 text-amber-700",
@@ -47,39 +55,42 @@ export default function AgendaCard({ agenda, variant = "government", onOpen }) {
                         <CalendarDays className="h-6 w-6" />
                     </div>
 
-                    <div>
+                    <div className="min-w-0">
                         <p
                             className={classNames(
-                                "text-sm font-black",
+                                "line-clamp-2 text-sm font-black",
                                 isGovernment
                                     ? "text-sky-700"
                                     : "text-amber-700",
                             )}
                         >
-                            {agenda.fullDate}
+                            {agenda.fullDate || agenda.start_label || "Tanggal belum tersedia"}
                         </p>
 
                         <p className="text-xs font-semibold text-slate-400">
-                            {agenda.time}
+                            {agenda.time || "Sepanjang hari"}
                         </p>
                     </div>
                 </div>
 
                 <button
-                    onClick={onOpen}
+                    type="button"
+                    onClick={openAgenda}
                     className="mt-4 block text-left text-lg font-black leading-snug text-slate-900 hover:text-sky-700"
                 >
-                    {agenda.title}
+                    {agenda.title || "Agenda Kota Kediri"}
                 </button>
 
                 <p className="mt-2 flex items-center gap-2 text-sm text-slate-500">
                     <MapPin
                         className={classNames(
-                            "h-4 w-4",
+                            "h-4 w-4 shrink-0",
                             isGovernment ? "text-sky-600" : "text-amber-600",
                         )}
                     />
-                    {agenda.location}
+                    <span className="line-clamp-1">
+                        {agenda.location || "Kota Kediri"}
+                    </span>
                 </p>
             </div>
         </motion.div>

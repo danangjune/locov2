@@ -7,7 +7,6 @@ import {
     ExternalLink,
     FileText,
     Home,
-    Landmark,
     LayoutDashboard,
     LogOut,
     Menu,
@@ -48,12 +47,6 @@ const navigation = [
         href: "/admin/home-slides",
         match: "/admin/home-slides",
         icon: MonitorPlay,
-    },
-    {
-        title: "Selayang Pandang",
-        href: "/admin/selayang-pandang",
-        match: "/admin/selayang-pandang",
-        icon: Landmark,
     },
     {
         title: "Section Beranda",

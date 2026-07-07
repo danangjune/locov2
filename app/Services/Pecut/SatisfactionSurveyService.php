@@ -83,7 +83,7 @@ class SatisfactionSurveyService
                     'total_respondents' => $totalRespondents,
                 ],
                 'rating_percent' => $this->ratingPercent($averageRating, $limitRate),
-                'distribution' => $this->mapDistribution($dashboardData),
+                'distribution' => $this->mapDistribution($comments),
                 'trend_ratings' => $this->mapTrendRatings(Arr::get($dashboardData, 'trend_ratings', [])),
                 'aspects' => $this->mapAspects(Arr::get($dashboardData, 'count_aspek', [])),
                 'comments' => $comments,
@@ -149,17 +149,22 @@ class SatisfactionSurveyService
         return $response->json() ?: [];
     }
 
-    private function mapDistribution(array $dashboardData): array
+    private function mapDistribution(array $comments): array
     {
-        $raw = Arr::get($dashboardData, 'distribusi_rating ', Arr::get($dashboardData, 'distribusi_rating', []));
 
         return collect([5, 4, 3, 2, 1])
-            ->map(function ($rating) use ($raw) {
+            ->map(function ($rating) use ($comments) {
+                $count = 0;
+                foreach ($comments as $comment) {
+                    if ((int) Arr::get($comment, "rating") === $rating) {
+                        $count++;
+                    }
+                }
                 return [
                     'rating' => $rating,
                     'label' => (string) $rating,
-                    'percent' => (float) Arr::get($raw, "percent_{$rating}", 0),
-                    'total_respondents' => (int) Arr::get($raw, "total_respondent_{$rating}", 0),
+                    'percent' => $count > 0 ? round((float) $count / count($comments) * 100, 2) : 0,
+                    'total_respondents' => $count,
                 ];
             })
             ->values()
