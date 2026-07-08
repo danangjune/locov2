@@ -42,6 +42,7 @@ Auth::routes(['login' => false, 'register' => false]);
 | Jangan taruh route parameter terlalu umum sebelum route statis.
 */
 
+
 // Route Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
