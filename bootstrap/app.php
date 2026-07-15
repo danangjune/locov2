@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\Api;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -18,7 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'role' => EnsureUserHasRole::class
+            'role' => EnsureUserHasRole::class,
+            'apikey' => Api::class,
         ]);
         $middleware->web([
             HandleInertiaRequests::class,
