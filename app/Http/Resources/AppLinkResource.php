@@ -44,6 +44,7 @@ class AppLinkResource extends JsonResource
                 'title' => $category->title,
                 'sub_title' => $category->sub_title,
             ]),
+            'mobile_route' => $this->mobile_route,
         ];
     }
 }

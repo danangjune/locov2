@@ -30,6 +30,7 @@ class AppLink extends Model
         'visit_count',
         'last_visited_at',
         'app_from_id',
+        'mobile_route',
     ];
 
     protected function casts(): array
