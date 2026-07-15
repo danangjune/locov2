@@ -133,7 +133,7 @@ export default function AppTreeRow({
                                     <Badge tone="amber">Populer</Badge>
                                 )}
                             </div>
-                            <div className="mt-1 flex flex-wrap items-center gap-2 text-xs font-bold text-slate-400">
+                            <div className="mt-1 line-clamp-2 max-w-xl flex flex-wrap items-center gap-2 text-xs font-bold text-slate-400">
                                 <span>#{item.id}</span>
                                 {item.code && <span>Code: {item.code}</span>}
                                 {item.alias && <span>Alias: {item.alias}</span>}
