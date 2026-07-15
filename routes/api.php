@@ -22,14 +22,3 @@ Route::middleware(['apikey'])->prefix('apps')->name('apps.')->group(function () 
     Route::get('/urusan', [AppLinkController::class, 'urusan']);
     Route::get('/opd', [AppLinkController::class, 'opd']);
 });
-
-Route::middleware(['apikey'])->prefix('agenda')->group(function () {
-    Route::get('/', [AgendaController::class, 'index']);
-});
-
-Route::middleware(['apikey'])->get('/berita/top', [HomeController::class, 'beritaTop']);
-
-Route::middleware(['apikey'])->prefix('aduan')->group(function () {
-    Route::get('/top', [AduanPortalController::class, 'top']);
-    Route::get('/detail/{id}', [AduanPortalController::class, 'detail']);
-});
