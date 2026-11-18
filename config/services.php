@@ -49,6 +49,14 @@ return [
         'token' => env('SURVEY_DIGITAL_TOKEN'),
         'refresh_token' => env('SURVEY_DIGITAL_REFRESH_TOKEN'),
         'timeout' => env('SURVEY_DIGITAL_TIMEOUT', 8),
+        'refresh_before_seconds' => env('SURVEY_DIGITAL_REFRESH_BEFORE_SECONDS', 1800),
+        'auto_login' => env('SURVEY_DIGITAL_AUTO_LOGIN', false),
+        'login_path' => env('SURVEY_DIGITAL_LOGIN_PATH'),
+        'login_username_field' => env('SURVEY_DIGITAL_LOGIN_USERNAME_FIELD', 'username'),
+        'username' => env('SURVEY_DIGITAL_USERNAME'),
+        'password' => env('SURVEY_DIGITAL_PASSWORD'),
+        'access_token_json_path' => env('SURVEY_DIGITAL_ACCESS_TOKEN_JSON_PATH', 'data.token'),
+        'refresh_token_json_path' => env('SURVEY_DIGITAL_REFRESH_TOKEN_JSON_PATH', 'data.refresh_token'),
     ],
 
     'kediri_kota' => [

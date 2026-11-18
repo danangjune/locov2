@@ -72,6 +72,8 @@ export default function Index({ meta = {}, data = {} }) {
     const embedUrl = data?.embed_url || defaultEmbedUrl;
     const satisfaction = data?.satisfaction || null;
 
+    console.log("Satisfaction Data:", satisfaction);
+
     return (
         <>
             <Head title={meta?.title || "Survey Kepuasan PECUT"} />
