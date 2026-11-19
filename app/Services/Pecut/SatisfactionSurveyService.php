@@ -16,10 +16,10 @@ class SatisfactionSurveyService
         private readonly SurveyDigitalTokenService $tokenService
     ) {}
 
-    public function getPecutSatisfaction(): array
+    public function getPecutSatisfaction($reqAppId = null): array
     {
         $base = rtrim(trim((string) config('services.survey_digital.url', '')), '/');
-        $appId = (int) config('services.survey_digital.app_id', 395);
+        $appId = $reqAppId ?? (int) config('services.survey_digital.app_id', 395);
 
         if (! filter_var($base, FILTER_VALIDATE_URL) || parse_url($base, PHP_URL_SCHEME) !== 'https') {
             return $this->emptyData('Endpoint dashboard survey belum dikonfigurasi.');

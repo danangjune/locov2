@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Api\AduanPortalController;
+use App\Http\Controllers\Portal\SurveyController;
 
 // Route CAAS BSSN
 Route::middleware(['apikey'])->prefix('caas')->group(function () {
@@ -21,4 +22,9 @@ Route::middleware(['apikey'])->prefix('apps')->name('apps.')->group(function () 
     Route::get('/kategori', [AppLinkController::class, 'kategori']);
     Route::get('/urusan', [AppLinkController::class, 'urusan']);
     Route::get('/opd', [AppLinkController::class, 'opd']);
+});
+
+// Route Survey Digital
+Route::middleware(['apikey'])->prefix('surveidigital')->name('surveidigital.')->group(function () {
+    Route::get('/apps', [SurveyController::class, 'apps'])->name('apps');
 });
